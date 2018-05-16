@@ -1,5 +1,6 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import {FormsModule, NgForm} from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
@@ -13,11 +14,13 @@ import {AuthService} from './global-services/auth.service';
   declarations: [
     AppComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    NgForm,
   ],
   imports: [
     BrowserModule,
-    RootRouterModule
+    FormsModule,
+    RootRouterModule,
   ],
   providers: [
     AuthService,
