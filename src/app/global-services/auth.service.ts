@@ -1,10 +1,8 @@
-import { Injectable } from '@angular/core';
 import {User} from '../global-models/user.model';
 
 //todo: replace dummy authentication
 
 // WARNING: This service is meant to be used by user service only! Do not use this service directly
-@Injectable()
 export class AuthService {
   //todo remove dummy_users
   private dummy_users= [
@@ -20,14 +18,14 @@ export class AuthService {
       let match_found: boolean = -1 != dummy_users.findIndex((x)=> x.username == username && x.password == password);
 
       if (match_found){
-        resolve();
+        resolve(new User(username, 'dummyEmail'));
       }
       else{
         reject();
       }
     }
 
-    return new Promise(authenticate);
+    return new Promise<User>(authenticate);
   }
 
 }

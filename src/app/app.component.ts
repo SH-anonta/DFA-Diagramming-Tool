@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from './global-services/auth.service';
 import {User} from './global-models/user.model';
+import {UserService} from './global-services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -8,11 +8,8 @@ import {User} from './global-models/user.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  title = 'app';
 
-  constructor(private auth: AuthService){
-
-  }
+  constructor(private user: UserService){}
 
   ngOnInit(){
     this.driverMethod();
@@ -20,11 +17,9 @@ export class AppComponent implements OnInit{
 
   driverMethod(){
     console.log('----Driver code starts');
-
-    let login_promise = this.auth.login('anonta', 'password');
-    login_promise.then(()=> console.log('login successful'));
-    login_promise.catch(()=> console.log('login failed'));
-
+    // let login_promise = this.user.login('anonta', 'password');
+    // login_promise.then((user: User)=> {console.log('login successful', user); });
+    // login_promise.catch(()=> console.log('login failed'));
     console.log('----Driver code ends');
   }
 }
