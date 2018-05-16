@@ -5,10 +5,10 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import {RootRouterModule} from './root-router.module';
 
-
 @NgModule({
   declarations: [
     AppComponent,
+
   ],
   imports: [
     BrowserModule,
