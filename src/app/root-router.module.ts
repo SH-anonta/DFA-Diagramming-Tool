@@ -1,9 +1,12 @@
 import {NgModule} from '@angular/core'
+import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
+
 import {HomepageComponent} from './page-components/homepage/homepage.component';
 import {Error404Component} from './page-components/error404/error404.component';
 import {LoginComponent} from './page-components/login/login.component';
 import {RegisterComponent} from './page-components/register/register.component';
+
 
 
 let routes = [
@@ -23,7 +26,8 @@ let routes = [
     RegisterComponent,
   ],
   imports: [
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    FormsModule,
   ],
   exports: [
     RouterModule

@@ -2,13 +2,14 @@
   <div class="row">
     <div class="col-sm-6 mx-auto mt-5">
 
-      <form id="LoginForm"
-            #f="ngForm"
+      <form #f="ngForm"
+            id="LoginForm"
             (ngSubmit)="onFormSubmit(f)" >
 
         <label for="username">Username</label>
         <input ngModel
                type="text"
+               id="username"
                name="username"
                class="form-control"
                placeholder="Mr. User">
@@ -16,6 +17,7 @@
         <label for="password">Password</label>
         <input ngModel
                type="password"
+               id="password"
                name="password"
                class="form-control"
                placeholder="************">
