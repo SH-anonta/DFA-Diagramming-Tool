@@ -39,24 +39,42 @@ class DiagramSelectionLayer extends createjs.Container{
 
 // for handling nodes
 class DiagramNodesLayer extends createjs.Container{
-  readonly NODE_RADIUS: number = 50;
+  readonly NODE_RADIUS: number = 40;
   nodes: createjs.Shape[]= [];
 
-  constructor() {
+  constructor(private parent_stage: createjs.Stage) {
     super();
 
     this.createNewNode(80,80);
+    this.createNewNode(60,300);
   }
 
   createNewNode(x, y){
     let circle = new createjs.Shape();
 
-    circle.graphics.beginFill('white').drawCircle(x, y, this.NODE_RADIUS);
+    circle.graphics.beginFill('white').drawCircle(0, 0, this.NODE_RADIUS);
+    circle.x = x;
+    circle.y = y;
 
-    this.addChild(circle);
+    this.setEventListenersToNode(circle);
+
     this.nodes.push(circle);
+    this.addChild(circle);
   }
 
+
+  setEventListenersToNode(node: createjs.Shape){
+    // add click listener
+    node.on('click', (event) => {console.log('Node Click')});
+
+
+    // enable drag and drop functionality
+    node.on('pressmove', (event: any) =>{
+      event.currentTarget.x = event.stageX;
+      event.currentTarget.y = event.stageY;
+      this.parent_stage.update();
+    });
+  }
 }
 
 export class DFADiagram {
@@ -73,7 +91,7 @@ export class DFADiagram {
 
     this.selection_rect_layer = new DiagramSelectionLayer(0,0, canvas_width, canvas_height);
     this.background = this.createBackGround();
-    this.nodes_layer = new DiagramNodesLayer();
+    this.nodes_layer = new DiagramNodesLayer(this.stage);
 
     this.stage.addChild(this.selection_rect_layer);
     this.stage.addChild(this.background);
