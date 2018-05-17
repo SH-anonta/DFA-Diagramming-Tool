@@ -5,10 +5,22 @@
   <a class="navbar-brand h1" routerLink="">Chat App</a>
 
 
-  <div class="form-inline float-right">
+
+  <div *ngIf="!userService.userIsAuthenticated()"
+    class="form-inline float-right">
     <a class="nav-item " routerLink="/login">Login</a>
     |
     <a routerLink="/register">Register</a>
+  </div>
+
+  <div *ngIf="userService.userIsAuthenticated()"
+       class="form-inline float-right">
+    <a class="nav-item "
+       routerLink="/"
+       (click)="onLogoutClick()">
+
+      Logout
+    </a>
   </div>
 
 </nav>

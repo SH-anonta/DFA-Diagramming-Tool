@@ -1,6 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { NgForm } from '@angular/forms';
-import '@angular/forms';
+
+
+import {AuthService} from '../../global-services/auth.service';
+import {UserService} from '../../global-services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +15,7 @@ export class LoginComponent implements OnInit {
   @ViewChild('Form') form: NgForm;
 
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
     // this.form = this.form_ref.nativeElement;
@@ -20,7 +23,7 @@ export class LoginComponent implements OnInit {
   }
 
 
-  onFormSubmit(event: NgForm){
-    console.log(event);
+  onFormSubmit(form: NgForm){
+    this.userService.login(form.value.username, form.value.password);
   }
 }
