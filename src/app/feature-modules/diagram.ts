@@ -1,4 +1,5 @@
 import * as createjs from 'createjs-module';
+import {directive} from '@angular/core/src/render3/instructions';
 
 
 class Node {
@@ -58,7 +59,7 @@ class NodeElement extends createjs.Container{
 class DiagramSelectionLayer extends createjs.Container{
   layer_hit_area: createjs.Shape;
 
-  constructor(private diagram: DFADiagram, width: number, height: number){
+  constructor(private director: DiagramDirector, width: number, height: number){
     super();
 
     // define real shape to be transparent rectangle
@@ -80,7 +81,7 @@ class DiagramSelectionLayer extends createjs.Container{
     // on double click, create new node at the given point
     this.on('dblclick', (event: any)=>{
       console.log('Selection layer double Click');
-      this.diagram.createNode('New', event.stageX, event.stageY);
+      this.director.createNode('New', event.stageX, event.stageY);
     });
   }
 
@@ -144,8 +145,8 @@ class DiagramDirector {
 
   constructor(private stage: createjs.Stage,
               private diagram: DFADiagram,
-              private selection_layer: DiagramSelectionLayer,
-              private node_layer: DiagramNodesLayer,
+              private selection_layer?: DiagramSelectionLayer,
+              private node_layer?: DiagramNodesLayer,
   ){
 
 
@@ -153,6 +154,19 @@ class DiagramDirector {
 
   updateDiagram(){
     this.stage.update();
+  }
+
+  createNode(label: string, x: number, y: number) {
+    this.node_layer.createNewNode(label, x, y);
+    this.updateDiagram();
+  }
+
+  setSelectionLayer(selection_layer: DiagramSelectionLayer){
+    this.selection_layer = selection_layer;
+  }
+
+  setNodeLayer(node_layer: DiagramNodesLayer){
+    this.node_layer = node_layer;
   }
 }
 
@@ -166,14 +180,17 @@ export class DFADiagram {
 
   constructor(canvas: HTMLCanvasElement){
     this.stage = new createjs.Stage(canvas);
-    this.director= new DiagramDirector(this.stage, this, this.selection_rect_layer, this.nodes_layer);
+    this.director= new DiagramDirector(this.stage, this);
 
     let canvas_width = (<any>this.stage.canvas).scrollWidth;
     let canvas_height= (<any>this.stage.canvas).scrollHeight;
 
-    this.selection_rect_layer = new DiagramSelectionLayer(this, canvas_width, canvas_height);
+    this.selection_rect_layer = new DiagramSelectionLayer(this.director, canvas_width, canvas_height);
     this.background = this.createBackGround();
     this.nodes_layer = new DiagramNodesLayer(this.director, canvas_width, canvas_height);
+
+    this.director.setNodeLayer(this.nodes_layer);
+    this.director.setSelectionLayer(this.selection_rect_layer);
 
     this.stage.addChild(this.background);
     this.stage.addChild(this.selection_rect_layer);
@@ -192,11 +209,6 @@ export class DFADiagram {
     background.graphics.beginFill('#f5f5ff').drawRect(0,0,canvas_width, canvas_height);
 
     return background;
-  }
-
-  createNode(label, x, y){
-    this.nodes_layer.createNewNode(label, x, y);
-    this.stage.update();
   }
 
   ctrlPressed() {
