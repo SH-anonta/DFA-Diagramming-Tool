@@ -1,5 +1,5 @@
 import * as createjs from 'createjs-module';
-import {directive} from '@angular/core/src/render3/instructions';
+import {selector} from 'rxjs/operator/publish';
 
 
 class Node {
@@ -14,6 +14,7 @@ class DFA {
 
 
 class NodeElement extends createjs.Container{
+  selection_border: createjs.Shape;
   readonly NODE_RADIUS: number = 40;
 
   constructor(private label: string, pos_x, pos_y){
@@ -40,9 +41,16 @@ class NodeElement extends createjs.Container{
       font_size: 20,
     });
 
+    // selection border
+    this.selection_border = new createjs.Shape();
+    this.selection_border.graphics.setStrokeStyle(2).beginStroke('blue').drawCircle(0, 0, this.NODE_RADIUS);
+    this.selection_border.alpha= 0;
+    this.x = pos_x;
+    this.y = pos_y;
+
 
     this.hitArea = circle;
-    this.addChild(circle, circle_border, node_label);
+    this.addChild(circle, circle_border, node_label, this.selection_border);
 
     this.setEventListeners();
   }
@@ -51,6 +59,14 @@ class NodeElement extends createjs.Container{
     // this.on('click', (event: any)=>{
     //   console.log('node click');
     // });
+  }
+
+  showSelectionBorder(){
+    this.selection_border.alpha= 1;
+  }
+
+  hideSelectionBorder(){
+    this.selection_border.alpha= 0;
   }
 
 }
@@ -120,7 +136,10 @@ class DiagramNodesLayer extends createjs.Container{
 
   setEventListenersToNode(node: NodeElement){
     // add click listener
-    // node.on('click', (event: any) => {console.log('Node Click');});
+    node.on('click', (event: any) => {
+      // console.log('Node Click');
+      this.director.toggleNodeSelection(event.currentTarget);
+    });
     // node.on('pressup', (event) => {console.log('Node pressup')});
 
 
@@ -140,8 +159,37 @@ class DiagramNodesLayer extends createjs.Container{
   }
 }
 
+class NodeSelectionDirector {
+  selected_nodes: NodeElement[]= [];
+
+  constructor(private director: DiagramDirector){
+
+  }
+
+  toggleNodeSelection(node: NodeElement){
+
+    let idx = this.selected_nodes.findIndex(value => value === node);
+    if(idx != -1){
+      node.hideSelectionBorder();
+      this.selected_nodes.splice(idx, 1);
+    }
+    else{
+      node.showSelectionBorder();
+      this.selected_nodes.push(node);
+    }
+
+    this.director.updateDiagram();
+  }
+
+  clearSelection(){
+    this.selected_nodes.forEach(x => x.hideSelectionBorder());
+  }
+}
+
 // A mediator class that encapsulates interaction between diagram components
 class DiagramDirector {
+  node_selection_director: NodeSelectionDirector = new NodeSelectionDirector(this);
+
 
   constructor(private stage: createjs.Stage,
               private diagram: DFADiagram,
@@ -160,13 +208,16 @@ class DiagramDirector {
     this.node_layer.createNewNode(label, x, y);
     this.updateDiagram();
   }
-
   setSelectionLayer(selection_layer: DiagramSelectionLayer){
     this.selection_layer = selection_layer;
   }
-
   setNodeLayer(node_layer: DiagramNodesLayer){
     this.node_layer = node_layer;
+  }
+
+
+  toggleNodeSelection(node: NodeElement) {
+    this.node_selection_director.toggleNodeSelection(node);
   }
 }
 

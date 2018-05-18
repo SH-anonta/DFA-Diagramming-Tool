@@ -18,7 +18,6 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
 
   @HostListener('document:mouseup', ['$event'])
   mouseUpEventHandler(event: MouseEvent){
-    console.log('press up');
     this.dfa_diagram.ctrlReleased();
   }
 
