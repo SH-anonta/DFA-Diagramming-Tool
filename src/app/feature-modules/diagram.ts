@@ -43,15 +43,13 @@ class NodeElement extends createjs.Container{
     this.hitArea = circle;
     this.addChild(circle, circle_border, node_label);
 
-
-
     this.setEventListeners();
   }
 
   setEventListeners(){
-    this.on('click', (event: any)=>{
-      console.log('node click');
-    });
+    // this.on('click', (event: any)=>{
+    //   console.log('node click');
+    // });
   }
 
 }
@@ -60,16 +58,16 @@ class NodeElement extends createjs.Container{
 class DiagramSelectionLayer extends createjs.Container{
   layer_hit_area: createjs.Shape;
 
-  constructor(x: number, y: number, width: number, height: number){
+  constructor(private diagram: DFADiagram, width: number, height: number){
     super();
 
     // define real shape to be transparent rectangle
     this.layer_hit_area = new createjs.Shape();
-    this.layer_hit_area.graphics.setStrokeStyle(2).beginStroke("#000").rect(x, y, width, height);
+    this.layer_hit_area.graphics.setStrokeStyle(2).beginStroke("#000").rect(0,0, width, height);
 
     // define shape to use as hit area (opaque)
     let hit_area = new createjs.Shape();
-    hit_area.graphics.beginFill("#000").rect(x, y, width, height);
+    hit_area.graphics.beginFill("#000").rect(0,0 , width, height);
     this.layer_hit_area.hitArea= hit_area;
 
     this.setEventListeners();
@@ -78,6 +76,12 @@ class DiagramSelectionLayer extends createjs.Container{
 
   setEventListeners(){
     this.layer_hit_area.on('click', (event) => {console.log('SelectionLayer Click')});
+
+    // on double click, create new node at the given point
+    this.on('dblclick', (event: any)=>{
+      console.log('Selection layer double Click');
+      this.diagram.createNode('New', event.stageX, event.stageY);
+    });
   }
 
 }
@@ -87,26 +91,36 @@ class DiagramNodesLayer extends createjs.Container{
   readonly NODE_RADIUS: number = 40;
   nodes: NodeElement[]= [];
 
-  constructor(private parent_stage: createjs.Stage) {
+  constructor(private parent_stage: createjs.Stage, width: number, height: number) {
     super();
 
-    this.createNewNode(80,80);
-    this.createNewNode(60,300);
+    // define shape to use as hit area (opaque)
+    // let hit_area = new createjs.Shape();
+    // hit_area.graphics.beginFill("#000").rect(0, 0, width, height);
+    // this.hitArea= hit_area;
+
+    this.createNewNode('area',80,80);
+    this.createNewNode('area', 60,300);
+
+    this.setEvenListeners();
   }
 
-  createNewNode(x, y){
-    let new_node = new NodeElement('Area', x, y);
+  createNewNode(label, x, y){
+    let new_node = new NodeElement(label, x, y);
     this.nodes.push(new_node);
     this.addChild(new_node);
 
     this.setEventListenersToNode(new_node);
   }
 
+  setEvenListeners(){
+
+    // this.on('click', (event) => {console.log('SelectionLayer Click')});
+  }
 
   setEventListenersToNode(node: NodeElement){
     // add click listener
     node.on('click', (event) => {console.log('Node Click')});
-
 
     // enable drag and drop functionality
     node.on('pressmove', (event: any) =>{
@@ -120,7 +134,7 @@ class DiagramNodesLayer extends createjs.Container{
 export class DFADiagram {
   readonly stage: createjs.Stage;    // Easeljs stage
   readonly background: createjs.Shape;
-  readonly nodes_layer: createjs.Container;
+  readonly nodes_layer: DiagramNodesLayer;
   readonly selection_rect_layer: createjs.Container;
 
   constructor(canvas: HTMLCanvasElement){
@@ -129,12 +143,12 @@ export class DFADiagram {
     let canvas_width = (<any>this.stage.canvas).scrollWidth;
     let canvas_height= (<any>this.stage.canvas).scrollHeight;
 
-    this.selection_rect_layer = new DiagramSelectionLayer(0,0, canvas_width, canvas_height);
+    this.selection_rect_layer = new DiagramSelectionLayer(this, canvas_width, canvas_height);
     this.background = this.createBackGround();
-    this.nodes_layer = new DiagramNodesLayer(this.stage);
+    this.nodes_layer = new DiagramNodesLayer(this.stage, canvas_width, canvas_height);
 
-    this.stage.addChild(this.selection_rect_layer);
     this.stage.addChild(this.background);
+    this.stage.addChild(this.selection_rect_layer);
     this.stage.addChild(this.nodes_layer);
 
     this.stage.update();
@@ -150,5 +164,10 @@ export class DFADiagram {
     background.graphics.beginFill('#f5f5ff').drawRect(0,0,canvas_width, canvas_height);
 
     return background;
+  }
+
+  createNode(label, x, y){
+    this.nodes_layer.createNewNode(label, x, y);
+    this.stage.update();
   }
 }
