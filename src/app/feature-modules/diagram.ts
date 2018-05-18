@@ -11,6 +11,51 @@ class DFA {
 
 }
 
+
+class NodeElement extends createjs.Container{
+  readonly NODE_RADIUS: number = 40;
+
+  constructor(private label: string, pos_x, pos_y){
+    super();
+
+
+    // main circle of the node
+    let circle = new createjs.Shape();
+    circle.graphics.beginFill('white').drawCircle(0, 0, this.NODE_RADIUS);
+    this.x = pos_x;
+    this.y = pos_y;
+
+    // circle border
+    let circle_border = new createjs.Shape();
+    circle_border.graphics.setStrokeStyle(1).beginStroke('black').drawCircle(0, 0, this.NODE_RADIUS);
+    this.x = pos_x;
+    this.y = pos_y;
+
+    // label of node
+    let node_label = new createjs.Text(label, "bold 15px Arial", "black");
+    node_label.set({
+      textAlign: "center",
+      textBaseline: "middle",
+      font_size: 20,
+    });
+
+
+    this.hitArea = circle;
+    this.addChild(circle, circle_border, node_label);
+
+
+
+    this.setEventListeners();
+  }
+
+  setEventListeners(){
+    this.on('click', (event: any)=>{
+      console.log('node click');
+    });
+  }
+
+}
+
 // all logic for selection of nodes
 class DiagramSelectionLayer extends createjs.Container{
   layer_hit_area: createjs.Shape;
@@ -40,7 +85,7 @@ class DiagramSelectionLayer extends createjs.Container{
 // for handling nodes
 class DiagramNodesLayer extends createjs.Container{
   readonly NODE_RADIUS: number = 40;
-  nodes: createjs.Shape[]= [];
+  nodes: NodeElement[]= [];
 
   constructor(private parent_stage: createjs.Stage) {
     super();
@@ -50,20 +95,15 @@ class DiagramNodesLayer extends createjs.Container{
   }
 
   createNewNode(x, y){
-    let circle = new createjs.Shape();
+    let new_node = new NodeElement('Area', x, y);
+    this.nodes.push(new_node);
+    this.addChild(new_node);
 
-    circle.graphics.beginFill('white').drawCircle(0, 0, this.NODE_RADIUS);
-    circle.x = x;
-    circle.y = y;
-
-    this.setEventListenersToNode(circle);
-
-    this.nodes.push(circle);
-    this.addChild(circle);
+    this.setEventListenersToNode(new_node);
   }
 
 
-  setEventListenersToNode(node: createjs.Shape){
+  setEventListenersToNode(node: NodeElement){
     // add click listener
     node.on('click', (event) => {console.log('Node Click')});
 
