@@ -12,13 +12,12 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
   mouseDownEventHandler(event: MouseEvent){
     // console.log('CTRl: '+ event.ctrlKey);
     if(event.ctrlKey){
+      console.log('ctrl press');
       this.dfa_diagram.ctrlPressed();
     }
-  }
-
-  @HostListener('document:mouseup', ['$event'])
-  mouseUpEventHandler(event: MouseEvent){
-    this.dfa_diagram.ctrlReleased();
+    else{
+      this.dfa_diagram.ctrlReleased();
+    }
   }
 
   @ViewChild('MainCanvas') canvas_ref: ElementRef;

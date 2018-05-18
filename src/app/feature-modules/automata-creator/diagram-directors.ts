@@ -62,6 +62,12 @@ export class DiagramDirector {
 
 
   toggleNodeSelection(node: NodeElement) {
+    console.log(this.diagram.ctrl_is_pressed);
+
+    if(!this.diagram.ctrl_is_pressed){
+      console.log('AAAAAAAAAAAAA');
+      this.node_selection_director.clearSelection();
+    }
     this.node_selection_director.toggleNodeSelection(node);
   }
 }
