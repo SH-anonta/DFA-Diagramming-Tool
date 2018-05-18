@@ -120,13 +120,22 @@ class DiagramNodesLayer extends createjs.Container{
 
   setEventListenersToNode(node: NodeElement){
     // add click listener
-    node.on('click', (event) => {console.log('Node Click')});
+    // node.on('click', (event) => {console.log('Node Click')});
+    // node.on('pressup', (event) => {console.log('Node pressup')});
 
+
+    // IMPORTANT: This method expects the target element to have drag_offset set to where mouse was first clicked (should be set by mousedown event handler)
     // enable drag and drop functionality
     node.on('pressmove', (event: any) =>{
-      event.currentTarget.x = event.stageX;
-      event.currentTarget.y = event.stageY;
+      event.currentTarget.x = event.stageX - event.currentTarget.drag_offset.x;
+      event.currentTarget.y = event.stageY - event.currentTarget.drag_offset.y;
+
       this.parent_stage.update();
+    });
+
+    node.on('mousedown', (event: any) =>{
+      // console.log('mouse down');
+      event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
     });
   }
 }
