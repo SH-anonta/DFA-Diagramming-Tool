@@ -91,7 +91,7 @@ class DiagramNodesLayer extends createjs.Container{
   readonly NODE_RADIUS: number = 40;
   nodes: NodeElement[]= [];
 
-  constructor(private parent_stage: createjs.Stage, width: number, height: number) {
+  constructor(private director: DiagramDirector, width: number, height: number) {
     super();
 
     // define shape to use as hit area (opaque)
@@ -101,7 +101,6 @@ class DiagramNodesLayer extends createjs.Container{
 
     this.createNewNode('area',80,80);
     this.createNewNode('area', 60,300);
-
     this.setEvenListeners();
   }
 
@@ -120,7 +119,7 @@ class DiagramNodesLayer extends createjs.Container{
 
   setEventListenersToNode(node: NodeElement){
     // add click listener
-    // node.on('click', (event) => {console.log('Node Click')});
+    // node.on('click', (event: any) => {console.log('Node Click');});
     // node.on('pressup', (event) => {console.log('Node pressup')});
 
 
@@ -130,7 +129,7 @@ class DiagramNodesLayer extends createjs.Container{
       event.currentTarget.x = event.stageX - event.currentTarget.drag_offset.x;
       event.currentTarget.y = event.stageY - event.currentTarget.drag_offset.y;
 
-      this.parent_stage.update();
+      this.director.updateDiagram();
     });
 
     node.on('mousedown', (event: any) =>{
@@ -140,21 +139,41 @@ class DiagramNodesLayer extends createjs.Container{
   }
 }
 
+// A mediator class that encapsulates interaction between diagram components
+class DiagramDirector {
+
+  constructor(private stage: createjs.Stage,
+              private diagram: DFADiagram,
+              private selection_layer: DiagramSelectionLayer,
+              private node_layer: DiagramNodesLayer,
+  ){
+
+
+  }
+
+  updateDiagram(){
+    this.stage.update();
+  }
+}
+
 export class DFADiagram {
+  ctrl_is_pressed: boolean= false;
+  readonly director: DiagramDirector;
   readonly stage: createjs.Stage;    // Easeljs stage
   readonly background: createjs.Shape;
   readonly nodes_layer: DiagramNodesLayer;
-  readonly selection_rect_layer: createjs.Container;
+  readonly selection_rect_layer: DiagramSelectionLayer;
 
   constructor(canvas: HTMLCanvasElement){
     this.stage = new createjs.Stage(canvas);
+    this.director= new DiagramDirector(this.stage, this, this.selection_rect_layer, this.nodes_layer);
 
     let canvas_width = (<any>this.stage.canvas).scrollWidth;
     let canvas_height= (<any>this.stage.canvas).scrollHeight;
 
     this.selection_rect_layer = new DiagramSelectionLayer(this, canvas_width, canvas_height);
     this.background = this.createBackGround();
-    this.nodes_layer = new DiagramNodesLayer(this.stage, canvas_width, canvas_height);
+    this.nodes_layer = new DiagramNodesLayer(this.director, canvas_width, canvas_height);
 
     this.stage.addChild(this.background);
     this.stage.addChild(this.selection_rect_layer);
@@ -178,5 +197,13 @@ export class DFADiagram {
   createNode(label, x, y){
     this.nodes_layer.createNewNode(label, x, y);
     this.stage.update();
+  }
+
+  ctrlPressed() {
+    this.ctrl_is_pressed= true;
+  }
+
+  ctrlReleased() {
+    this.ctrl_is_pressed= false;
   }
 }
