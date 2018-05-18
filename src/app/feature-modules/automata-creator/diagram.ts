@@ -1,6 +1,5 @@
 import * as createjs from 'createjs-module';
-import {selector} from 'rxjs/operator/publish';
-
+import {DiagramDirector} from './diagram-directors';
 
 class Node {
   name: string= 'N/A';
@@ -13,7 +12,7 @@ class DFA {
 }
 
 
-class NodeElement extends createjs.Container{
+export class NodeElement extends createjs.Container{
   selection_border: createjs.Shape;
   readonly NODE_RADIUS: number = 40;
 
@@ -72,7 +71,7 @@ class NodeElement extends createjs.Container{
 }
 
 // all logic for selection of nodes
-class DiagramSelectionLayer extends createjs.Container{
+export class DiagramSelectionLayer extends createjs.Container{
   layer_hit_area: createjs.Shape;
 
   constructor(private director: DiagramDirector, width: number, height: number){
@@ -104,7 +103,7 @@ class DiagramSelectionLayer extends createjs.Container{
 }
 
 // for handling nodes
-class DiagramNodesLayer extends createjs.Container{
+export class DiagramNodesLayer extends createjs.Container{
   readonly NODE_RADIUS: number = 40;
   nodes: NodeElement[]= [];
 
@@ -156,68 +155,6 @@ class DiagramNodesLayer extends createjs.Container{
       // console.log('mouse down');
       event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
     });
-  }
-}
-
-class NodeSelectionDirector {
-  selected_nodes: NodeElement[]= [];
-
-  constructor(private director: DiagramDirector){
-
-  }
-
-  toggleNodeSelection(node: NodeElement){
-
-    let idx = this.selected_nodes.findIndex(value => value === node);
-    if(idx != -1){
-      node.hideSelectionBorder();
-      this.selected_nodes.splice(idx, 1);
-    }
-    else{
-      node.showSelectionBorder();
-      this.selected_nodes.push(node);
-    }
-
-    this.director.updateDiagram();
-  }
-
-  clearSelection(){
-    this.selected_nodes.forEach(x => x.hideSelectionBorder());
-  }
-}
-
-// A mediator class that encapsulates interaction between diagram components
-class DiagramDirector {
-  node_selection_director: NodeSelectionDirector = new NodeSelectionDirector(this);
-
-
-  constructor(private stage: createjs.Stage,
-              private diagram: DFADiagram,
-              private selection_layer?: DiagramSelectionLayer,
-              private node_layer?: DiagramNodesLayer,
-  ){
-
-
-  }
-
-  updateDiagram(){
-    this.stage.update();
-  }
-
-  createNode(label: string, x: number, y: number) {
-    this.node_layer.createNewNode(label, x, y);
-    this.updateDiagram();
-  }
-  setSelectionLayer(selection_layer: DiagramSelectionLayer){
-    this.selection_layer = selection_layer;
-  }
-  setNodeLayer(node_layer: DiagramNodesLayer){
-    this.node_layer = node_layer;
-  }
-
-
-  toggleNodeSelection(node: NodeElement) {
-    this.node_selection_director.toggleNodeSelection(node);
   }
 }
 
