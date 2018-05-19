@@ -106,14 +106,10 @@ export class DiagramSelectionLayer extends createjs.Container{
 export class DiagramNodesLayer extends createjs.Container{
   readonly NODE_RADIUS: number = 40;
   nodes: NodeElement[]= [];
+  selected_nodes: NodeElement[]= [];
 
   constructor(private director: DiagramDirector, width: number, height: number) {
     super();
-
-    // define shape to use as hit area (opaque)
-    // let hit_area = new createjs.Shape();
-    // hit_area.graphics.beginFill("#000").rect(0, 0, width, height);
-    // this.hitArea= hit_area;
 
     this.createNewNode('area',80,80);
     this.createNewNode('area', 60,300);
@@ -157,6 +153,26 @@ export class DiagramNodesLayer extends createjs.Container{
       // console.log('mouse down');
       event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
     });
+  }
+
+  toggleNodeSelection(node: NodeElement){
+
+    let idx = this.selected_nodes.findIndex(value => value === node);
+    if(idx != -1){
+      node.hideSelectionBorder();
+      this.selected_nodes.splice(idx, 1);
+    }
+    else{
+      node.showSelectionBorder();
+      this.selected_nodes.push(node);
+    }
+
+    this.director.updateDiagram();
+  }
+
+  deselectAllNodes(){
+    this.selected_nodes.forEach(x => x.hideSelectionBorder());
+    this.selected_nodes.splice(0, this.selected_nodes.length);
   }
 }
 

@@ -33,4 +33,6 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
     this.dfa_diagram = new DFADiagram(this.canvas_ref.nativeElement);
   }
 
+
+
 }

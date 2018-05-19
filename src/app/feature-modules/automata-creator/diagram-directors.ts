@@ -1,39 +1,9 @@
 import * as createjs from "createjs-module";
 import {DFADiagram, DiagramNodesLayer, DiagramSelectionLayer, NodeElement} from './diagram';
 
-
-
-export class NodeSelectionDirector {
-  selected_nodes: NodeElement[]= [];
-
-  constructor(private director: DiagramDirector){
-
-  }
-
-  toggleNodeSelection(node: NodeElement){
-
-    let idx = this.selected_nodes.findIndex(value => value === node);
-    if(idx != -1){
-      node.hideSelectionBorder();
-      this.selected_nodes.splice(idx, 1);
-    }
-    else{
-      node.showSelectionBorder();
-      this.selected_nodes.push(node);
-    }
-
-    this.director.updateDiagram();
-  }
-
-  clearSelection(){
-    this.selected_nodes.forEach(x => x.hideSelectionBorder());
-    this.selected_nodes.splice(0, this.selected_nodes.length);
-  }
-}
-
 // A mediator class that encapsulates interaction between diagram components
 export class DiagramDirector {
-  node_selection_director: NodeSelectionDirector = new NodeSelectionDirector(this);
+  // node_selection_director: NodeSelectionDirector = new NodeSelectionDirector(this);
 
 
   constructor(private stage: createjs.Stage,
@@ -65,9 +35,8 @@ export class DiagramDirector {
     console.log(this.diagram.ctrl_is_pressed);
 
     if(!this.diagram.ctrl_is_pressed){
-      console.log('AAAAAAAAAAAAA');
-      this.node_selection_director.clearSelection();
+      this.node_layer.deselectAllNodes();
     }
-    this.node_selection_director.toggleNodeSelection(node);
+    this.node_layer.toggleNodeSelection(node);
   }
 }
