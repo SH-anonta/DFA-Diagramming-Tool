@@ -13,8 +13,18 @@ class DFA {
 
 
 export class NodeElement extends createjs.Container{
-  selection_border: createjs.Shape;
+  selection_border: createjs.Shape;     // circle border that indicates the node is selected
+  accept_state_symbol: createjs.Shape;  // an inner circle that indicates the node is an accept state
+
   readonly NODE_RADIUS: number = 40;
+  private _is_accept_state: boolean= false;
+
+  set is_accept_state(val: boolean){
+    this._is_accept_state = val;
+    this.accept_state_symbol.alpha= val ? 1 : 0;
+  }
+
+  get is_accept_state(): boolean{ return this._is_accept_state; }
 
   constructor(private label: string, pos_x, pos_y){
     super();
@@ -29,6 +39,13 @@ export class NodeElement extends createjs.Container{
     // circle border
     let circle_border = new createjs.Shape();
     circle_border.graphics.setStrokeStyle(1).beginStroke('black').drawCircle(0, 0, this.NODE_RADIUS);
+    this.x = pos_x;
+    this.y = pos_y;
+
+    // accept state border
+    this.accept_state_symbol = new createjs.Shape();
+    this.accept_state_symbol.graphics.setStrokeStyle(1).beginStroke('black').drawCircle(0, 0, this.NODE_RADIUS-5);
+    this.accept_state_symbol.alpha= 0;
     this.x = pos_x;
     this.y = pos_y;
 
@@ -49,7 +66,7 @@ export class NodeElement extends createjs.Container{
 
 
     this.hitArea = circle;
-    this.addChild(circle, circle_border, node_label, this.selection_border);
+    this.addChild(circle, circle_border, node_label, this.selection_border, this.accept_state_symbol);
 
     this.setEventListeners();
   }
@@ -67,6 +84,7 @@ export class NodeElement extends createjs.Container{
   hideSelectionBorder(){
     this.selection_border.alpha= 0;
   }
+
 
 }
 
@@ -133,10 +151,14 @@ export class DiagramNodesLayer extends createjs.Container{
     // add click listener
     node.on('click', (event: any) => {
       // console.log('Node Click');
-
       this.director.toggleNodeSelection(event.currentTarget);
     });
 
+    node.on('dblclick', (event: any) => {
+      // console.log('Node dbl Click');
+      event.currentTarget.is_accept_state = !event.currentTarget.is_accept_state;
+      this.director.updateDiagram();
+    });
     // node.on('pressup', (event) => {console.log('Node pressup')});
 
 

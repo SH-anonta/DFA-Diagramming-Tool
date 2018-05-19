@@ -32,7 +32,7 @@ export class DiagramDirector {
 
 
   toggleNodeSelection(node: NodeElement) {
-    console.log(this.diagram.ctrl_is_pressed);
+    // console.log(this.diagram.ctrl_is_pressed);
 
     if(!this.diagram.ctrl_is_pressed){
       this.node_layer.deselectAllNodes();

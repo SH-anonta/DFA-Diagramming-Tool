@@ -12,7 +12,7 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
   mouseDownEventHandler(event: MouseEvent){
     // console.log('CTRl: '+ event.ctrlKey);
     if(event.ctrlKey){
-      console.log('ctrl press');
+      // console.log('ctrl press');
       this.dfa_diagram.ctrlPressed();
     }
     else{
