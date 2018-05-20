@@ -31,17 +31,22 @@ export class DiagramDirector {
   }
 
 
-  toggleNodeSelection(node: NodeElement) {
-    // console.log(this.diagram.ctrl_is_pressed);
+  deleteSelectedNodes() {
+    this.node_layer.deleteSelectedNodes();
+    this.updateDiagram();
+  }
 
+  nodeClicked(node: NodeElement){
     if(!this.diagram.ctrl_is_pressed){
       this.node_layer.deselectAllNodes();
     }
-    this.node_layer.toggleNodeSelection(node);
+
+    node.is_selected= !node.is_selected;
+    this.updateDiagram();
   }
 
-  deleteSelectedNodes() {
-    this.node_layer.deleteSelectedNodes();
-    this.updateDiagram();0
+  nodeDoubleClicked(node: NodeElement){
+    node.is_accept_state = !node.is_accept_state;
+    this.updateDiagram();
   }
 }

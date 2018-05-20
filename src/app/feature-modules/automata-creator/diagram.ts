@@ -155,13 +155,12 @@ export class DiagramNodesLayer extends createjs.Container{
     // add click listener
     node.on('click', (event: any) => {
       // console.log('Node Click');
-      this.director.toggleNodeSelection(event.currentTarget);
+      this.director.nodeClicked(event.currentTarget);
     });
 
     node.on('dblclick', (event: any) => {
       // console.log('Node dbl Click');
-      event.currentTarget.is_accept_state = !event.currentTarget.is_accept_state;
-      this.director.updateDiagram();
+      this.director.nodeDoubleClicked(event.currentTarget)
     });
     // node.on('pressup', (event) => {console.log('Node pressup')});
 
