@@ -20,6 +20,16 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
     }
   }
 
+  // @HostListener('document:keydown', ['$event'])
+  // keyPressEventHandler(event: KeyboardEvent){
+  //   // console.log('CTRl: '+ event.ctrlKey);
+  //
+  //   // check if delete key is pressed
+  //   if(event.keyCode === 46){
+  //    console.log('Delete pressed');
+  //   }
+  // }
+
   @ViewChild('MainCanvas') canvas_ref: ElementRef;
   dfa_diagram: DFADiagram;
 

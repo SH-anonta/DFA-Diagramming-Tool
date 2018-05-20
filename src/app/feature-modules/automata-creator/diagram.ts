@@ -1,5 +1,6 @@
 import * as createjs from 'createjs-module';
 import {DiagramDirector} from './diagram-directors';
+import {forEach} from '@angular/router/src/utils/collection';
 
 class Node {
   name: string= 'N/A';
@@ -11,6 +12,10 @@ class DFA {
 
 }
 
+// This class listens to key events and
+class EventFlags{
+
+}
 
 export class NodeElement extends createjs.Container{
   selection_border: createjs.Shape;     // circle border that indicates the node is selected
@@ -184,6 +189,17 @@ export class DiagramNodesLayer extends createjs.Container{
   deselectAllNodes(){
     this.nodes.forEach(x => x.is_selected = false);
   }
+
+  deleteSelectedNodes(){
+    for(let node of this.nodes){
+      if(node.is_selected){
+        this.removeChild(node);
+      }
+    }
+
+    // only keep the nodes that were not selected before deletion
+    this.nodes = this.nodes.filter((node: NodeElement)=> { return !node.is_selected} );
+  }
 }
 
 export class DFADiagram {
@@ -194,7 +210,7 @@ export class DFADiagram {
   readonly nodes_layer: DiagramNodesLayer;
   readonly selection_rect_layer: DiagramSelectionLayer;
 
-  constructor(canvas: HTMLCanvasElement){
+  constructor(private canvas: HTMLCanvasElement){
     this.stage = new createjs.Stage(canvas);
     this.director= new DiagramDirector(this.stage, this);
 
@@ -211,6 +227,8 @@ export class DFADiagram {
     this.stage.addChild(this.background);
     this.stage.addChild(this.selection_rect_layer);
     this.stage.addChild(this.nodes_layer);
+
+    this.setEventListeners();
 
     this.stage.update();
   }
@@ -233,5 +251,19 @@ export class DFADiagram {
 
   ctrlReleased() {
     this.ctrl_is_pressed= false;
+  }
+
+  private setEventListeners() {
+    // this.canvas.addEventListener('keydown', (event: KeyboardEvent)=>{
+    document.addEventListener('keydown', (event: KeyboardEvent)=>{
+      // console.log(event);
+      // check if delete key is pressed
+
+      // execute only if the delete is not pressed in an input element
+      if(event.target === document.body && event.keyCode === 46){
+        // console.log('Delete pressed');
+        this.director.deleteSelectedNodes();
+      }
+    });
   }
 }

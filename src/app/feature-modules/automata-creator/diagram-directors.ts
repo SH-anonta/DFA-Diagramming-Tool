@@ -39,4 +39,9 @@ export class DiagramDirector {
     }
     this.node_layer.toggleNodeSelection(node);
   }
+
+  deleteSelectedNodes() {
+    this.node_layer.deleteSelectedNodes();
+    this.updateDiagram();0
+  }
 }
