@@ -16,15 +16,25 @@ export class NodeElement extends createjs.Container{
   selection_border: createjs.Shape;     // circle border that indicates the node is selected
   accept_state_symbol: createjs.Shape;  // an inner circle that indicates the node is an accept state
 
+  // constants
   readonly NODE_RADIUS: number = 40;
-  private _is_accept_state: boolean= false;
 
+
+  // accept state status, changing the value of this property also changes the diagram
+  private _is_accept_state: boolean= false;
   set is_accept_state(val: boolean){
     this._is_accept_state = val;
     this.accept_state_symbol.alpha= val ? 1 : 0;
   }
-
   get is_accept_state(): boolean{ return this._is_accept_state; }
+
+  // node selection logic, changing the value of this property also changes the diagram
+  private _is_selected: boolean= false;
+  set is_selected(val: boolean){
+    this._is_selected = val;
+    this.selection_border.alpha= val ? 1 : 0;
+  }
+  get is_selected(){return this._is_selected;}
 
   constructor(private label: string, pos_x, pos_y){
     super();
@@ -70,22 +80,11 @@ export class NodeElement extends createjs.Container{
 
     this.setEventListeners();
   }
-
   setEventListeners(){
     // this.on('click', (event: any)=>{
     //   console.log('node click');
     // });
   }
-
-  showSelectionBorder(){
-    this.selection_border.alpha= 1;
-  }
-
-  hideSelectionBorder(){
-    this.selection_border.alpha= 0;
-  }
-
-
 }
 
 // all logic for selection of nodes
@@ -124,7 +123,7 @@ export class DiagramSelectionLayer extends createjs.Container{
 export class DiagramNodesLayer extends createjs.Container{
   readonly NODE_RADIUS: number = 40;
   nodes: NodeElement[]= [];
-  selected_nodes: NodeElement[]= [];
+  // selected_nodes: NodeElement[]= [];
 
   constructor(private director: DiagramDirector, width: number, height: number) {
     super();
@@ -178,23 +177,12 @@ export class DiagramNodesLayer extends createjs.Container{
   }
 
   toggleNodeSelection(node: NodeElement){
-
-    let idx = this.selected_nodes.findIndex(value => value === node);
-    if(idx != -1){
-      node.hideSelectionBorder();
-      this.selected_nodes.splice(idx, 1);
-    }
-    else{
-      node.showSelectionBorder();
-      this.selected_nodes.push(node);
-    }
-
+    node.is_selected = !node.is_selected;
     this.director.updateDiagram();
   }
 
   deselectAllNodes(){
-    this.selected_nodes.forEach(x => x.hideSelectionBorder());
-    this.selected_nodes.splice(0, this.selected_nodes.length);
+    this.nodes.forEach(x => x.is_selected = false);
   }
 }
 
