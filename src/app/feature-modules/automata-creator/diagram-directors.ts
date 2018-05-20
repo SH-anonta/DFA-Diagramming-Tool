@@ -54,12 +54,26 @@ export class DiagramDirector {
   }
 
   nodeMouseDown(event: any){
+    // drag_offset is used to keep track of where the mouse pointer is pressed on the node element
     event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
   }
 
+  // this method expects drag_offset property to be set on event, by mouseDown event handler
   nodePressMove(event: any){
     event.currentTarget.x = event.stageX - event.currentTarget.drag_offset.x;
     event.currentTarget.y = event.stageY - event.currentTarget.drag_offset.y;
+    this.updateDiagram();
+  }
+
+  // Selection layer action handlers
+
+  selectionLayerClicked(event: any){
+    this.node_layer.deselectAllNodes();
+    this.updateDiagram();
+  }
+
+  selectionLayerDoubleClicked(event: any){
+    this.node_layer.createNewNode('New', event.stageX, event.stageY);
     this.updateDiagram();
   }
 }

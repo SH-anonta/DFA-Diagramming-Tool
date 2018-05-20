@@ -113,12 +113,15 @@ export class DiagramSelectionLayer extends createjs.Container{
   }
 
   setEventListeners(){
-    this.layer_hit_area.on('click', (event) => {console.log('SelectionLayer Click')});
+    this.layer_hit_area.on('click', (event: any) => {
+      // console.log('SelectionLayer Click');
+      this.director.selectionLayerClicked(event);
+    });
 
     // on double click, create new node at the given point
     this.on('dblclick', (event: any)=>{
-      console.log('Selection layer double Click');
-      this.director.createNode('New', event.stageX, event.stageY);
+      // console.log('Selection layer double Click');
+      this.director.selectionLayerDoubleClicked(event);
     });
   }
 
