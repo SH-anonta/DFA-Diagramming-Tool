@@ -31,11 +31,14 @@ export class DiagramDirector {
   }
 
 
-  deleteSelectedNodes() {
+  deleteButtonPressedOnPageBody() {
+    // delete button pressed outside of any input fields.
+    // this indicates the ues wants to delete selected nodes
     this.node_layer.deleteSelectedNodes();
     this.updateDiagram();
   }
 
+  // In response to actions performed on nodes
   nodeClicked(node: NodeElement){
     if(!this.diagram.ctrl_is_pressed){
       this.node_layer.deselectAllNodes();
@@ -47,6 +50,16 @@ export class DiagramDirector {
 
   nodeDoubleClicked(node: NodeElement){
     node.is_accept_state = !node.is_accept_state;
+    this.updateDiagram();
+  }
+
+  nodeMouseDown(event: any){
+    event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
+  }
+
+  nodePressMove(event: any){
+    event.currentTarget.x = event.stageX - event.currentTarget.drag_offset.x;
+    event.currentTarget.y = event.stageY - event.currentTarget.drag_offset.y;
     this.updateDiagram();
   }
 }

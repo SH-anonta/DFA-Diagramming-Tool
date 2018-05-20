@@ -151,6 +151,8 @@ export class DiagramNodesLayer extends createjs.Container{
     // this.on('click', (event) => {console.log('SelectionLayer Click')});
   }
 
+
+  // all event response task is delegated to a mediator class (DiagramDirector)
   setEventListenersToNode(node: NodeElement){
     // add click listener
     node.on('click', (event: any) => {
@@ -168,21 +170,13 @@ export class DiagramNodesLayer extends createjs.Container{
     // IMPORTANT: This method expects the target element to have drag_offset set to where mouse was first clicked (should be set by mousedown event handler)
     // enable drag and drop functionality
     node.on('pressmove', (event: any) =>{
-      event.currentTarget.x = event.stageX - event.currentTarget.drag_offset.x;
-      event.currentTarget.y = event.stageY - event.currentTarget.drag_offset.y;
-
-      this.director.updateDiagram();
+      this.director.nodePressMove(event);
     });
 
     node.on('mousedown', (event: any) =>{
       // console.log('mouse down');
-      event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
+      this.director.nodeMouseDown(event);
     });
-  }
-
-  toggleNodeSelection(node: NodeElement){
-    node.is_selected = !node.is_selected;
-    this.director.updateDiagram();
   }
 
   deselectAllNodes(){
@@ -261,7 +255,7 @@ export class DFADiagram {
       // execute only if the delete is not pressed in an input element
       if(event.target === document.body && event.keyCode === 46){
         // console.log('Delete pressed');
-        this.director.deleteSelectedNodes();
+        this.director.deleteButtonPressedOnPageBody();
       }
     });
   }
