@@ -83,3 +83,20 @@ export class CreateNodeAction implements Action{
     this.node_layer.deleteNode(this.created_node);
   }
 }
+
+
+export class ToggleNodeAcceptStateStatusAction implements Action{
+  private readonly node: NodeElement;
+
+  constructor(private node_layer: DiagramNodesLayer, node: NodeElement){
+    this.node = node;
+  }
+
+  do(){
+    this.node.is_accept_state = !this.node.is_accept_state;
+  }
+
+  undo(){
+    this.node.is_accept_state = !this.node.is_accept_state;
+  }
+}

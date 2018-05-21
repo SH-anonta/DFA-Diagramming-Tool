@@ -138,7 +138,6 @@ export class DiagramNodesLayer extends createjs.Container{
 
     this.createNewNode('area',80,80);
     this.createNewNode('area', 60,300);
-    this.setEvenListeners();
   }
 
   createNewNode(label, x, y): NodeElement{
@@ -152,8 +151,11 @@ export class DiagramNodesLayer extends createjs.Container{
   }
 
   addNode(node: NodeElement) {
-    this.nodes.push(node);
-    this.addChild(node);
+    if(this.nodes.findIndex(x => {return x === node;}) == -1){
+      this.nodes.push(node);
+      this.addChild(node);
+    }
+
   }
 
   addNodes(nodes: NodeElement[]) {
@@ -161,12 +163,6 @@ export class DiagramNodesLayer extends createjs.Container{
       this.addNode(x);
     }
   }
-
-  setEvenListeners(){
-
-    // this.on('click', (event) => {console.log('SelectionLayer Click')});
-  }
-
 
   // all event response task is delegated to a mediator class (DiagramDirector)
   setEventListenersToNode(node: NodeElement){
@@ -230,6 +226,14 @@ export class DiagramNodesLayer extends createjs.Container{
     return this.nodes.filter(x => {return x.is_selected;});
   }
 
+  translateSelectedNodes(x: number, y: number){
+    for(let node of this.nodes){
+      if(node.is_selected){
+        node.x+= x;
+        node.y+= y;
+      }
+    }
+  }
 
 }
 

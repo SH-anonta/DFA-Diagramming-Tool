@@ -1,6 +1,7 @@
 import * as createjs from "createjs-module";
 import {DFADiagram, DiagramNodesLayer, DiagramSelectionLayer, NodeElement} from './diagram';
-import {ActionExecutor, CreateNodeAction, DeleteSelectedNodesAction} from './diagram-actions';
+import {ActionExecutor, CreateNodeAction, DeleteSelectedNodesAction, ToggleNodeAcceptStateStatusAction} from './diagram-actions';
+import {zipStatic} from 'rxjs/operators/zip';
 
 // A mediator class that encapsulates interaction between diagram components
 export class DiagramDirector {
@@ -47,19 +48,35 @@ export class DiagramDirector {
   }
 
   nodeDoubleClicked(node: NodeElement){
-    node.is_accept_state = !node.is_accept_state;
+    this.action_executor.executeAction(new ToggleNodeAcceptStateStatusAction(this.node_layer, node));
     this.updateDiagram();
   }
 
+
+  last_mouse_x= 0;
+  last_mouse_y= 0;
+
   nodeMouseDown(event: any){
     // drag_offset is used to keep track of where the mouse pointer is pressed on the node element
+
     event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
+    this.last_mouse_x= event.stageX;
+    this.last_mouse_y= event.stageY;
   }
 
   // this method expects drag_offset property to be set on event, by mouseDown event handler
   nodePressMove(event: any){
-    event.currentTarget.x = event.stageX - event.currentTarget.drag_offset.x;
-    event.currentTarget.y = event.stageY - event.currentTarget.drag_offset.y;
+    // event.currentTarget.x = event.stageX - event.currentTarget.drag_offset.x;
+    // event.currentTarget.y = event.stageY - event.currentTarget.drag_offset.y;
+
+    let tx=  event.stageX - this.last_mouse_x;
+    let ty=  event.stageY - this.last_mouse_y;
+
+    this.node_layer.translateSelectedNodes(tx, ty);
+
+    this.last_mouse_x= event.stageX;
+    this.last_mouse_y= event.stageY;
+
     this.updateDiagram();
   }
 
@@ -71,8 +88,7 @@ export class DiagramDirector {
   }
 
   selectionLayerDoubleClicked(event: any){
-    this.action_executor.executeAction(new CreateNodeAction(this.node_layer, 'New', event.stageX, event.stageY))
-    // this.node_layer.createNewNode('New', event.stageX, event.stageY);
+    this.action_executor.executeAction(new CreateNodeAction(this.node_layer, 'New', event.stageX, event.stageY));
     this.updateDiagram();
   }
 
