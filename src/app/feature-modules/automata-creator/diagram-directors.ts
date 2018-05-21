@@ -75,12 +75,12 @@ export class DiagramDirector {
     this.updateDiagram();
   }
 
-  ctrlZPresed(){
+  ctrlZPressed(){
     this.action_executor.undoAction();
     this.updateDiagram();
   }
 
-  ctrlYPresed(){
+  ctrlYPressed(){
     this.action_executor.redoAction();
     this.updateDiagram();
   }

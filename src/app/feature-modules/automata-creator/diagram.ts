@@ -297,11 +297,11 @@ export class DFADiagram {
         // console.log('Delete pressed');
         this.director.deleteButtonPressedOnPageBody();
       }
-      else if(event.key == 'z'){
-        this.director.ctrlZPresed();
+      else if(event.ctrlKey && event.key == 'z'){
+        this.director.ctrlZPressed();
       }
-      else if(event.key == 'y'){
-        this.director.ctrlYPresed();
+      else if(event.ctrlKey && event.key == 'y'){
+        this.director.ctrlYPressed();
       }
 
     });
