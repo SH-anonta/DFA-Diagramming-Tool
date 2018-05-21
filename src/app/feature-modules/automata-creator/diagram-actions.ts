@@ -15,23 +15,24 @@ export class ActionExecutor{
     this.done_actions.push(action);
   }
 
-  undo(){
-    if(this.undone_actions.length > 0){
+  undoAction(){
+    if(this.done_actions.length > 0){
       let action:Action = this.done_actions.pop();
       action.undo();
       this.undone_actions.push(action);
     }
 
-  }
-
-  redo(){
     if(this.undone_actions.length > this.MAX_ACTION_HISTORY_COUNT){
       // if max history limit will be crossed, discard the oldest action
       this.done_actions.splice(0, 1);
     }
-    if(this.done_actions.length > 0) {
+  }
+
+  redoAction(){
+
+    if(this.undone_actions.length > 0) {
       let action: Action = this.undone_actions.pop();
-      action.undo();
+      action.do();
       this.done_actions.push(action);
     }
   }
@@ -60,6 +61,5 @@ export class DeleteSelectedNodesAction implements Action{
   undo(){
    this.node_layer.addNodes(this.deleted_nodes);
   }
-
 }
 

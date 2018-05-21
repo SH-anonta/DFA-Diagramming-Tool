@@ -289,10 +289,21 @@ export class DFADiagram {
       // check if delete key is pressed
 
       // execute only if the delete is not pressed in an input element
-      if(event.target === document.body && event.keyCode === 46){
+      if(event.target !== document.body){
+        return;
+      }
+
+      if(event.keyCode === 46){
         // console.log('Delete pressed');
         this.director.deleteButtonPressedOnPageBody();
       }
+      else if(event.key == 'z'){
+        this.director.ctrlZPresed();
+      }
+      else if(event.key == 'y'){
+        this.director.ctrlYPresed();
+      }
+
     });
   }
 }

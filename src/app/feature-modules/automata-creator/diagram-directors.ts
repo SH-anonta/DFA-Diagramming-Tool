@@ -74,4 +74,14 @@ export class DiagramDirector {
     this.node_layer.createNewNode('New', event.stageX, event.stageY);
     this.updateDiagram();
   }
+
+  ctrlZPresed(){
+    this.action_executor.undoAction();
+    this.updateDiagram();
+  }
+
+  ctrlYPresed(){
+    this.action_executor.redoAction();
+    this.updateDiagram();
+  }
 }
