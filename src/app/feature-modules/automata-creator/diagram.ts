@@ -149,6 +149,11 @@ export class DiagramNodesLayer extends createjs.Container{
     this.setEventListenersToNode(new_node);
   }
 
+  addNode(node: NodeElement) {
+    this.addChild(node);
+  }
+
+
   setEvenListeners(){
 
     // this.on('click', (event) => {console.log('SelectionLayer Click')});
@@ -196,6 +201,12 @@ export class DiagramNodesLayer extends createjs.Container{
     // only keep the nodes that were not selected before deletion
     this.nodes = this.nodes.filter((node: NodeElement)=> { return !node.is_selected} );
   }
+
+  deleteNode(node: NodeElement) {
+    this.removeChild(node);
+  }
+
+
 }
 
 export class DFADiagram {
