@@ -13,9 +13,9 @@ export class ActionExecutor{
     this.undone_actions.splice(0, this.undone_actions.length);
   }
 
-  executeAction(action: Action){
-    // important is important in case action.do() raises an exception
-    action.do();
+  execute(action: Action){
+    // important is important in case action.redo() raises an exception
+    action.execute();
     this.done_actions.push(action);
     this.clearUndoneActions();
   }
@@ -37,7 +37,7 @@ export class ActionExecutor{
 
     if(this.undone_actions.length > 0) {
       let action: Action = this.undone_actions.pop();
-      action.do();
+      action.redo();
       this.done_actions.push(action);
     }
   }
@@ -47,7 +47,9 @@ export class ActionExecutor{
 
 export interface Action{
 
-  do();
+  execute();
+
+  redo();
 
   undo();
 }
@@ -59,7 +61,11 @@ export class DeleteSelectedNodesAction implements Action{
     this.deleted_nodes = node_layer.getSelectedNodes();
   }
 
-  do(){
+  execute(){
+    this.node_layer.deleteNodes(this.deleted_nodes);
+  }
+
+  redo(){
     this.node_layer.deleteNodes(this.deleted_nodes);
   }
 
@@ -69,13 +75,20 @@ export class DeleteSelectedNodesAction implements Action{
 }
 
 export class CreateNodeAction implements Action{
-  private readonly created_node: NodeElement;
+  private created_node: NodeElement;
 
-  constructor(private node_layer: DiagramNodesLayer, label: string, x:number, y:number){
-    this.created_node = this.node_layer.createNewNode(label, x, y);
+  constructor(private node_layer: DiagramNodesLayer,
+              private node_label: string,
+              private node_x:number,
+              private node_y:number){
+
   }
 
-  do(){
+  execute(){
+    this.created_node= this.node_layer.createNewNode(this.node_label, this.node_x, this.node_y);
+  }
+
+  redo(){
     this.node_layer.addNode(this.created_node);
   }
 
@@ -92,7 +105,11 @@ export class ToggleNodeAcceptStateStatusAction implements Action{
     this.node = node;
   }
 
-  do(){
+  execute(){
+    this.node.is_accept_state = !this.node.is_accept_state;
+  }
+
+  redo(){
     this.node.is_accept_state = !this.node.is_accept_state;
   }
 

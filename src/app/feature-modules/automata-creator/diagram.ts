@@ -151,6 +151,7 @@ export class DiagramNodesLayer extends createjs.Container{
   }
 
   addNode(node: NodeElement) {
+    // prevent same node from being inserted twice
     if(this.nodes.findIndex(x => {return x === node;}) == -1){
       this.nodes.push(node);
       this.addChild(node);

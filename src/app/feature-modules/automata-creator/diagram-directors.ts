@@ -32,7 +32,7 @@ export class DiagramDirector {
     // this indicates the ues wants to delete selected nodes
     // this.node_layer.deleteSelectedNodes();
 
-    this.action_executor.executeAction(new DeleteSelectedNodesAction(this.node_layer));
+    this.action_executor.execute(new DeleteSelectedNodesAction(this.node_layer));
 
     this.updateDiagram();
   }
@@ -48,7 +48,7 @@ export class DiagramDirector {
   }
 
   nodeDoubleClicked(node: NodeElement){
-    this.action_executor.executeAction(new ToggleNodeAcceptStateStatusAction(this.node_layer, node));
+    this.action_executor.execute(new ToggleNodeAcceptStateStatusAction(this.node_layer, node));
     this.updateDiagram();
   }
 
@@ -88,7 +88,7 @@ export class DiagramDirector {
   }
 
   selectionLayerDoubleClicked(event: any){
-    this.action_executor.executeAction(new CreateNodeAction(this.node_layer, 'New', event.stageX, event.stageY));
+    this.action_executor.execute(new CreateNodeAction(this.node_layer, 'New', event.stageX, event.stageY));
     this.updateDiagram();
   }
 
