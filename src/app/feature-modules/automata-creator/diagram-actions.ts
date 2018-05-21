@@ -68,3 +68,18 @@ export class DeleteSelectedNodesAction implements Action{
   }
 }
 
+export class CreateNodeAction implements Action{
+  private readonly created_node: NodeElement;
+
+  constructor(private node_layer: DiagramNodesLayer, label: string, x:number, y:number){
+    this.created_node = this.node_layer.createNewNode(label, x, y);
+  }
+
+  do(){
+    this.node_layer.addNode(this.created_node);
+  }
+
+  undo(){
+    this.node_layer.deleteNode(this.created_node);
+  }
+}

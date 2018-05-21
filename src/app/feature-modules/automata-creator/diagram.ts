@@ -141,12 +141,14 @@ export class DiagramNodesLayer extends createjs.Container{
     this.setEvenListeners();
   }
 
-  createNewNode(label, x, y){
+  createNewNode(label, x, y): NodeElement{
     let new_node = new NodeElement(label, x, y);
     this.nodes.push(new_node);
     this.addChild(new_node);
 
     this.setEventListenersToNode(new_node);
+
+    return new_node
   }
 
   addNode(node: NodeElement) {

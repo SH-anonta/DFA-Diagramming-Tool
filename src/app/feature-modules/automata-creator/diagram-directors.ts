@@ -1,6 +1,6 @@
 import * as createjs from "createjs-module";
 import {DFADiagram, DiagramNodesLayer, DiagramSelectionLayer, NodeElement} from './diagram';
-import {ActionExecutor, DeleteSelectedNodesAction} from './diagram-actions';
+import {ActionExecutor, CreateNodeAction, DeleteSelectedNodesAction} from './diagram-actions';
 
 // A mediator class that encapsulates interaction between diagram components
 export class DiagramDirector {
@@ -71,7 +71,8 @@ export class DiagramDirector {
   }
 
   selectionLayerDoubleClicked(event: any){
-    this.node_layer.createNewNode('New', event.stageX, event.stageY);
+    this.action_executor.executeAction(new CreateNodeAction(this.node_layer, 'New', event.stageX, event.stageY))
+    // this.node_layer.createNewNode('New', event.stageX, event.stageY);
     this.updateDiagram();
   }
 
