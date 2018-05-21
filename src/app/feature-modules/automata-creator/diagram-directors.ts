@@ -1,6 +1,12 @@
 import * as createjs from "createjs-module";
 import {DFADiagram, DiagramNodesLayer, DiagramSelectionLayer, NodeElement} from './diagram';
-import {ActionExecutor, CreateNodeAction, DeleteSelectedNodesAction, ToggleNodeAcceptStateStatusAction} from './diagram-actions';
+import {
+  ActionExecutor,
+  CreateNodeAction,
+  DeleteSelectedNodesAction,
+  MoveNodesAction,
+  ToggleNodeAcceptStateStatusAction
+} from './diagram-actions';
 import {zipStatic} from 'rxjs/operators/zip';
 
 // A mediator class that encapsulates interaction between diagram components
@@ -53,6 +59,8 @@ export class DiagramDirector {
   }
 
 
+  initial_mouse_x= 0;
+  initial_mouse_y= 0;
   last_mouse_x= 0;
   last_mouse_y= 0;
 
@@ -62,6 +70,9 @@ export class DiagramDirector {
     event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
     this.last_mouse_x= event.stageX;
     this.last_mouse_y= event.stageY;
+
+    this.initial_mouse_x= event.stageX;
+    this.initial_mouse_y= event.stageY;
   }
 
   // this method expects drag_offset property to be set on event, by mouseDown event handler
@@ -78,6 +89,23 @@ export class DiagramDirector {
     this.last_mouse_y= event.stageY;
 
     this.updateDiagram();
+
+    console.log('Press Move');
+  }
+
+  nodePressUp(event: any){
+    // moving of nodes has been completed
+    // console.log('Press up');
+
+    let dx = event.stageX-this.initial_mouse_x;
+    let dy = event.stageY-this.initial_mouse_y;
+
+    // if the has moved after mouesdown event was fired
+    if(dx != 0 || dy != 0){
+      let selected_nodes = this.node_layer.getSelectedNodes();
+      console.log(selected_nodes);
+      this.action_executor.execute(new MoveNodesAction(selected_nodes,dx,dy));
+    }
   }
 
   // Selection layer action handlers

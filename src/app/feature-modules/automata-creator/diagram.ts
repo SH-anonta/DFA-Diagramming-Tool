@@ -186,6 +186,11 @@ export class DiagramNodesLayer extends createjs.Container{
       this.director.nodePressMove(event);
     });
 
+    node.on('pressup', (event: any) =>{
+      // console.log('mouse down');
+      this.director.nodePressUp(event);
+    });
+
     node.on('mousedown', (event: any) =>{
       // console.log('mouse down');
       this.director.nodeMouseDown(event);

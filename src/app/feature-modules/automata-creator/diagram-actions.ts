@@ -97,7 +97,6 @@ export class CreateNodeAction implements Action{
   }
 }
 
-
 export class ToggleNodeAcceptStateStatusAction implements Action{
   private readonly node: NodeElement;
 
@@ -115,5 +114,35 @@ export class ToggleNodeAcceptStateStatusAction implements Action{
 
   undo(){
     this.node.is_accept_state = !this.node.is_accept_state;
+  }
+}
+
+
+
+export class MoveNodesAction implements Action{
+  private readonly node: NodeElement;
+
+  constructor(private nodes: NodeElement[],
+              private translate_x: number,
+              private translate_y: number){
+  }
+
+  execute(){
+    // intentionally do nothing
+    // For making the operation interactive
+  }
+
+  redo(){
+    for(let node of this.nodes){
+      node.x += this.translate_x;
+      node.y += this.translate_y;
+    }
+  }
+
+  undo(){
+    for(let node of this.nodes){
+      node.x -= this.translate_x;
+      node.y -= this.translate_y;
+    }
   }
 }
