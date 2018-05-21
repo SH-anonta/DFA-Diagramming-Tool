@@ -46,16 +46,20 @@ export interface Action{
   undo();
 }
 
-class DeleteNodeAction implements Action{
-  constructor(private node_layer: DiagramNodesLayer, private node: NodeElement){
+export class DeleteSelectedNodesAction implements Action{
+  deleted_nodes: NodeElement[];
+
+  constructor(private node_layer: DiagramNodesLayer){
+    this.deleted_nodes = node_layer.getSelectedNodes();
   }
 
   do(){
-    this.node_layer.deleteNode(this.node);
+    this.node_layer.deleteNodes(this.deleted_nodes);
   }
 
   undo(){
-   this.node_layer.addNode(this.node);
+   this.node_layer.addNodes(this.deleted_nodes);
   }
+
 }
 

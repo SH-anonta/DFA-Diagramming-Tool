@@ -1,10 +1,10 @@
 import * as createjs from "createjs-module";
 import {DFADiagram, DiagramNodesLayer, DiagramSelectionLayer, NodeElement} from './diagram';
+import {ActionExecutor, DeleteSelectedNodesAction} from './diagram-actions';
 
 // A mediator class that encapsulates interaction between diagram components
 export class DiagramDirector {
-  // node_selection_director: NodeSelectionDirector = new NodeSelectionDirector(this);
-
+  private action_executor: ActionExecutor = new ActionExecutor();
 
   constructor(private stage: createjs.Stage,
               private diagram: DFADiagram,
@@ -12,17 +12,12 @@ export class DiagramDirector {
               private node_layer?: DiagramNodesLayer,
   ){
 
-
   }
 
   updateDiagram(){
     this.stage.update();
   }
 
-  createNode(label: string, x: number, y: number) {
-    this.node_layer.createNewNode(label, x, y);
-    this.updateDiagram();
-  }
   setSelectionLayer(selection_layer: DiagramSelectionLayer){
     this.selection_layer = selection_layer;
   }
@@ -34,7 +29,10 @@ export class DiagramDirector {
   deleteButtonPressedOnPageBody() {
     // delete button pressed outside of any input fields.
     // this indicates the ues wants to delete selected nodes
-    this.node_layer.deleteSelectedNodes();
+    // this.node_layer.deleteSelectedNodes();
+
+    this.action_executor.executeAction(new DeleteSelectedNodesAction(this.node_layer));
+
     this.updateDiagram();
   }
 

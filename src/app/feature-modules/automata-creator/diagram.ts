@@ -150,9 +150,15 @@ export class DiagramNodesLayer extends createjs.Container{
   }
 
   addNode(node: NodeElement) {
+    this.nodes.push(node);
     this.addChild(node);
   }
 
+  addNodes(nodes: NodeElement[]) {
+    for(let x of nodes){
+      this.addNode(x);
+    }
+  }
 
   setEvenListeners(){
 
@@ -203,7 +209,23 @@ export class DiagramNodesLayer extends createjs.Container{
   }
 
   deleteNode(node: NodeElement) {
-    this.removeChild(node);
+    let idx = this.nodes.findIndex(x => {return x === node});
+
+    if(idx != -1){
+      this.nodes.splice(idx, 1);
+      this.removeChild(node);
+    }
+
+  }
+
+  deleteNodes(nodes: NodeElement[]){
+    for(let x of nodes){
+      this.deleteNode(x);
+    }
+  }
+
+  getSelectedNodes() {
+    return this.nodes.filter(x => {return x.is_selected;});
   }
 
 
