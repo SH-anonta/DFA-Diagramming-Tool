@@ -7,7 +7,7 @@ export class ActionExecutor{
   private undone_actions: Action[]= [];
 
   // Max size of undo, redo stacks
-  readonly MAX_ACTION_HISTORY_COUNT= 50;
+  readonly MAX_ACTION_HISTORY_COUNT= 100;
 
   private clearUndoneActions(){
     this.undone_actions.splice(0, this.undone_actions.length);
@@ -120,7 +120,6 @@ export class ToggleNodeAcceptStateStatusAction implements Action{
 
 
 export class MoveNodesAction implements Action{
-  private readonly node: NodeElement;
 
   constructor(private nodes: NodeElement[],
               private translate_x: number,

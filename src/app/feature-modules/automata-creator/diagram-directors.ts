@@ -44,12 +44,23 @@ export class DiagramDirector {
   }
 
   // In response to actions performed on nodes
-  nodeClicked(node: NodeElement){
+  nodeClicked(event: any){
+    let dx = event.stageX - this.initial_mouse_x;
+    let dy = event.stageY - this.initial_mouse_y;
+    let drag_performed = !(dx == 0 && dy == 0);
+
     if(!this.diagram.ctrl_is_pressed){
-      this.node_layer.deselectAllNodes();
+      if(!drag_performed){
+        this.node_layer.deselectAllNodes();
+      }
+      event.currentTarget.is_selected = true;
+    }
+    else{
+      event.currentTarget.is_selected = !event.currentTarget.is_selected;
     }
 
-    node.is_selected= !node.is_selected;
+
+
     this.updateDiagram();
   }
 
@@ -57,7 +68,6 @@ export class DiagramDirector {
     this.action_executor.execute(new ToggleNodeAcceptStateStatusAction(this.node_layer, node));
     this.updateDiagram();
   }
-
 
   initial_mouse_x= 0;
   initial_mouse_y= 0;
