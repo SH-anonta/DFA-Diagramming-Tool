@@ -129,15 +129,13 @@ export class DiagramSelectionLayer extends createjs.Container{
 
 // for handling nodes
 export class DiagramNodesLayer extends createjs.Container{
-  readonly NODE_RADIUS: number = 40;
-  nodes: NodeElement[]= [];
+  private nodes: NodeElement[]= [];
   // selected_nodes: NodeElement[]= [];
 
   constructor(private director: DiagramDirector, width: number, height: number) {
     super();
-
-    this.createNewNode('area',80,80);
-    this.createNewNode('area', 60,300);
+    // this.createNewNode('area',80,80);
+    // this.createNewNode('area', 60,300);
   }
 
   createNewNode(label, x, y): NodeElement{
@@ -165,6 +163,9 @@ export class DiagramNodesLayer extends createjs.Container{
     }
   }
 
+  getAllNodes(): NodeElement[]{
+    return this.nodes;
+  }
   // all event response task is delegated to a mediator class (DiagramDirector)
   setEventListenersToNode(node: NodeElement){
     // add click listener
