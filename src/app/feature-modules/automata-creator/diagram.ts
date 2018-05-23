@@ -310,6 +310,8 @@ export class DFADiagram {
 
     });
 
+
+    // The custom events emitted by createjs library does not support keyevents
     // Warning: inefficient
     document.addEventListener('keydown', (event: any) =>{
       this.ctrl_is_pressed = event.ctrlKey;

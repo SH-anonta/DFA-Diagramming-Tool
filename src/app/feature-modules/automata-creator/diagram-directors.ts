@@ -49,17 +49,20 @@ export class DiagramDirector {
     let dy = event.stageY - this.initial_mouse_y;
     let drag_performed = !(dx == 0 && dy == 0);
 
-    if(!this.diagram.ctrl_is_pressed){
-      if(!drag_performed){
-        this.node_layer.deselectAllNodes();
-      }
+    // if(!this.diagram.ctrl_is_pressed){
+    //   if(!drag_performed){
+    //     this.node_layer.deselectAllNodes();
+    //   }
+    //   event.currentTarget.is_selected = true;
+    // }
+    // else{
+    //   event.currentTarget.is_selected = !event.currentTarget.is_selected;
+    // }
+
+    if(!this.diagram.ctrl_is_pressed && !drag_performed){
+      this.node_layer.deselectAllNodes();
       event.currentTarget.is_selected = true;
     }
-    else{
-      event.currentTarget.is_selected = !event.currentTarget.is_selected;
-    }
-
-
 
     this.updateDiagram();
   }
@@ -83,6 +86,17 @@ export class DiagramDirector {
 
     this.initial_mouse_x= event.stageX;
     this.initial_mouse_y= event.stageY;
+
+    if(this.diagram.ctrl_is_pressed){
+      event.currentTarget.is_selected = !event.currentTarget.is_selected;
+    }
+    else if(!event.currentTarget.is_selected){
+      // if control is not pressed and the clicked node is not selected
+      this.node_layer.deselectAllNodes();
+      event.currentTarget.is_selected = true;
+    }
+
+    this.updateDiagram();
   }
 
   // this method expects drag_offset property to be set on event, by mouseDown event handler
@@ -100,7 +114,7 @@ export class DiagramDirector {
 
     this.updateDiagram();
 
-    console.log('Press Move');
+    // console.log('Press Move');
   }
 
   nodePressUp(event: any){
@@ -113,7 +127,6 @@ export class DiagramDirector {
     // if the has moved after mouesdown event was fired
     if(dx != 0 || dy != 0){
       let selected_nodes = this.node_layer.getSelectedNodes();
-      console.log(selected_nodes);
       this.action_executor.execute(new MoveNodesAction(selected_nodes,dx,dy));
     }
   }
