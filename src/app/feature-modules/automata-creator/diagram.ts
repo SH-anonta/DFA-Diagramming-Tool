@@ -1,6 +1,5 @@
 import * as createjs from 'createjs-module';
 import {DiagramDirector} from './diagram-directors';
-import {forEach} from '@angular/router/src/utils/collection';
 
 class Node {
   name: string= 'N/A';
@@ -134,8 +133,8 @@ export class DiagramNodesLayer extends createjs.Container{
 
   constructor(private director: DiagramDirector, width: number, height: number) {
     super();
-    // this.createNewNode('area',80,80);
-    // this.createNewNode('area', 60,300);
+    this.createNewNode('area',80,80);
+    this.createNewNode('area', 60,300);
   }
 
   createNewNode(label, x, y): NodeElement{
@@ -287,14 +286,6 @@ export class DFADiagram {
     return background;
   }
 
-  ctrlPressed() {
-    this.ctrl_is_pressed= true;
-  }
-
-  ctrlReleased() {
-    this.ctrl_is_pressed= false;
-  }
-
   private setEventListeners() {
     // this.canvas.addEventListener('keydown', (event: KeyboardEvent)=>{
     document.addEventListener('keydown', (event: KeyboardEvent)=>{
@@ -317,6 +308,17 @@ export class DFADiagram {
         this.director.ctrlYPressed();
       }
 
+    });
+
+    // Warning: inefficient
+    document.addEventListener('keydown', (event: any) =>{
+      this.ctrl_is_pressed = event.ctrlKey;
+      // console.log('ctrl down')
+    });
+
+    document.addEventListener('keyup', (event: any) =>{
+      this.ctrl_is_pressed = event.ctrlKey;
+      // console.log('ctrl up');
     });
   }
 }
