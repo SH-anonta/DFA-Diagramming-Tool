@@ -85,7 +85,10 @@ export class CreateNodeAction implements Action{
   }
 
   execute(){
-    this.created_node= this.node_layer.createNewNode(this.node_label, this.node_x, this.node_y);
+    let new_node = this.node_layer.createNewNode(this.node_label, this.node_x, this.node_y);
+    new_node.is_selected = true;
+    this.created_node= new_node;
+
   }
 
   redo(){

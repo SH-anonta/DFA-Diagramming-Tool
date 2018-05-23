@@ -43,7 +43,6 @@ export class NodeElement extends createjs.Container{
   constructor(private label: string, pos_x, pos_y){
     super();
 
-
     // main circle of the node
     let circle = new createjs.Shape();
     circle.graphics.beginFill('white').drawCircle(0, 0, this.NODE_RADIUS);
