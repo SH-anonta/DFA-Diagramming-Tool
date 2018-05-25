@@ -151,5 +151,46 @@ describe('DFA Diagram', ()=>{
       expect(this.node1.y).toEqual(this.node1_y+ty);
     });
   });
+
+  describe('NodeElement', ()=>{
+
+    beforeEach(()=>{
+      this.node1_label = 'Node1';
+      this.node1_x = 60;
+      this.node1_y = 80;
+
+      this.node1 = new NodeElement(this.node1_label, this.node1_x, this.node1_y);
+    });
+
+    it('Should create Node', () =>{
+      let node1_label = 'Node1';
+      let node1_x = 60;
+      let node1_y = 80;
+
+      let node1 = new NodeElement(node1_label, node1_x, node1_y);
+
+      // expect(node1.label).toEqual(node1_label);
+      expect(node1.x).toEqual(node1_x);
+      expect(node1.y).toEqual(node1_y);
+
+    });
+
+    it('Should be selectable', () =>{
+      this.node1.is_selected = true;
+      expect(this.node1.is_selected).toBeTruthy();
+
+      this.node1.is_selected = false;
+      expect(this.node1.is_selected).toBeFalsy();
+    });
+
+    it('Should toggle between accept state and non accept state', () =>{
+      this.node1.is_accept_state = true;
+      expect(this.node1.is_accept_state).toBeTruthy();
+
+      this.node1.is_accept_state = false;
+      expect(this.node1.is_accept_state).toBeFalsy();
+    });
+
+  });
 });
 
