@@ -132,8 +132,8 @@ export class DiagramNodesLayer extends createjs.Container{
 
   constructor(private director: DiagramDirector, width: number, height: number) {
     super();
-    this.createNewNode('area',80,80);
-    this.createNewNode('area', 60,300);
+    // this.createNewNode('area',80,80);
+    // this.createNewNode('area', 60,300);
   }
 
   createNewNode(label, x, y): NodeElement{
@@ -164,36 +164,9 @@ export class DiagramNodesLayer extends createjs.Container{
   getAllNodes(): NodeElement[]{
     return this.nodes;
   }
-  // all event response task is delegated to a mediator class (DiagramDirector)
-  setEventListenersToNode(node: NodeElement){
-    // add click listener
-    node.on('click', (event: any) => {
-      // console.log('Node Click');
-      this.director.nodeClicked(event);
-    });
 
-    node.on('dblclick', (event: any) => {
-      // console.log('Node dbl Click');
-      this.director.nodeDoubleClicked(event.currentTarget)
-    });
-    // node.on('pressup', (event) => {console.log('Node pressup')});
-
-
-    // IMPORTANT: This method expects the target element to have drag_offset set to where mouse was first clicked (should be set by mousedown event handler)
-    // enable drag and drop functionality
-    node.on('pressmove', (event: any) =>{
-      this.director.nodePressMove(event);
-    });
-
-    node.on('pressup', (event: any) =>{
-      // console.log('mouse down');
-      this.director.nodePressUp(event);
-    });
-
-    node.on('mousedown', (event: any) =>{
-      // console.log('mouse down');
-      this.director.nodeMouseDown(event);
-    });
+  selectAllNodes(){
+    this.nodes.forEach(x => x.is_selected = true);
   }
 
   deselectAllNodes(){
@@ -238,6 +211,38 @@ export class DiagramNodesLayer extends createjs.Container{
         node.y+= y;
       }
     }
+  }
+
+  // all event response task is delegated to a mediator class (DiagramDirector)
+  setEventListenersToNode(node: NodeElement){
+    // add click listener
+    node.on('click', (event: any) => {
+      // console.log('Node Click');
+      this.director.nodeClicked(event);
+    });
+
+    node.on('dblclick', (event: any) => {
+      // console.log('Node dbl Click');
+      this.director.nodeDoubleClicked(event.currentTarget)
+    });
+    // node.on('pressup', (event) => {console.log('Node pressup')});
+
+
+    // IMPORTANT: This method expects the target element to have drag_offset set to where mouse was first clicked (should be set by mousedown event handler)
+    // enable drag and drop functionality
+    node.on('pressmove', (event: any) =>{
+      this.director.nodePressMove(event);
+    });
+
+    node.on('pressup', (event: any) =>{
+      // console.log('mouse down');
+      this.director.nodePressUp(event);
+    });
+
+    node.on('mousedown', (event: any) =>{
+      // console.log('mouse down');
+      this.director.nodeMouseDown(event);
+    });
   }
 
 }
