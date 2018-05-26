@@ -1,5 +1,5 @@
 import {TestBed} from '@angular/core/testing';
-import {DFADiagram, DiagramNodesLayer, NodeElement} from './diagram';
+import {DFADiagram, DiagramNodesLayer, DiagramSelectionLayer, NodeElement} from './diagram';
 
 
 describe('DFA Diagram', ()=>{
@@ -191,6 +191,13 @@ describe('DFA Diagram', ()=>{
       expect(this.node1.is_accept_state).toBeFalsy();
     });
 
+  });
+
+  describe('SelectionLayer', function () {
+    it('Should be creatable', ()=>{
+      let director:any = jasmine.createSpy('DiagramDirector');
+      let temp = new DiagramSelectionLayer(director, 100, 100);
+    });
   });
 });
 
