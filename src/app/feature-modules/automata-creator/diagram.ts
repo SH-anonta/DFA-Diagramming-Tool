@@ -132,8 +132,14 @@ export class DiagramNodesLayer extends createjs.Container{
 
   constructor(private director: DiagramDirector, width: number, height: number) {
     super();
-    // this.createNewNode('area',80,80);
-    // this.createNewNode('area', 60,300);
+    let nodea = this.createNewNode('area',80,80);
+    let nodeb = this.createNewNode('area', 60,300);
+
+    setTimeout((e)=>{
+      console.log('Time out exe');
+      let edge = this.director.createNewEdge(nodea, nodeb);
+      this.director.updateDiagram();
+    }, 100);
   }
 
   createNewNode(label, x, y): NodeElement{
@@ -247,6 +253,45 @@ export class DiagramNodesLayer extends createjs.Container{
 
 }
 
+class EdgeElement extends createjs.Container{
+  private center_control_point: number;
+  line: createjs.Shape ;
+  label: string;
+
+  constructor(private end_point_a: NodeElement, private end_point_b: NodeElement){
+    super();
+
+    this.line= new createjs.Shape();
+    this.line.graphics.beginStroke('blue');
+    this.line.graphics.moveTo(end_point_a.x, end_point_a.y);
+    this.line.graphics.lineTo(end_point_b.x, end_point_b.y);
+    this.line.graphics.endStroke();
+
+    this.addChild(this.line);
+  }
+
+
+}
+
+// this class only contains logic for drawing line that represent edges
+export class DiagramEdgeLayer extends createjs.Container{
+  private edges: EdgeElement[]= [];
+
+  constructor(){
+    super();
+
+  }
+
+  // creates new edge between two nodes and return the created edge
+  createEdge(end_point_a: NodeElement, end_point_b: NodeElement): EdgeElement{
+    let edge = new EdgeElement(end_point_a, end_point_b);
+    this.edges.push(edge);
+    this.addChild(edge);
+
+    return edge;
+  }
+}
+
 export class DFADiagram {
   ctrl_is_pressed: boolean= false;
   readonly director: DiagramDirector;
@@ -254,6 +299,8 @@ export class DFADiagram {
   readonly background: createjs.Shape;
   readonly nodes_layer: DiagramNodesLayer;
   readonly selection_rect_layer: DiagramSelectionLayer;
+  readonly edge_layer: DiagramEdgeLayer;
+
 
   constructor(private canvas: HTMLCanvasElement){
     this.stage = new createjs.Stage(canvas);
@@ -262,16 +309,21 @@ export class DFADiagram {
     let canvas_width = (<any>this.stage.canvas).scrollWidth;
     let canvas_height= (<any>this.stage.canvas).scrollHeight;
 
+    this.edge_layer = new DiagramEdgeLayer();
     this.selection_rect_layer = new DiagramSelectionLayer(this.director, canvas_width, canvas_height);
     this.background = this.createBackGround();
     this.nodes_layer = new DiagramNodesLayer(this.director, canvas_width, canvas_height);
 
+    this.director.setEdgeLayer(this.edge_layer);
     this.director.setNodeLayer(this.nodes_layer);
     this.director.setSelectionLayer(this.selection_rect_layer);
 
+    // order of insertion is important here
+    // If layer a is added after b, a will be on top of b
     this.stage.addChild(this.background);
     this.stage.addChild(this.selection_rect_layer);
     this.stage.addChild(this.nodes_layer);
+    this.stage.addChild(this.edge_layer);
 
     this.setEventListeners();
 

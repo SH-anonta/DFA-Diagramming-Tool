@@ -1,5 +1,5 @@
 import * as createjs from "createjs-module";
-import {DFADiagram, DiagramNodesLayer, DiagramSelectionLayer, NodeElement} from './diagram';
+import {DFADiagram, DiagramEdgeLayer, DiagramNodesLayer, DiagramSelectionLayer, NodeElement} from './diagram';
 import {
   ActionExecutor,
   CreateNodeAction,
@@ -17,6 +17,7 @@ export class DiagramDirector {
               private diagram: DFADiagram,
               private selection_layer?: DiagramSelectionLayer,
               private node_layer?: DiagramNodesLayer,
+              private edge_layer?: DiagramEdgeLayer,
   ){
 
   }
@@ -32,6 +33,9 @@ export class DiagramDirector {
     this.node_layer = node_layer;
   }
 
+  setEdgeLayer(edge_layer: DiagramEdgeLayer){
+    this.edge_layer = edge_layer;
+  }
 
   deleteButtonPressedOnPageBody() {
     // delete button pressed outside of any input fields.
@@ -151,5 +155,10 @@ export class DiagramDirector {
   ctrlYPressed(){
     this.action_executor.redoAction();
     this.updateDiagram();
+  }
+
+  // todo delete
+  createNewEdge(nodea: NodeElement, nodeb: NodeElement){
+    return this.edge_layer.createEdge(nodea, nodeb);
   }
 }
