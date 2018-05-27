@@ -255,21 +255,38 @@ export class DiagramNodesLayer extends createjs.Container{
 
 class EdgeElement extends createjs.Container{
   private center_control_point: number;
-  line: createjs.Shape ;
+  line: createjs.Shape;
+  line_create_command;
+  line_basier_curve_command;
   label: string;
 
   constructor(private end_point_a: NodeElement, private end_point_b: NodeElement){
     super();
 
     this.line= new createjs.Shape();
-    this.line.graphics.beginStroke('blue');
-    this.line.graphics.moveTo(end_point_a.x, end_point_a.y);
-    this.line.graphics.lineTo(end_point_b.x, end_point_b.y);
-    this.line.graphics.endStroke();
+    this.line.graphics.setStrokeStyle(2);
+    this.line.graphics.beginStroke('#208ed0');
 
+    this.line_create_command= this.line.graphics.moveTo(end_point_a.x, end_point_a.y).command;
+
+    // this.line.graphics.lineTo(end_point_b.x, end_point_b.y);
+    this.line_basier_curve_command= this.line.graphics.bezierCurveTo(end_point_a.x, end_point_a.y,
+      -50+(end_point_a.x+end_point_b.x)/2, (end_point_a.y+end_point_b.y)/2,
+                                     end_point_b.x, end_point_b.y).command;
+    // move_command.x = 300;
+    // this.line.graphics.arcTo(end_point_a.x, end_point_a.y, end_point_b.x, end_point_b.y, 0);
+
+    this.line.graphics.endStroke();
     this.addChild(this.line);
   }
 
+  updateEdgePosition(){
+    this.line_create_command.x= this.end_point_a.x;
+    this.line_create_command.y= this.end_point_a.y;
+
+    this.line_basier_curve_command.x= this.end_point_a.x;
+    this.line_basier_curve_command.y= this.end_point_a.y;
+  }
 
 }
 
@@ -322,8 +339,8 @@ export class DFADiagram {
     // If layer a is added after b, a will be on top of b
     this.stage.addChild(this.background);
     this.stage.addChild(this.selection_rect_layer);
-    this.stage.addChild(this.nodes_layer);
     this.stage.addChild(this.edge_layer);
+    this.stage.addChild(this.nodes_layer);
 
     this.setEventListeners();
 
