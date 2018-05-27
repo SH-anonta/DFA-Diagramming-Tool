@@ -23,7 +23,6 @@ export class NodeElement extends createjs.Container{
   // constants
   readonly NODE_RADIUS: number = 40;
 
-
   // accept state status, changing the value of this property also changes the diagram
   private _is_accept_state: boolean= false;
   set is_accept_state(val: boolean){
@@ -83,6 +82,12 @@ export class NodeElement extends createjs.Container{
 
     this.setEventListeners();
   }
+
+  translatePosition(tx: number, ty:number){
+    this.x+= tx;
+    this.y+= ty;
+  }
+
   setEventListeners(){
     // this.on('click', (event: any)=>{
     //   console.log('node click');
@@ -210,11 +215,10 @@ export class DiagramNodesLayer extends createjs.Container{
     return this.nodes.filter(x => {return x.is_selected;});
   }
 
-  translateSelectedNodes(x: number, y: number){
+  translateSelectedNodes(tx: number, ty: number){
     for(let node of this.nodes){
       if(node.is_selected){
-        node.x+= x;
-        node.y+= y;
+        node.translatePosition(tx, ty)
       }
     }
   }
@@ -271,7 +275,7 @@ class EdgeElement extends createjs.Container{
 
     // this.line.graphics.lineTo(end_point_b.x, end_point_b.y);
     this.line_basier_curve_command= this.line.graphics.bezierCurveTo(end_point_a.x, end_point_a.y,
-      -50+(end_point_a.x+end_point_b.x)/2, (end_point_a.y+end_point_b.y)/2,
+      (end_point_a.x+end_point_b.x)/2, (end_point_a.y+end_point_b.y)/2,
                                      end_point_b.x, end_point_b.y).command;
     // move_command.x = 300;
     // this.line.graphics.arcTo(end_point_a.x, end_point_a.y, end_point_b.x, end_point_b.y, 0);
