@@ -16,15 +16,27 @@ export class NodeElement extends createjs.Container{
   private _is_accept_state: boolean= false;
   set is_accept_state(val: boolean){
     this._is_accept_state = val;
-    this.accept_state_symbol.alpha= val ? 1 : 0;
+
+    if(val){
+      this.showAcceptStateSymbol();
+    }
+    else{
+      this.hideAcceptStateSymbol();
+    }
   }
   get is_accept_state(): boolean{ return this._is_accept_state; }
 
   // node selection logic, changing the value of this property also changes the diagram
   private _is_selected: boolean= false;
+
   set is_selected(val: boolean){
     this._is_selected = val;
-    this.selection_border.alpha= val ? 1 : 0;
+    if(val){
+      this.showSelectionHighlight();
+    }
+    else{
+      this.hideSelectionHighlight();
+    }
   }
   get is_selected(){return this._is_selected;}
 
@@ -92,6 +104,22 @@ export class NodeElement extends createjs.Container{
     for(let x of this.incident_edges){
       x.updateEdgePosition();
     }
+  }
+
+  private showAcceptStateSymbol(){
+    this.accept_state_symbol.alpha= 1;
+  }
+
+  private hideAcceptStateSymbol(){
+    this.accept_state_symbol.alpha= 0;
+  }
+
+  private showSelectionHighlight() {
+    this.selection_border.alpha= 1;
+  }
+
+  private hideSelectionHighlight() {
+    this.selection_border.alpha = 0;
   }
 }
 
