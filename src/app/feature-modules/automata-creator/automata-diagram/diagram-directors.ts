@@ -1,5 +1,5 @@
 import * as createjs from "createjs-module";
-import {DFADiagram, DiagramEdgeLayer, DiagramNodesLayer, DiagramSelectionLayer, NodeElement} from './diagram';
+import {DFADiagram} from './diagram';
 import {
   ActionExecutor,
   CreateNodeAction,
@@ -7,7 +7,10 @@ import {
   MoveNodesAction,
   ToggleNodeAcceptStateStatusAction
 } from './diagram-actions';
-import {zipStatic} from 'rxjs/operators/zip';
+
+import {DiagramSelectionLayer} from './selection-layer';
+import {DiagramNodesLayer, NodeElement} from './node-layer';
+import {DiagramEdgeLayer} from './edge-layer';
 
 // A mediator class that encapsulates interaction between diagram components
 export class DiagramDirector {
@@ -52,16 +55,6 @@ export class DiagramDirector {
     let dx = event.stageX - this.initial_mouse_x;
     let dy = event.stageY - this.initial_mouse_y;
     let drag_performed = !(dx == 0 && dy == 0);
-
-    // if(!this.diagram.ctrl_is_pressed){
-    //   if(!drag_performed){
-    //     this.node_layer.deselectAllNodes();
-    //   }
-    //   event.currentTarget.is_selected = true;
-    // }
-    // else{
-    //   event.currentTarget.is_selected = !event.currentTarget.is_selected;
-    // }
 
     if(!this.diagram.ctrl_is_pressed && !drag_performed){
       this.node_layer.deselectAllNodes();
