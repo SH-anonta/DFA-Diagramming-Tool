@@ -1,5 +1,6 @@
 import * as createjs from 'createjs-module';
 import {DiagramDirector} from './diagram-directors';
+import {forEach} from '@angular/router/src/utils/collection';
 
 class Node {
   name: string= 'N/A';
@@ -19,6 +20,8 @@ class EventFlags{
 export class NodeElement extends createjs.Container{
   selection_border: createjs.Shape;     // circle border that indicates the node is selected
   accept_state_symbol: createjs.Shape;  // an inner circle that indicates the node is an accept state
+
+  incident_edges: EdgeElement[] = [];
 
   // constants
   readonly NODE_RADIUS: number = 40;
@@ -86,12 +89,23 @@ export class NodeElement extends createjs.Container{
   translatePosition(tx: number, ty:number){
     this.x+= tx;
     this.y+= ty;
+    this.updateAllIncidentEdges();
   }
 
   setEventListeners(){
     // this.on('click', (event: any)=>{
     //   console.log('node click');
     // });
+  }
+
+  addEdge(edge: EdgeElement){
+    this.incident_edges.push(edge);
+  }
+
+  updateAllIncidentEdges(){
+    for(let x of this.incident_edges){
+      x.updateEdgePosition();
+    }
   }
 }
 
@@ -138,11 +152,15 @@ export class DiagramNodesLayer extends createjs.Container{
   constructor(private director: DiagramDirector, width: number, height: number) {
     super();
     let nodea = this.createNewNode('area',80,80);
-    let nodeb = this.createNewNode('area', 60,300);
+    let nodeb = this.createNewNode('area', 500,100);
 
     setTimeout((e)=>{
       console.log('Time out exe');
       let edge = this.director.createNewEdge(nodea, nodeb);
+
+      nodea.addEdge(edge);
+      nodeb.addEdge(edge);
+
       this.director.updateDiagram();
     }, 100);
   }
@@ -261,9 +279,10 @@ class EdgeElement extends createjs.Container{
   private center_control_point: number;
   line: createjs.Shape;
   line_create_command;
-  line_basier_curve_command;
+  line_quadratic_curve_command;
   label: string;
 
+  // Take two nodes that this edge connects
   constructor(private end_point_a: NodeElement, private end_point_b: NodeElement){
     super();
 
@@ -273,12 +292,8 @@ class EdgeElement extends createjs.Container{
 
     this.line_create_command= this.line.graphics.moveTo(end_point_a.x, end_point_a.y).command;
 
-    // this.line.graphics.lineTo(end_point_b.x, end_point_b.y);
-    this.line_basier_curve_command= this.line.graphics.bezierCurveTo(end_point_a.x, end_point_a.y,
-      (end_point_a.x+end_point_b.x)/2, (end_point_a.y+end_point_b.y)/2,
-                                     end_point_b.x, end_point_b.y).command;
-    // move_command.x = 300;
-    // this.line.graphics.arcTo(end_point_a.x, end_point_a.y, end_point_b.x, end_point_b.y, 0);
+    this.line_quadratic_curve_command= this.line.graphics.quadraticCurveTo((end_point_a.x+end_point_b.x)/2, (end_point_a.y+end_point_b.y)/2,
+      end_point_b.x, end_point_b.y).command;
 
     this.line.graphics.endStroke();
     this.addChild(this.line);
@@ -288,8 +303,11 @@ class EdgeElement extends createjs.Container{
     this.line_create_command.x= this.end_point_a.x;
     this.line_create_command.y= this.end_point_a.y;
 
-    this.line_basier_curve_command.x= this.end_point_a.x;
-    this.line_basier_curve_command.y= this.end_point_a.y;
+    this.line_quadratic_curve_command.cpx= (this.end_point_a.x+this.end_point_b.x)/2;
+    this.line_quadratic_curve_command.cpy= (this.end_point_a.y+this.end_point_b.y)/2;
+
+    this.line_quadratic_curve_command.x= this.end_point_b.x;
+    this.line_quadratic_curve_command.y= this.end_point_b.y;
   }
 
 }
