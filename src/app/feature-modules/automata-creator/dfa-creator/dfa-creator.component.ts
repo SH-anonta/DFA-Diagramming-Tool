@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {DFADiagram} from '../diagram';
+import {DFADiagram} from '../automata-diagram/diagram';
 import {HostListener} from '@angular/core';
 
 @Component({
