@@ -1,5 +1,5 @@
 // this class only contains logic for drawing line that represent edges
-import {NodeElement} from './diagram';
+import {NodeElement} from './node-layer';
 import * as createjs from "createjs-module";
 
 export class EdgeElement extends createjs.Container{

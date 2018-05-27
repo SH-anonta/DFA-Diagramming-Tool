@@ -1,24 +1,8 @@
 import * as createjs from 'createjs-module';
 import {DiagramDirector} from './diagram-directors';
-import {forEach} from '@angular/router/src/utils/collection';
-import {DiagramEdgeLayer, EdgeElement} from './edge-layer';
+import {DiagramEdgeLayer} from './edge-layer';
 import {DiagramNodesLayer} from './node-layer';
 import {DiagramSelectionLayer} from './selection-layer';
-
-class Node {
-  name: string= 'N/A';
-
-}
-
-class DFA {
-  adjacent_nodes: Node[]= [];
-
-}
-
-// This class listens to key events and
-class EventFlags{
-
-}
 
 
 export class DFADiagram {
