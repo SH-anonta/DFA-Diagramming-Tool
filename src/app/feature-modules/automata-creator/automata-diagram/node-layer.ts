@@ -260,4 +260,18 @@ export class DiagramNodesLayer extends createjs.Container{
   setDirector(director: DiagramDirector){
     this.director = director;
   }
+
+  getNodeAtStagePosition(x: number, y: number):NodeElement | boolean{
+    for(let node of this.nodes){
+      let point = node.globalToLocal(x, y);
+
+      if(node.hitTest(point.x, point.y)){
+
+        return node;
+      }
+    }
+
+    return false;
+  }
+
 }

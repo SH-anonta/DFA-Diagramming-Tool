@@ -65,6 +65,19 @@ export class EdgeElement extends createjs.Container{
     this.source_node = node;
   }
 
+  setDestinationNode(node: NodeElement){
+    this.destination_node= node;
+  }
+
+  setSourcePosition(x:number, y:number){
+    this.line_create_command.x = x;
+    this.line_create_command.y = y;
+  }
+
+  setDestinationPosition(x:number, y:number){
+    this.line_quadratic_curve_command.x= x;
+    this.line_quadratic_curve_command.y= y;
+  }
 }
 
 
@@ -74,7 +87,7 @@ export class DiagramEdgeLayer extends createjs.Container{
 
   createFloatingEdge(sx: number, sy: number, dx: number, dy: number){
     this.floating_edge = this.createEdgeWithoutNodes(sx, sy, dx, dy);
-    return
+    return this.floating_edge;
   }
 
   constructor(){
@@ -92,7 +105,7 @@ export class DiagramEdgeLayer extends createjs.Container{
     return edge;
   }
 
-  createEdge(end_point_a?: NodeElement, end_point_b?: NodeElement): EdgeElement{
+  createEdge(end_point_a: NodeElement, end_point_b: NodeElement): EdgeElement{
     let edge = new EdgeElement(end_point_a.x, end_point_a.y, end_point_b.x, end_point_b.y, end_point_a, end_point_b);
     this.edges.push(edge);
     this.addChild(edge);
@@ -100,4 +113,26 @@ export class DiagramEdgeLayer extends createjs.Container{
     return edge;
   }
 
+  removeEdge(edge: EdgeElement){
+    console.log('Remove requested', this.edges.length);
+
+    let idx = this.edges.findIndex((x) => {return edge === x;});
+
+    if(idx != -1){
+      this.edges.splice(idx, 1);
+    }
+    this.removeChild(edge);
+
+    console.log('Remove requested', this.edges.length);
+  }
+
+  removeFloatingEdge(){
+
+    this.removeEdge(this.floating_edge);
+    this.floating_edge = undefined;
+  }
+
+  undefineFloatingEdge(){
+    this.floating_edge = undefined;
+  }
 }

@@ -10,7 +10,7 @@ import {
 
 import {DiagramSelectionLayer} from './selection-layer';
 import {DiagramNodesLayer, NodeElement} from './node-layer';
-import {DiagramEdgeLayer} from './edge-layer';
+import {DiagramEdgeLayer, EdgeElement} from './edge-layer';
 
 // todo create common interface for DiagramDirector and all director mode classes
 //todo move mouse event data out of defaoult mode
@@ -110,11 +110,11 @@ export class DiagramDirector{
 export class DiagramDirectorDefaultMode {
   private action_executor: ActionExecutor = new ActionExecutor();
 
-  constructor(private stage: createjs.Stage,
-              private diagram: DFADiagram,
-              private selection_layer: DiagramSelectionLayer,
-              private node_layer: DiagramNodesLayer,
-              private edge_layer: DiagramEdgeLayer,
+  constructor(protected stage: createjs.Stage,
+              protected diagram: DFADiagram,
+              protected selection_layer: DiagramSelectionLayer,
+              protected node_layer: DiagramNodesLayer,
+              protected edge_layer: DiagramEdgeLayer,
   ){}
 
   updateDiagram(){
@@ -258,14 +258,15 @@ export class DiagramDirectorDefaultMode {
 }
 
 
-enum EdgeCreationStage{
-  initial,
-  src_node_selected,
-  destination_node_selected
+enum EdgeCreationPhase{
+  source_node_selection,
+  destination_node_selection,
 }
 
 export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
-  private creation_stage = EdgeCreationStage.initial;
+  private current_phase: EdgeCreationPhase = EdgeCreationPhase.source_node_selection;
+  private floating_edge: EdgeElement;
+
 
   constructor(stage: createjs.Stage,
               diagram: DFADiagram,
@@ -279,15 +280,70 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
 
 
   nodeMouseDown(event: any){
-    if(this.creation_stage == EdgeCreationStage.initial){
+    if(this.current_phase == EdgeCreationPhase.source_node_selection){
+      let x = event.currentTarget.x;
+      let y = event.currentTarget.y;
 
-    }
-    else if(this.creation_stage == EdgeCreationStage.src_node_selected){
+      this.floating_edge = this.edge_layer.createFloatingEdge(x,y,x,y);
+      this.current_phase = EdgeCreationPhase.destination_node_selection;
 
+      this.floating_edge.setSourceNode(event.currentTarget);
+      this.updateDiagram();
     }
+    console.log('Node down');
   }
 
   nodeClicked(event: any){
+    console.log('Node click');
+    this.updateDiagram();
+  }
 
+
+  // Important: This method gets called even if the mouse is not on top of a node
+  // the currentTarget of event is set to the node which was pressed on at first
+  nodePressUp(event: any){
+
+    if(this.current_phase == EdgeCreationPhase.destination_node_selection){
+      // console.log('dest', event.currentTarget.label);
+
+
+      // this either returns a node element which is under the mouse pointer
+      // or returns false if no node is under the mouse pointer
+      let destination_node: any= this.node_layer.getNodeAtStagePosition(event.stageX, event.stageY);
+      if(destination_node === false){
+         console.log('Node hit not detected');
+        this.edge_layer.removeFloatingEdge();
+      }
+      else{
+        // this.floating_edge.setDestinationPosition(destination_node.x, destination_node.y);
+
+        this.floating_edge.setDestinationNode(destination_node);
+
+        // associate the edge to the destination node and source node
+        // so it is connected to them
+        destination_node.addEdge(this.floating_edge);
+        event.currentTarget.addEdge(this.floating_edge);
+        this.floating_edge.updateEdgePosition();
+
+        // now that the edge is associated with two nodes
+        // it is no longer a floating node
+        this.edge_layer.undefineFloatingEdge();
+        this.floating_edge = undefined;
+      }
+
+      this.current_phase = EdgeCreationPhase.source_node_selection;
+      this.updateDiagram();
+    }
+    console.log('Node up');
+  }
+
+  nodePressMove(event){
+    if(this.current_phase == EdgeCreationPhase.destination_node_selection){
+      this.floating_edge.setDestinationPosition(event.stageX, event.stageY);
+      this.updateDiagram();
+      // console.log('Press move');
+    }
   }
 }
+
+// todo add switch hook for every Director modes
