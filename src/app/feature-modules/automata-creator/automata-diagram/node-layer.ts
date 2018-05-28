@@ -1,4 +1,4 @@
-import {DiagramDirectorDefaultMode} from './diagram-directors';
+import {DiagramDirector, DiagramDirectorDefaultMode} from './diagram-directors';
 import * as createjs from "createjs-module";
 import {EdgeElement} from './edge-layer';
 
@@ -126,9 +126,10 @@ export class NodeElement extends createjs.Container{
 
 export class DiagramNodesLayer extends createjs.Container{
   private nodes: NodeElement[]= [];
+  private director: DiagramDirector;
   // selected_nodes: NodeElement[]= [];
 
-  constructor(private director: DiagramDirectorDefaultMode, width: number, height: number) {
+  constructor(width: number, height: number) {
     super();
     let nodea = this.createNewNode('area',80,80);
     let nodeb = this.createNewNode('area', 500,100);
@@ -252,4 +253,7 @@ export class DiagramNodesLayer extends createjs.Container{
     });
   }
 
+  setDirector(director: DiagramDirector){
+    this.director = director;
+  }
 }

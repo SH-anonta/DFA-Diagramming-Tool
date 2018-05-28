@@ -1,11 +1,12 @@
 // all logic for selection of nodes
-import {DiagramDirectorDefaultMode} from './diagram-directors';
+import {DiagramDirector, DiagramDirectorDefaultMode} from './diagram-directors';
 import * as createjs from "createjs-module";
 
 export class DiagramSelectionLayer extends createjs.Container{
-  layer_hit_area: createjs.Shape;
+  private layer_hit_area: createjs.Shape;
+  private director: DiagramDirector;
 
-  constructor(private director: DiagramDirectorDefaultMode, width: number, height: number){
+  constructor(width: number, height: number){
     super();
 
     // define real shape to be transparent rectangle
@@ -34,4 +35,8 @@ export class DiagramSelectionLayer extends createjs.Container{
     });
   }
 
+
+  setDirector(director: DiagramDirector){
+    this.director = director;
+  }
 }

@@ -1,6 +1,6 @@
 import * as createjs from 'createjs-module';
 import {DiagramSelectionLayer} from './selection-layer';
-import {DiagramDirectorDefaultMode} from './diagram-directors';
+import {DiagramDirectorDefaultMode, DiagramDirector} from './diagram-directors';
 import {DiagramNodesLayer} from './node-layer';
 import {DiagramEdgeLayer} from './edge-layer';
 
@@ -10,7 +10,8 @@ export class DFADiagram {
   shift_is_pressed: boolean= false;
 
   // class for controlling all the parts of the diagram
-  readonly director: DiagramDirectorDefaultMode;
+  // readonly director: DiagramDirectorDefaultMode;
+  readonly director: DiagramDirector;
 
   // different classes that make up the diagram
   readonly stage: createjs.Stage;    // Easeljs stage
@@ -22,19 +23,22 @@ export class DFADiagram {
 
   constructor(private canvas: HTMLCanvasElement){
     this.stage = new createjs.Stage(canvas);
-    this.director= new DiagramDirectorDefaultMode(this.stage, this);
 
     let canvas_width = (<any>this.stage.canvas).scrollWidth;
     let canvas_height= (<any>this.stage.canvas).scrollHeight;
 
-    this.edge_layer = new DiagramEdgeLayer();
-    this.selection_rect_layer = new DiagramSelectionLayer(this.director, canvas_width, canvas_height);
     this.background = this.createBackGround();
-    this.nodes_layer = new DiagramNodesLayer(this.director, canvas_width, canvas_height);
+    this.edge_layer = new DiagramEdgeLayer();
+    this.selection_rect_layer = new DiagramSelectionLayer(canvas_width, canvas_height);
+    this.nodes_layer = new DiagramNodesLayer(canvas_width, canvas_height);
 
-    this.director.setEdgeLayer(this.edge_layer);
-    this.director.setNodeLayer(this.nodes_layer);
-    this.director.setSelectionLayer(this.selection_rect_layer);
+    this.director= new DiagramDirector(this.stage, this, this.selection_rect_layer, this.nodes_layer, this.edge_layer);
+    this.nodes_layer.setDirector(this.director);
+    this.selection_rect_layer.setDirector(this.director);
+
+    // this.director.setEdgeLayer(this.edge_layer);
+    // this.director.setNodeLayer(this.nodes_layer);
+    // this.director.setSelectionLayer(this.selection_rect_layer);
 
     // order of insertion is important here
     // If layer a is added after b, a will be on top of b

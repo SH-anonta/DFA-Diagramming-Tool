@@ -12,6 +12,7 @@ import {DiagramSelectionLayer} from './selection-layer';
 import {DiagramNodesLayer, NodeElement} from './node-layer';
 import {DiagramEdgeLayer} from './edge-layer';
 
+// todo create common interface for DiagramDirector and all director mode classes
 //todo move mouse event data out of defaoult mode
 
 export class DiagramDirector{
@@ -54,6 +55,10 @@ export class DiagramDirector{
 
   // methods for handling events that occur on different components of the diagram
   // all methods below should delegate the call to the current_mode mode object
+
+  updateDiagram(){
+    this.current_mode.updateDiagram();
+  }
 
   deleteButtonPressedOnPageBody() {
     this.current_mode.deleteButtonPressedOnPageBody();
@@ -103,6 +108,11 @@ export class DiagramDirector{
 
   ctrlYPressed(){
     this.current_mode.ctrlYPressed();
+  }
+
+  // todo delete
+  createNewEdge(nodea: NodeElement, nodeb: NodeElement){
+    return this.current_mode.createNewEdge(nodea, nodeb);
   }
 
 }
