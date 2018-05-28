@@ -1,7 +1,7 @@
 import * as createjs from "createjs-module";
 import {DFADiagram} from './diagram';
 import {
-  ActionExecutor,
+  ActionExecutor, CreateEdgeAction,
   CreateNodeAction,
   DeleteSelectedNodesAction,
   MoveNodesAction,
@@ -11,11 +11,13 @@ import {
 import {DiagramSelectionLayer} from './selection-layer';
 import {DiagramNodesLayer, NodeElement} from './node-layer';
 import {DiagramEdgeLayer, EdgeElement} from './edge-layer';
+import {templateJitUrl} from '@angular/compiler';
 
 // todo create common interface for DiagramDirector and all director mode classes
 //todo move mouse event data out of defaoult mode
 
 export class DiagramDirector{
+  private action_executor = new ActionExecutor();
   private readonly default_mode: DiagramDirectorDefaultMode;
   private readonly edge_creation_mode: DiagramDirectorDefaultMode;
 
@@ -28,10 +30,10 @@ export class DiagramDirector{
               edge_layer: DiagramEdgeLayer){
 
     // create default mode
-    this.default_mode = new DiagramDirectorDefaultMode(stage, diagram,selection_layer, node_layer, edge_layer);
+    this.default_mode = new DiagramDirectorDefaultMode(this.action_executor, stage, diagram,selection_layer, node_layer, edge_layer);
 
     // create edge creation mode
-    this.edge_creation_mode = new DiagramDirectorEdgeCreationMode(stage, diagram,selection_layer, node_layer, edge_layer);
+    this.edge_creation_mode = new DiagramDirectorEdgeCreationMode(this.action_executor, stage, diagram,selection_layer, node_layer, edge_layer);
 
     this.current_mode = this.default_mode;
   }
@@ -108,9 +110,10 @@ export class DiagramDirector{
 
 // A mediator class that encapsulates interaction between diagram components
 export class DiagramDirectorDefaultMode {
-  private action_executor: ActionExecutor = new ActionExecutor();
 
-  constructor(protected stage: createjs.Stage,
+
+  constructor(protected action_executor,
+              protected stage: createjs.Stage,
               protected diagram: DFADiagram,
               protected selection_layer: DiagramSelectionLayer,
               protected node_layer: DiagramNodesLayer,
@@ -268,13 +271,14 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
   private floating_edge: EdgeElement;
 
 
-  constructor(stage: createjs.Stage,
+  constructor(action_executor,
+              stage: createjs.Stage,
               diagram: DFADiagram,
               selection_layer?: DiagramSelectionLayer,
               node_layer?: DiagramNodesLayer,
               edge_layer?: DiagramEdgeLayer){
 
-    super(stage, diagram, selection_layer, node_layer, edge_layer);
+    super(action_executor, stage, diagram, selection_layer, node_layer, edge_layer);
   }
 
 
@@ -324,6 +328,7 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
         destination_node.addEdge(this.floating_edge);
         event.currentTarget.addEdge(this.floating_edge);
         this.floating_edge.updateEdgePosition();
+        this.action_executor.execute(new CreateEdgeAction(this.edge_layer, this.floating_edge));
 
         // now that the edge is associated with two nodes
         // it is no longer a floating node

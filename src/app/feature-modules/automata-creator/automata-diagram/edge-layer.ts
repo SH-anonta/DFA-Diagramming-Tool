@@ -113,6 +113,17 @@ export class DiagramEdgeLayer extends createjs.Container{
     return edge;
   }
 
+  addEdge(edge: EdgeElement){
+    let idx = this.edges.findIndex((x) => {return edge === x;});
+
+    if(idx == -1){
+      this.addChild(edge);
+      this.edges.splice(idx, 1);
+    }
+
+  }
+
+  // todo remove edge from node elements
   removeEdge(edge: EdgeElement){
     console.log('Remove requested', this.edges.length);
 

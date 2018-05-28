@@ -1,4 +1,5 @@
 import {DiagramNodesLayer, NodeElement} from './node-layer';
+import {DiagramEdgeLayer, EdgeElement} from './edge-layer';
 
 export class ActionExecutor{
   // stacks for keeping track of what actions have been executed
@@ -54,6 +55,8 @@ export interface Action{
   undo();
 }
 
+
+// Actions performed on node elements
 export class DeleteSelectedNodesAction implements Action{
   deleted_nodes: NodeElement[];
 
@@ -120,8 +123,6 @@ export class ToggleNodeAcceptStateStatusAction implements Action{
   }
 }
 
-
-
 export class MoveNodesAction implements Action{
 
   constructor(private nodes: NodeElement[],
@@ -136,15 +137,38 @@ export class MoveNodesAction implements Action{
 
   redo(){
     for(let node of this.nodes){
-      node.x += this.translate_x;
-      node.y += this.translate_y;
+      node.translatePosition(this.translate_x, this.translate_y)
+      // node.x += this.translate_x;
+      // node.y += this.translate_y;
     }
   }
 
   undo(){
     for(let node of this.nodes){
-      node.x -= this.translate_x;
-      node.y -= this.translate_y;
+      node.translatePosition(-1*this.translate_x, -1*this.translate_y)
+      // node.x -= this.translate_x;
+      // node.y -= this.translate_y;
     }
+  }
+}
+
+// Actions performed on edges
+
+export class CreateEdgeAction implements Action{
+
+  constructor(private edge_layer: DiagramEdgeLayer, private edge: EdgeElement){
+
+  }
+
+  execute(){
+    // edge is assumed to be created before hand
+  }
+
+  undo(){
+    this.edge_layer.removeEdge(this.edge);
+  }
+
+  redo(){
+    this.edge_layer.addEdge(this.edge);
   }
 }
