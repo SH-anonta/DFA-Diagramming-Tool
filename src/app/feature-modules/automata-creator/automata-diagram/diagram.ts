@@ -1,13 +1,18 @@
 import * as createjs from 'createjs-module';
 import {DiagramSelectionLayer} from './selection-layer';
-import {DiagramDirector} from './diagram-directors';
+import {DiagramDirectorDefaultMode} from './diagram-directors';
 import {DiagramNodesLayer} from './node-layer';
 import {DiagramEdgeLayer} from './edge-layer';
 
 
 export class DFADiagram {
   ctrl_is_pressed: boolean= false;
-  readonly director: DiagramDirector;
+  shift_is_pressed: boolean= false;
+
+  // class for controlling all the parts of the diagram
+  readonly director: DiagramDirectorDefaultMode;
+
+  // different classes that make up the diagram
   readonly stage: createjs.Stage;    // Easeljs stage
   readonly background: createjs.Shape;
   readonly nodes_layer: DiagramNodesLayer;
@@ -17,7 +22,7 @@ export class DFADiagram {
 
   constructor(private canvas: HTMLCanvasElement){
     this.stage = new createjs.Stage(canvas);
-    this.director= new DiagramDirector(this.stage, this);
+    this.director= new DiagramDirectorDefaultMode(this.stage, this);
 
     let canvas_width = (<any>this.stage.canvas).scrollWidth;
     let canvas_height= (<any>this.stage.canvas).scrollHeight;
@@ -84,11 +89,12 @@ export class DFADiagram {
     // Warning: inefficient
     document.addEventListener('keydown', (event: any) =>{
       this.ctrl_is_pressed = event.ctrlKey;
-      // console.log('ctrl down')
+      this.shift_is_pressed = event.shiftKey;
     });
 
     document.addEventListener('keyup', (event: any) =>{
       this.ctrl_is_pressed = event.ctrlKey;
+      this.shift_is_pressed = event.shiftKey;
       // console.log('ctrl up');
     });
   }

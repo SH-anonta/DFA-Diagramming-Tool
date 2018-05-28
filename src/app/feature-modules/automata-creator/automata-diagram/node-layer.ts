@@ -1,4 +1,4 @@
-import {DiagramDirector} from './diagram-directors';
+import {DiagramDirectorDefaultMode} from './diagram-directors';
 import * as createjs from "createjs-module";
 import {EdgeElement} from './edge-layer';
 
@@ -128,7 +128,7 @@ export class DiagramNodesLayer extends createjs.Container{
   private nodes: NodeElement[]= [];
   // selected_nodes: NodeElement[]= [];
 
-  constructor(private director: DiagramDirector, width: number, height: number) {
+  constructor(private director: DiagramDirectorDefaultMode, width: number, height: number) {
     super();
     let nodea = this.createNewNode('area',80,80);
     let nodeb = this.createNewNode('area', 500,100);
@@ -220,7 +220,7 @@ export class DiagramNodesLayer extends createjs.Container{
     }
   }
 
-  // all event response task is delegated to a mediator class (DiagramDirector)
+  // all event response task is delegated to a mediator class (DiagramDirectorDefaultMode)
   setEventListenersToNode(node: NodeElement){
     // add click listener
     node.on('click', (event: any) => {

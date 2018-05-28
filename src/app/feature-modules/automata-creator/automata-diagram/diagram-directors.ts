@@ -12,8 +12,12 @@ import {DiagramSelectionLayer} from './selection-layer';
 import {DiagramNodesLayer, NodeElement} from './node-layer';
 import {DiagramEdgeLayer} from './edge-layer';
 
+// export class DiagramDirectorDefaultMode{
+//
+// }
+
 // A mediator class that encapsulates interaction between diagram components
-export class DiagramDirector {
+export class DiagramDirectorDefaultMode {
   private action_executor: ActionExecutor = new ActionExecutor();
 
   constructor(private stage: createjs.Stage,
@@ -85,17 +89,24 @@ export class DiagramDirector {
     this.initial_mouse_x= event.stageX;
     this.initial_mouse_y= event.stageY;
 
-    if(this.diagram.ctrl_is_pressed){
-      event.currentTarget.is_selected = !event.currentTarget.is_selected;
+    if(this.diagram.shift_is_pressed){
+
     }
-    else if(!event.currentTarget.is_selected){
-      // if control is not pressed and the clicked node is not selected
-      this.node_layer.deselectAllNodes();
-      event.currentTarget.is_selected = true;
+    else{
+
+      if(this.diagram.ctrl_is_pressed){
+        event.currentTarget.is_selected = !event.currentTarget.is_selected;
+      }
+      else if(!event.currentTarget.is_selected){
+        // if control is not pressed and the clicked node is not selected
+        this.node_layer.deselectAllNodes();
+        event.currentTarget.is_selected = true;
+      }
     }
 
     this.updateDiagram();
   }
+
 
   // this method expects drag_offset property to be set on event, by mouseDown event handler
   nodePressMove(event: any){
@@ -154,5 +165,24 @@ export class DiagramDirector {
   // todo delete
   createNewEdge(nodea: NodeElement, nodeb: NodeElement){
     return this.edge_layer.createEdge(nodea, nodeb);
+  }
+}
+
+export class DirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
+  constructor(stage: createjs.Stage,
+              diagram: DFADiagram,
+              selection_layer?: DiagramSelectionLayer,
+              node_layer?: DiagramNodesLayer,
+              edge_layer?: DiagramEdgeLayer){
+
+    super(stage, diagram, selection_layer, node_layer, edge_layer);
+  }
+
+  nodeMouseDown(event: any){
+
+  }
+
+  nodeClicked(event: any){
+
   }
 }
