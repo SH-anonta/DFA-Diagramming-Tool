@@ -12,9 +12,100 @@ import {DiagramSelectionLayer} from './selection-layer';
 import {DiagramNodesLayer, NodeElement} from './node-layer';
 import {DiagramEdgeLayer} from './edge-layer';
 
-// export class DiagramDirectorDefaultMode{
-//
-// }
+//todo move mouse event data out of defaoult mode
+
+export class DiagramDirector{
+  private readonly default_mode: DiagramDirectorDefaultMode;
+  private readonly edge_creation_mode: DiagramDirectorDefaultMode;
+
+  private current_mode:DiagramDirectorDefaultMode;
+
+  constructor(stage: createjs.Stage,
+              diagram: DFADiagram,
+              selection_layer: DiagramSelectionLayer,
+              node_layer: DiagramNodesLayer,
+              edge_layer: DiagramEdgeLayer){
+
+    // create default mode
+    this.default_mode = new DiagramDirectorDefaultMode(stage, diagram);
+    this.default_mode.setEdgeLayer(edge_layer);
+    this.default_mode.setNodeLayer(node_layer);
+    this.default_mode.setSelectionLayer(selection_layer);
+
+    // create edge creation mode
+    this.edge_creation_mode = new DiagramDirectorEdgeCreationMode (stage, diagram);
+    this.edge_creation_mode.setEdgeLayer(edge_layer);
+    this.edge_creation_mode.setNodeLayer(node_layer);
+    this.edge_creation_mode.setSelectionLayer(selection_layer);
+
+
+    this.current_mode = this.default_mode;
+  }
+
+
+  // methods for switching between director's modes
+  switchToDefaultMode(){
+    this.current_mode  = this.default_mode;
+  }
+
+  switchToNodeCreationMode(){
+    this.current_mode  = this.edge_creation_mode;
+  }
+
+  // methods for handling events that occur on different components of the diagram
+  // all methods below should delegate the call to the current_mode mode object
+
+  deleteButtonPressedOnPageBody() {
+    this.current_mode.deleteButtonPressedOnPageBody();
+  }
+
+  // In response to actions performed on nodes
+  nodeClicked(event: any){
+    this.current_mode.nodeClicked(event);
+  }
+
+  nodeDoubleClicked(node: NodeElement){
+    this.current_mode.nodeDoubleClicked(node);
+  }
+
+  initial_mouse_x= 0;
+  initial_mouse_y= 0;
+  last_mouse_x= 0;
+  last_mouse_y= 0;
+
+  nodeMouseDown(event: any){
+    this.current_mode.nodeMouseDown(event);
+  }
+
+
+  // this method expects drag_offset property to be set on event, by mouseDown event handler
+  nodePressMove(event: any){
+    this.current_mode.nodePressMove(event);
+  }
+
+  nodePressUp(event: any){
+    this.current_mode.nodePressUp(event);
+  }
+
+  // Selection layer action handlers
+
+  selectionLayerClicked(event: any){
+    this.current_mode.selectionLayerClicked(event);
+  }
+
+  selectionLayerDoubleClicked(event: any){
+    this.current_mode.selectionLayerDoubleClicked(event);
+  }
+
+  ctrlZPressed(){
+    this.current_mode.ctrlZPressed();
+  }
+
+  ctrlYPressed(){
+    this.current_mode.ctrlYPressed();
+  }
+
+}
 
 // A mediator class that encapsulates interaction between diagram components
 export class DiagramDirectorDefaultMode {
@@ -44,6 +135,7 @@ export class DiagramDirectorDefaultMode {
     this.edge_layer = edge_layer;
   }
 
+  // event handlers
   deleteButtonPressedOnPageBody() {
     // delete button pressed outside of any input fields.
     // this indicates the ues wants to delete selected nodes
@@ -168,7 +260,7 @@ export class DiagramDirectorDefaultMode {
   }
 }
 
-export class DirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
+export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
   constructor(stage: createjs.Stage,
               diagram: DFADiagram,
               selection_layer?: DiagramSelectionLayer,
