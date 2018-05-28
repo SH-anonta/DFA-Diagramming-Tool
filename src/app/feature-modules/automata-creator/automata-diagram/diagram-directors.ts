@@ -28,17 +28,10 @@ export class DiagramDirector{
               edge_layer: DiagramEdgeLayer){
 
     // create default mode
-    this.default_mode = new DiagramDirectorDefaultMode(stage, diagram);
-    this.default_mode.setEdgeLayer(edge_layer);
-    this.default_mode.setNodeLayer(node_layer);
-    this.default_mode.setSelectionLayer(selection_layer);
+    this.default_mode = new DiagramDirectorDefaultMode(stage, diagram,selection_layer, node_layer, edge_layer);
 
     // create edge creation mode
-    this.edge_creation_mode = new DiagramDirectorEdgeCreationMode (stage, diagram);
-    this.edge_creation_mode.setEdgeLayer(edge_layer);
-    this.edge_creation_mode.setNodeLayer(node_layer);
-    this.edge_creation_mode.setSelectionLayer(selection_layer);
-
+    this.edge_creation_mode = new DiagramDirectorEdgeCreationMode(stage, diagram,selection_layer, node_layer, edge_layer);
 
     this.current_mode = this.default_mode;
   }
@@ -123,12 +116,10 @@ export class DiagramDirectorDefaultMode {
 
   constructor(private stage: createjs.Stage,
               private diagram: DFADiagram,
-              private selection_layer?: DiagramSelectionLayer,
-              private node_layer?: DiagramNodesLayer,
-              private edge_layer?: DiagramEdgeLayer,
-  ){
-
-  }
+              private selection_layer: DiagramSelectionLayer,
+              private node_layer: DiagramNodesLayer,
+              private edge_layer: DiagramEdgeLayer,
+  ){}
 
   updateDiagram(){
     this.stage.update();

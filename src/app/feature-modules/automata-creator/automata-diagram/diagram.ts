@@ -1,6 +1,6 @@
 import * as createjs from 'createjs-module';
 import {DiagramSelectionLayer} from './selection-layer';
-import {DiagramDirectorDefaultMode, DiagramDirector} from './diagram-directors';
+import {DiagramDirector} from './diagram-directors';
 import {DiagramNodesLayer} from './node-layer';
 import {DiagramEdgeLayer} from './edge-layer';
 
@@ -35,10 +35,6 @@ export class DFADiagram {
     this.director= new DiagramDirector(this.stage, this, this.selection_rect_layer, this.nodes_layer, this.edge_layer);
     this.nodes_layer.setDirector(this.director);
     this.selection_rect_layer.setDirector(this.director);
-
-    // this.director.setEdgeLayer(this.edge_layer);
-    // this.director.setNodeLayer(this.nodes_layer);
-    // this.director.setSelectionLayer(this.selection_rect_layer);
 
     // order of insertion is important here
     // If layer a is added after b, a will be on top of b
