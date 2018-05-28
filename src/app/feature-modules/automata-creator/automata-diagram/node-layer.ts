@@ -131,8 +131,12 @@ export class DiagramNodesLayer extends createjs.Container{
 
   constructor(width: number, height: number) {
     super();
-    let nodea = this.createNewNode('area',80,80);
-    let nodeb = this.createNewNode('area', 500,100);
+    let nodea = this.createNewNode('A',80,80);
+    let nodeb = this.createNewNode('B', 500,100);
+
+
+    let nodec = this.createNewNode('C',80,380);
+    let noded = this.createNewNode('D', 500,400);
 
     setTimeout((e)=>{
       console.log('Time out exe');

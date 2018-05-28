@@ -81,6 +81,13 @@ export class DFADiagram {
       else if(event.ctrlKey && event.key == 'y'){
         this.director.ctrlYPressed();
       }
+      // todo delete next two else if blocks
+      else if(event.key == 'q'){
+        this.director.switchToNodeCreationMode();
+      }
+      else if(event.key == 'w'){
+        this.director.switchToDefaultMode();
+      }
 
     });
 

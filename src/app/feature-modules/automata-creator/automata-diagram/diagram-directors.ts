@@ -36,14 +36,15 @@ export class DiagramDirector{
     this.current_mode = this.default_mode;
   }
 
-
   // methods for switching between director's modes
   switchToDefaultMode(){
     this.current_mode  = this.default_mode;
+    console.log('Switched to default mode');
   }
 
   switchToNodeCreationMode(){
     this.current_mode  = this.edge_creation_mode;
+    console.log('Switched to edge creation mode');
   }
 
   // methods for handling events that occur on different components of the diagram
@@ -65,11 +66,6 @@ export class DiagramDirector{
   nodeDoubleClicked(node: NodeElement){
     this.current_mode.nodeDoubleClicked(node);
   }
-
-  initial_mouse_x= 0;
-  initial_mouse_y= 0;
-  last_mouse_x= 0;
-  last_mouse_y= 0;
 
   nodeMouseDown(event: any){
     this.current_mode.nodeMouseDown(event);
@@ -261,7 +257,16 @@ export class DiagramDirectorDefaultMode {
   }
 }
 
+
+enum EdgeCreationStage{
+  initial,
+  src_node_selected,
+  destination_node_selected
+}
+
 export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
+  private creation_stage = EdgeCreationStage.initial;
+
   constructor(stage: createjs.Stage,
               diagram: DFADiagram,
               selection_layer?: DiagramSelectionLayer,
@@ -271,8 +276,15 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
     super(stage, diagram, selection_layer, node_layer, edge_layer);
   }
 
-  nodeMouseDown(event: any){
 
+
+  nodeMouseDown(event: any){
+    if(this.creation_stage == EdgeCreationStage.initial){
+
+    }
+    else if(this.creation_stage == EdgeCreationStage.src_node_selected){
+
+    }
   }
 
   nodeClicked(event: any){
