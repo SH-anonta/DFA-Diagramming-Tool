@@ -76,8 +76,9 @@ export class DiagramDirector {
 
   nodeMouseDown(event: any){
     // drag_offset is used to keep track of where the mouse pointer is pressed on the node element
-
     event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
+
+    //Values used for making decisions
     this.last_mouse_x= event.stageX;
     this.last_mouse_y= event.stageY;
 

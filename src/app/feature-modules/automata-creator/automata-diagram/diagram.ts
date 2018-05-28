@@ -1,8 +1,8 @@
 import * as createjs from 'createjs-module';
-import {DiagramDirector} from './diagram-directors';
-import {DiagramEdgeLayer} from './edge-layer';
-import {DiagramNodesLayer} from './node-layer';
 import {DiagramSelectionLayer} from './selection-layer';
+import {DiagramDirector} from './diagram-directors';
+import {DiagramNodesLayer} from './node-layer';
+import {DiagramEdgeLayer} from './edge-layer';
 
 
 export class DFADiagram {

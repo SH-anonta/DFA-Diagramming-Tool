@@ -1,4 +1,4 @@
-import {DiagramNodesLayer, NodeElement} from './diagram';
+import {DiagramNodesLayer, NodeElement} from './node-layer';
 
 export class ActionExecutor{
   // stacks for keeping track of what actions have been executed
