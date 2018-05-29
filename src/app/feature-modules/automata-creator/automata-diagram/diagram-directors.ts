@@ -41,12 +41,12 @@ export class DiagramDirector{
   // methods for switching between director's modes
   switchToDefaultMode(){
     this.current_mode  = this.default_mode;
-    console.log('Switched to default mode');
+    // console.log('Switched to default mode');
   }
 
-  switchToNodeCreationMode(){
+  switchToEdgeCreationMode(){
     this.current_mode  = this.edge_creation_mode;
-    console.log('Switched to edge creation mode');
+    // console.log('Switched to edge creation mode');
   }
 
   // methods for handling events that occur on different components of the diagram
@@ -294,7 +294,6 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
       this.floating_edge.setSourceNode(event.currentTarget);
       this.updateDiagram();
     }
-    console.log('Node down');
   }
 
   nodeClicked(event: any){
@@ -339,14 +338,12 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
       this.current_phase = EdgeCreationPhase.source_node_selection;
       this.updateDiagram();
     }
-    console.log('Node up');
   }
 
   nodePressMove(event){
     if(this.current_phase == EdgeCreationPhase.destination_node_selection){
       this.floating_edge.setDestinationPosition(event.stageX, event.stageY);
       this.updateDiagram();
-      // console.log('Press move');
     }
   }
 }

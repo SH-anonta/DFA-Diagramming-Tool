@@ -81,13 +81,7 @@ export class DFADiagram {
       else if(event.ctrlKey && event.key == 'y'){
         this.director.ctrlYPressed();
       }
-      // todo delete next two else if blocks
-      else if(event.key == 'q'){
-        this.director.switchToNodeCreationMode();
-      }
-      else if(event.key == 'w'){
-        this.director.switchToDefaultMode();
-      }
+
 
     });
 
@@ -97,12 +91,25 @@ export class DFADiagram {
     document.addEventListener('keydown', (event: any) =>{
       this.ctrl_is_pressed = event.ctrlKey;
       this.shift_is_pressed = event.shiftKey;
+
+
+      // todo: remove, mode switching of diagram director should be set from outside
+      if(event.keyCode == 16){
+        // if the shift button was pressed
+        this.director.switchToEdgeCreationMode()
+      }
     });
 
     document.addEventListener('keyup', (event: any) =>{
       this.ctrl_is_pressed = event.ctrlKey;
       this.shift_is_pressed = event.shiftKey;
       // console.log('ctrl up');
+
+      // todo: remove, mode switching of diagram director should be set from outside
+      if(event.keyCode == 16){
+        // if the shift button was released,
+        this.director.switchToDefaultMode()
+      }
     });
   }
 }

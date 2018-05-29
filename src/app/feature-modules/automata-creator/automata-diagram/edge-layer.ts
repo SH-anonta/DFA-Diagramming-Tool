@@ -125,16 +125,12 @@ export class DiagramEdgeLayer extends createjs.Container{
 
   // todo remove edge from node elements
   removeEdge(edge: EdgeElement){
-    console.log('Remove requested', this.edges.length);
-
     let idx = this.edges.findIndex((x) => {return edge === x;});
 
     if(idx != -1){
       this.edges.splice(idx, 1);
     }
     this.removeChild(edge);
-
-    console.log('Remove requested', this.edges.length);
   }
 
   removeFloatingEdge(){
