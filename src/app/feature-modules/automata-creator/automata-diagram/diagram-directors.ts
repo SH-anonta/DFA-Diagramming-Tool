@@ -16,7 +16,21 @@ import {templateJitUrl} from '@angular/compiler';
 // todo create common interface for DiagramDirector and all director mode classes
 //todo move mouse event data out of defaoult mode
 
-export class DiagramDirector{
+interface DiagramEventHandler {
+  updateDiagram();
+  deleteButtonPressedOnPageBody(event: any);
+  nodeClicked(event: any);
+  nodeDoubleClicked(event: any);
+  nodeMouseDown(event: any);
+  nodePressMove(event: any);
+  nodePressUp(event: any);
+  selectionLayerClicked(event: any);
+  selectionLayerDoubleClicked(event: any);
+  ctrlZPressed(event: any);
+  ctrlYPressed(event: any);
+}
+
+export class DiagramDirector implements DiagramEventHandler {
   private action_executor = new ActionExecutor();
   private readonly default_mode: DiagramDirectorDefaultMode;
   private readonly edge_creation_mode: DiagramDirectorDefaultMode;
@@ -109,7 +123,7 @@ export class DiagramDirector{
 }
 
 // A mediator class that encapsulates interaction between diagram components
-export class DiagramDirectorDefaultMode {
+export class DiagramDirectorDefaultMode implements DiagramEventHandler{
 
 
   constructor(protected action_executor,

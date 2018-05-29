@@ -47,11 +47,8 @@ export class ActionExecutor{
 // action classes that encapsulate logic for manipulating the diagram
 
 export interface Action{
-
   execute();
-
   redo();
-
   undo();
 }
 
