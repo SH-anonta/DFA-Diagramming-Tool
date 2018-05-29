@@ -96,7 +96,7 @@ export class DFADiagram {
       // todo: remove, mode switching of diagram director should be set from outside
       if(event.keyCode == 16){
         // if the shift button was pressed
-        this.director.switchToEdgeCreationMode()
+        this.director.switchMode(this.director.edge_creation_mode)
       }
     });
 
@@ -108,7 +108,7 @@ export class DFADiagram {
       // todo: remove, mode switching of diagram director should be set from outside
       if(event.keyCode == 16){
         // if the shift button was released,
-        this.director.switchToDefaultMode()
+        this.director.switchMode(this.director.default_mode)
       }
     });
   }

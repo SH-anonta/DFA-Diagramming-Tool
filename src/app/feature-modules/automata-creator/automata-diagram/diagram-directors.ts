@@ -11,11 +11,8 @@ import {
 import {DiagramSelectionLayer} from './selection-layer';
 import {DiagramNodesLayer, NodeElement} from './node-layer';
 import {DiagramEdgeLayer, EdgeElement} from './edge-layer';
-import {templateJitUrl} from '@angular/compiler';
 
-// todo create common interface for DiagramDirector and all director mode classes
-//todo move mouse event data out of defaoult mode
-
+//todo move mouse event data out of default direct mode
 interface DiagramEventHandler {
   updateDiagram();
   deleteButtonPressedOnPageBody(event: any);
@@ -32,8 +29,8 @@ interface DiagramEventHandler {
 
 export class DiagramDirector implements DiagramEventHandler {
   private action_executor = new ActionExecutor();
-  private readonly default_mode: DiagramDirectorDefaultMode;
-  private readonly edge_creation_mode: DiagramDirectorDefaultMode;
+  public readonly default_mode: DiagramDirectorDefaultMode;
+  public readonly edge_creation_mode: DiagramDirectorEdgeCreationMode;
 
   private current_mode:DiagramDirectorDefaultMode;
 
@@ -52,15 +49,20 @@ export class DiagramDirector implements DiagramEventHandler {
     this.current_mode = this.default_mode;
   }
 
-  // methods for switching between director's modes
-  switchToDefaultMode(){
-    this.current_mode  = this.default_mode;
-    // console.log('Switched to default mode');
-  }
+  // // methods for switching between director's modes
+  // switchToDefaultMode(){
+  //   this.current_mode  = this.default_mode;
+  //   // console.log('Switched to default mode');
+  // }
+  //
+  // switchToEdgeCreationMode(){
+  //   this.current_mode  = this.edge_creation_mode;
+  //   // console.log('Switched to edge creation mode');
+  // }
 
-  switchToEdgeCreationMode(){
-    this.current_mode  = this.edge_creation_mode;
-    // console.log('Switched to edge creation mode');
+  switchMode(mode: DiagramDirectorDefaultMode){
+    this.current_mode  = mode;
+    this.current_mode.onSwitchHook()
   }
 
   // methods for handling events that occur on different components of the diagram
@@ -125,7 +127,6 @@ export class DiagramDirector implements DiagramEventHandler {
 // A mediator class that encapsulates interaction between diagram components
 export class DiagramDirectorDefaultMode implements DiagramEventHandler{
 
-
   constructor(protected action_executor,
               protected stage: createjs.Stage,
               protected diagram: DFADiagram,
@@ -136,17 +137,6 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
 
   updateDiagram(){
     this.stage.update();
-  }
-
-  setSelectionLayer(selection_layer: DiagramSelectionLayer){
-    this.selection_layer = selection_layer;
-  }
-  setNodeLayer(node_layer: DiagramNodesLayer){
-    this.node_layer = node_layer;
-  }
-
-  setEdgeLayer(edge_layer: DiagramEdgeLayer){
-    this.edge_layer = edge_layer;
   }
 
   // event handlers
@@ -271,6 +261,11 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
   // todo delete
   createNewEdge(nodea: NodeElement, nodeb: NodeElement){
     return this.edge_layer.createEdge(nodea, nodeb);
+  }
+
+  // this method gets called when the director switches to this mode
+  onSwitchHook(){
+    // intentionally do nothing
   }
 }
 
