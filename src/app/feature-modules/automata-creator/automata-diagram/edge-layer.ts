@@ -1,6 +1,7 @@
 // this class only contains logic for drawing line that represent edges
 import {NodeElement} from './node-layer';
 import * as createjs from "createjs-module";
+import {DiagramDirector} from './diagram-directors';
 
 export class EdgeElement extends createjs.Container{
   private center_control_point: number;
@@ -22,7 +23,7 @@ export class EdgeElement extends createjs.Container{
 
     // define the end points of the line that represents the edge
     this.line= new createjs.Shape();
-    this.line.graphics.setStrokeStyle(2);
+    this.line.graphics.setStrokeStyle(3);
     this.line.graphics.beginStroke('#208ed0');
 
     this.line_create_command= this.line.graphics.moveTo(sx, sy).command;
@@ -84,6 +85,7 @@ export class EdgeElement extends createjs.Container{
 export class DiagramEdgeLayer extends createjs.Container{
   private edges: EdgeElement[]= [];
   private floating_edge: EdgeElement;
+  private director: DiagramDirector;
 
   createFloatingEdge(sx: number, sy: number, dx: number, dy: number){
     this.floating_edge = this.createEdgeWithoutNodes(sx, sy, dx, dy);
@@ -109,6 +111,8 @@ export class DiagramEdgeLayer extends createjs.Container{
     let edge = new EdgeElement(end_point_a.x, end_point_a.y, end_point_b.x, end_point_b.y, end_point_a, end_point_b);
     this.edges.push(edge);
     this.addChild(edge);
+
+    this.setEventListenersToEdge(edge);
 
     return edge;
   }
@@ -141,5 +145,27 @@ export class DiagramEdgeLayer extends createjs.Container{
 
   undefineFloatingEdge(){
     this.floating_edge = undefined;
+  }
+
+  setDirector(director: DiagramDirector){
+    this.director = director;
+  }
+
+  setEventListenersToEdge(edge: EdgeElement){
+    edge.addEventListener('click', (event: any)=>{
+      this.director.edgeClicked(event);
+    });
+
+    edge.addEventListener('dblclick', (event: any)=>{
+      this.director.edgeDoubleClicked(event);
+    });
+
+    edge.addEventListener('mousedown', (event: any)=>{
+      this.director.edgeMouseDown(event);
+    });
+
+    edge.addEventListener('mouseup', (event: any)=>{
+      this.director.edgeMouseUp(event);
+    });
   }
 }

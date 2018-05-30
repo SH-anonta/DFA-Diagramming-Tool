@@ -16,15 +16,27 @@ import {DiagramEdgeLayer, EdgeElement} from './edge-layer';
 interface DiagramEventHandler {
   updateDiagram();
   deleteButtonPressedOnPageBody(event: any);
+  ctrlZPressed(event: any);
+  ctrlYPressed(event: any);
+
+  // node events
   nodeClicked(event: any);
   nodeDoubleClicked(event: any);
   nodeMouseDown(event: any);
   nodePressMove(event: any);
   nodePressUp(event: any);
+
+  // edge events
+  edgeClicked(event: any);
+  edgeDoubleClicked(event: any);
+  edgeMouseDown(event: any);
+  edgeMouseUp(event: any);
+
+  // select layer events
   selectionLayerClicked(event: any);
   selectionLayerDoubleClicked(event: any);
-  ctrlZPressed(event: any);
-  ctrlYPressed(event: any);
+
+
 }
 
 export class DiagramDirector implements DiagramEventHandler {
@@ -49,17 +61,6 @@ export class DiagramDirector implements DiagramEventHandler {
     this.current_mode = this.default_mode;
   }
 
-  // // methods for switching between director's modes
-  // switchToDefaultMode(){
-  //   this.current_mode  = this.default_mode;
-  //   // console.log('Switched to default mode');
-  // }
-  //
-  // switchToEdgeCreationMode(){
-  //   this.current_mode  = this.edge_creation_mode;
-  //   // console.log('Switched to edge creation mode');
-  // }
-
   switchMode(mode: DiagramDirectorDefaultMode){
     this.current_mode  = mode;
     this.current_mode.onSwitchHook()
@@ -76,6 +77,23 @@ export class DiagramDirector implements DiagramEventHandler {
     this.current_mode.deleteButtonPressedOnPageBody();
   }
 
+  ctrlZPressed(){
+    this.current_mode.ctrlZPressed();
+  }
+
+  ctrlYPressed(){
+    this.current_mode.ctrlYPressed();
+  }
+
+  // Selection layer action handlers
+  selectionLayerClicked(event: any){
+    this.current_mode.selectionLayerClicked(event);
+  }
+
+  selectionLayerDoubleClicked(event: any){
+    this.current_mode.selectionLayerDoubleClicked(event);
+  }
+
   // In response to actions performed on nodes
   nodeClicked(event: any){
     this.current_mode.nodeClicked(event);
@@ -89,7 +107,6 @@ export class DiagramDirector implements DiagramEventHandler {
     this.current_mode.nodeMouseDown(event);
   }
 
-
   // this method expects drag_offset property to be set on event, by mouseDown event handler
   nodePressMove(event: any){
     this.current_mode.nodePressMove(event);
@@ -99,29 +116,27 @@ export class DiagramDirector implements DiagramEventHandler {
     this.current_mode.nodePressUp(event);
   }
 
-  // Selection layer action handlers
-
-  selectionLayerClicked(event: any){
-    this.current_mode.selectionLayerClicked(event);
+  // edge event action handlers
+  edgeClicked(event: any){
+    this.current_mode.edgeClicked(event);
   }
 
-  selectionLayerDoubleClicked(event: any){
-    this.current_mode.selectionLayerDoubleClicked(event);
+  edgeDoubleClicked(event: any){
+    this.current_mode.edgeDoubleClicked(event);
   }
 
-  ctrlZPressed(){
-    this.current_mode.ctrlZPressed();
+  edgeMouseDown(event: any){
+    this.current_mode.edgeMouseDown(event)
   }
 
-  ctrlYPressed(){
-    this.current_mode.ctrlYPressed();
+  edgeMouseUp(event: any){
+    this.current_mode.edgeMouseUp(event)
   }
 
   // todo delete
   createNewEdge(nodea: NodeElement, nodeb: NodeElement){
     return this.current_mode.createNewEdge(nodea, nodeb);
   }
-
 }
 
 // A mediator class that encapsulates interaction between diagram components
@@ -267,6 +282,21 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
   onSwitchHook(){
     // intentionally do nothing
   }
+
+  edgeClicked(event: any) {
+    // console.log('Edge clicked');
+  }
+
+  edgeDoubleClicked(event: any){
+
+  }
+  edgeMouseDown(event: any){
+
+  }
+
+  edgeMouseUp(event: any){
+
+  }
 }
 
 
@@ -356,5 +386,3 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
     }
   }
 }
-
-// todo add switch hook for every Director modes

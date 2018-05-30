@@ -33,8 +33,9 @@ export class DFADiagram {
     this.nodes_layer = new DiagramNodesLayer(canvas_width, canvas_height);
 
     this.director= new DiagramDirector(this.stage, this, this.selection_rect_layer, this.nodes_layer, this.edge_layer);
-    this.nodes_layer.setDirector(this.director);
     this.selection_rect_layer.setDirector(this.director);
+    this.nodes_layer.setDirector(this.director);
+    this.edge_layer.setDirector(this.director);
 
     // order of insertion is important here
     // If layer a is added after b, a will be on top of b
