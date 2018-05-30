@@ -30,7 +30,7 @@ export class EdgeElement extends createjs.Container{
 
     // define the end points of the line that represents the edge
     this.line= new createjs.Shape();
-    this.line.graphics.setStrokeStyle(3);
+    this.line.graphics.setStrokeStyle(2);
 
     // the command object is used to later alter the color of the line
     this.graphics_commands.edge_color_command = this.line.graphics.beginStroke(EdgeElement.DEFAULT_COLOR).command;
@@ -72,7 +72,7 @@ export class EdgeElement extends createjs.Container{
   }
 
   setHighlightColor(){
-    this.graphics_commands.edge_color_command.style = 'blue';
+    this.graphics_commands.edge_color_command.style = EdgeElement.HIGHLIGHT_COLOR;
   }
 
   setDefaultColor(){

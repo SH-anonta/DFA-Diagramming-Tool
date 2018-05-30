@@ -200,6 +200,8 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
     this.initial_mouse_x= event.stageX;
     this.initial_mouse_y= event.stageY;
 
+    this.edge_layer.deselectAllEdges();
+
     if(this.diagram.shift_is_pressed){
 
     }
@@ -255,6 +257,7 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
 
   selectionLayerClicked(event: any){
     this.node_layer.deselectAllNodes();
+    this.edge_layer.deselectAllEdges();
     this.updateDiagram();
   }
 
@@ -285,7 +288,7 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
 
   edgeClicked(event: any) {
     // console.log('Edge clicked');
-    console.log('Edge mouse down');
+    this.node_layer.deselectAllNodes();
     this.edge_layer.selectEdge(event.currentTarget);
     this.updateDiagram();
   }
@@ -324,7 +327,7 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
   }
 
 
-
+  // mouse events
   nodeMouseDown(event: any){
     if(this.current_phase == EdgeCreationPhase.source_node_selection){
       let x = event.currentTarget.x;
@@ -387,5 +390,18 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
       this.floating_edge.setDestinationPosition(event.stageX, event.stageY);
       this.updateDiagram();
     }
+  }
+
+  // edge events, disable default behaviour of edges
+
+  edgeClicked(event: any) {
+  }
+
+  edgeDoubleClicked(event: any){
+  }
+  edgeMouseDown(event: any){
+  }
+
+  edgeMouseUp(event: any){
   }
 }
