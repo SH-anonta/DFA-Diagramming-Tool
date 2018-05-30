@@ -5,6 +5,13 @@ import {DiagramDirector} from './diagram-directors';
 
 export class EdgeElement extends createjs.Container{
   private center_control_point: number;
+  private static DEFAULT_COLOR: string = '#000000';
+  private static HIGHLIGHT_COLOR: string =  '#213bd0';
+
+  private graphics_commands = {
+    edge_color_command : undefined,   // used for changing the color of the edge
+  };
+
   line: createjs.Shape;
   line_create_command;
   line_quadratic_curve_command;
@@ -24,32 +31,16 @@ export class EdgeElement extends createjs.Container{
     // define the end points of the line that represents the edge
     this.line= new createjs.Shape();
     this.line.graphics.setStrokeStyle(3);
-    this.line.graphics.beginStroke('#208ed0');
 
+    // the command object is used to later alter the color of the line
+    this.graphics_commands.edge_color_command = this.line.graphics.beginStroke(EdgeElement.DEFAULT_COLOR).command;
     this.line_create_command= this.line.graphics.moveTo(sx, sy).command;
-
-    this.line_quadratic_curve_command= this.line.graphics.quadraticCurveTo((sx+dx)/2, (sy+dy)/2,
-      dx, dy).command;
+    this.line_quadratic_curve_command= this.line.graphics.quadraticCurveTo((sx+dx)/2, (sy+dy)/2, dx, dy).command;
 
     this.line.graphics.endStroke();
     this.addChild(this.line);
   }
 
-  // constructor(private end_point_a: NodeElement, private end_point_b: NodeElement){
-  //   super();
-  //
-  //   this.line= new createjs.Shape();
-  //   this.line.graphics.setStrokeStyle(2);
-  //   this.line.graphics.beginStroke('#208ed0');
-  //
-  //   this.line_create_command= this.line.graphics.moveTo(end_point_a.x, end_point_a.y).command;
-  //
-  //   this.line_quadratic_curve_command= this.line.graphics.quadraticCurveTo((end_point_a.x+end_point_b.x)/2, (end_point_a.y+end_point_b.y)/2,
-  //     end_point_b.x, end_point_b.y).command;
-  //
-  //   this.line.graphics.endStroke();
-  //   this.addChild(this.line);
-  // }
 
   updateEdgePosition(){
     this.line_create_command.x= this.source_node.x;
@@ -79,6 +70,14 @@ export class EdgeElement extends createjs.Container{
     this.line_quadratic_curve_command.x= x;
     this.line_quadratic_curve_command.y= y;
   }
+
+  setHighlightColor(){
+    this.graphics_commands.edge_color_command.style = 'blue';
+  }
+
+  setDefaultColor(){
+    this.graphics_commands.edge_color_command.style = EdgeElement.DEFAULT_COLOR;
+  }
 }
 
 
@@ -87,8 +86,14 @@ export class DiagramEdgeLayer extends createjs.Container{
   private floating_edge: EdgeElement;
   private director: DiagramDirector;
 
+  // only one edge can be selected at a time
+  private selected_edge: EdgeElement = null;
+
+  // node selection logic, changing the value of this property also changes the diagram
   createFloatingEdge(sx: number, sy: number, dx: number, dy: number){
     this.floating_edge = this.createEdgeWithoutNodes(sx, sy, dx, dy);
+
+    this.setEventListenersToEdge(this.floating_edge);
     return this.floating_edge;
   }
 
@@ -151,6 +156,8 @@ export class DiagramEdgeLayer extends createjs.Container{
     this.director = director;
   }
 
+
+  // todo: move this inside EdgeElement class to ensure all edges get listened to
   setEventListenersToEdge(edge: EdgeElement){
     edge.addEventListener('click', (event: any)=>{
       this.director.edgeClicked(event);
@@ -168,4 +175,23 @@ export class DiagramEdgeLayer extends createjs.Container{
       this.director.edgeMouseUp(event);
     });
   }
+
+  deselectAllEdges(){
+    if(this.selected_edge != null){
+      this.selected_edge.setDefaultColor();
+      this.selected_edge = null;
+    }
+  }
+
+  selectEdge(edge: EdgeElement){
+    this.deselectAllEdges();
+    this.selected_edge = edge;
+    this.selected_edge.setHighlightColor();
+  }
+
+  getSelectedEdge(): EdgeElement{
+    return this.selected_edge;
+  }
+
+
 }

@@ -285,6 +285,9 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
 
   edgeClicked(event: any) {
     // console.log('Edge clicked');
+    console.log('Edge mouse down');
+    this.edge_layer.selectEdge(event.currentTarget);
+    this.updateDiagram();
   }
 
   edgeDoubleClicked(event: any){
