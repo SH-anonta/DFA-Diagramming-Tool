@@ -2,6 +2,7 @@
 import {NodeElement} from './node-layer';
 import * as createjs from "createjs-module";
 import {DiagramDirector} from './diagram-directors';
+import {Observer} from 'rxjs/Observer';
 
 export class EdgeElement extends createjs.Container{
   private center_control_point: number;
@@ -39,6 +40,9 @@ export class EdgeElement extends createjs.Container{
 
     this.line.graphics.endStroke();
     this.addChild(this.line);
+
+    // source_node and destination node may be undefined
+    this.setNodePositionListeners(source_node, destination_node);
   }
 
 
@@ -55,10 +59,12 @@ export class EdgeElement extends createjs.Container{
 
   setSourceNode(node: NodeElement){
     this.source_node = node;
+    this.setNodePositionListeners(node, undefined);
   }
 
   setDestinationNode(node: NodeElement){
     this.destination_node= node;
+    this.setNodePositionListeners(undefined, node);
   }
 
   setSourcePosition(x:number, y:number){
@@ -77,6 +83,21 @@ export class EdgeElement extends createjs.Container{
 
   setDefaultColor(){
     this.graphics_commands.edge_color_command.style = EdgeElement.DEFAULT_COLOR;
+  }
+
+  private setNodePositionListeners(source_node: NodeElement, destination_node:NodeElement) {
+
+    if(source_node){
+      source_node.addNodePositionListener((node: NodeElement) =>{
+        this.updateEdgePosition();
+      });
+    }
+
+    if(destination_node){
+      destination_node.addNodePositionListener((node: NodeElement) =>{
+        this.updateEdgePosition();
+      });
+    }
   }
 }
 
@@ -112,8 +133,8 @@ export class DiagramEdgeLayer extends createjs.Container{
     return edge;
   }
 
-  createEdge(end_point_a: NodeElement, end_point_b: NodeElement): EdgeElement{
-    let edge = new EdgeElement(end_point_a.x, end_point_a.y, end_point_b.x, end_point_b.y, end_point_a, end_point_b);
+  createEdge(src_node: NodeElement, dest_node: NodeElement): EdgeElement{
+    let edge = new EdgeElement(src_node.x, src_node.y, dest_node.x, dest_node.y, src_node, dest_node);
     this.edges.push(edge);
     this.addChild(edge);
 

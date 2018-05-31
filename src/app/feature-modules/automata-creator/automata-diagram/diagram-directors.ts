@@ -369,8 +369,7 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
 
         // associate the edge to the destination node and source node
         // so it is connected to them
-        destination_node.addEdge(this.floating_edge);
-        event.currentTarget.addEdge(this.floating_edge);
+
         this.floating_edge.updateEdgePosition();
         this.action_executor.execute(new CreateEdgeAction(this.edge_layer, this.floating_edge));
 

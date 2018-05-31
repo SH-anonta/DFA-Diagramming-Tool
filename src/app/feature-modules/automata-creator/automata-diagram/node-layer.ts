@@ -1,13 +1,14 @@
 import {DiagramDirector, DiagramDirectorDefaultMode} from './diagram-directors';
 import * as createjs from "createjs-module";
 import {EdgeElement} from './edge-layer';
-
+import {Observer} from 'rxjs/Observer';
+import {Subject} from 'rxjs/Subject';
 
 export class NodeElement extends createjs.Container{
   selection_border: createjs.Shape;     // circle border that indicates the node is selected
   accept_state_symbol: createjs.Shape;  // an inner circle that indicates the node is an accept state
 
-  incident_edges: EdgeElement[] = [];
+  private node_position_change: Subject<NodeElement> = new Subject();
 
   // constants
   readonly NODE_RADIUS: number = 40;
@@ -96,14 +97,14 @@ export class NodeElement extends createjs.Container{
     // });
   }
 
-  addEdge(edge: EdgeElement){
-    this.incident_edges.push(edge);
-  }
+  // addEdge(edge: EdgeElement){
+  //   // this.incident_edges.push(edge);
+  // }
 
-  updateAllIncidentEdges(){
-    for(let x of this.incident_edges){
-      x.updateEdgePosition();
-    }
+  private updateAllIncidentEdges(){
+
+    // when this node is moved, inform all incident edges
+    this.node_position_change.next(this);
   }
 
   private showAcceptStateSymbol(){
@@ -120,6 +121,10 @@ export class NodeElement extends createjs.Container{
 
   private hideSelectionHighlight() {
     this.selection_border.alpha = 0;
+  }
+
+  addNodePositionListener(observer: any){
+    return this.node_position_change.subscribe(observer);
   }
 }
 
@@ -138,12 +143,10 @@ export class DiagramNodesLayer extends createjs.Container{
     let nodec = this.createNewNode('C',80,380);
     let noded = this.createNewNode('D', 500,400);
 
+    // todo delete, only for debugging convenience
     setTimeout((e)=>{
       console.log('Time out exe');
       let edge = this.director.createNewEdge(nodea, nodeb);
-
-      nodea.addEdge(edge);
-      nodeb.addEdge(edge);
 
       this.director.updateDiagram();
     }, 100);
