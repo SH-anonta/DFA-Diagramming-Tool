@@ -160,7 +160,7 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
     // this indicates the ues wants to delete selected nodes or the selected edge
 
     if(this.node_layer.getSelectedNodes().length > 0){
-      this.action_executor.execute(new DeleteSelectedNodesAction(this.node_layer));
+      this.action_executor.execute(new DeleteSelectedNodesAction(this.node_layer, this.edge_layer));
     }
 
     let selected_edge = this.edge_layer.getSelectedEdge();

@@ -62,10 +62,14 @@ export class EdgeElement extends createjs.Container{
     this.setNodePositionListeners(node, undefined);
   }
 
+  getSourceNode(): NodeElement{return this.source_node;}
+
   setDestinationNode(node: NodeElement){
     this.destination_node= node;
     this.setNodePositionListeners(undefined, node);
   }
+
+  getDestinationNode(): NodeElement{return this.destination_node;}
 
   setSourcePosition(x:number, y:number){
     this.line_create_command.x = x;
@@ -157,6 +161,8 @@ export class DiagramEdgeLayer extends createjs.Container{
   removeEdge(edge: EdgeElement){
     let idx = this.edges.findIndex((x) => {return edge === x;});
 
+    console.log('Remove request', idx);
+
     if(idx != -1){
       this.edges.splice(idx, 1);
     }
@@ -214,5 +220,10 @@ export class DiagramEdgeLayer extends createjs.Container{
     return this.selected_edge;
   }
 
-
+  getIncidentEdges(node: NodeElement): EdgeElement[]{
+    return this.edges.filter((edge) =>{
+      // filter edges that are not incident with given node
+      return node === edge.getSourceNode() || node === edge.getDestinationNode();
+    });
+  }
 }

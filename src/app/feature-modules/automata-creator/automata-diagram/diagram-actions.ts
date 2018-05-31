@@ -55,22 +55,37 @@ export interface Action{
 
 // Actions performed on node elements
 export class DeleteSelectedNodesAction implements Action{
-  deleted_nodes: NodeElement[];
+  private deleted_nodes: NodeElement[];
+  private incident_edges_of_deleted_nodes: EdgeElement[]= [];
 
-  constructor(private node_layer: DiagramNodesLayer){
+  constructor(private node_layer: DiagramNodesLayer, private edge_layer: DiagramEdgeLayer){
     this.deleted_nodes = node_layer.getSelectedNodes();
+
+    for(let node of this.deleted_nodes){
+      this.incident_edges_of_deleted_nodes = this.incident_edges_of_deleted_nodes.concat(edge_layer.getIncidentEdges(node));
+
+    }
   }
 
   execute(){
     this.node_layer.deleteNodes(this.deleted_nodes);
+    for(let edge of this.incident_edges_of_deleted_nodes){
+      this.edge_layer.removeEdge(edge);
+    }
   }
 
   redo(){
     this.node_layer.deleteNodes(this.deleted_nodes);
+    for(let edge of this.incident_edges_of_deleted_nodes){
+      this.edge_layer.removeEdge(edge);
+    }
   }
 
   undo(){
-   this.node_layer.addNodes(this.deleted_nodes);
+    this.node_layer.addNodes(this.deleted_nodes);
+    for(let edge of this.incident_edges_of_deleted_nodes){
+      this.edge_layer.addEdge(edge);
+    }
   }
 }
 
