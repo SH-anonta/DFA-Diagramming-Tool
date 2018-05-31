@@ -2,20 +2,21 @@
 import {NodeElement} from './node-layer';
 import * as createjs from "createjs-module";
 import {DiagramDirector} from './diagram-directors';
-import {Observer} from 'rxjs/Observer';
 
 export class EdgeElement extends createjs.Container{
-  private center_control_point: number;
   private static DEFAULT_COLOR: string = '#000000';
   private static HIGHLIGHT_COLOR: string =  '#213bd0';
 
-  private graphics_commands = {
-    edge_color_command : undefined,   // used for changing the color of the edge
+  // the line that represents this edge, a quadratic curve line
+  line: createjs.Shape;
+
+  // these commands are altered to dynamically change the properties of the shapes they render
+  render_commands = {
+    line_create_command: undefined,           // used for changing the start point of the line
+    line_quadratic_curve_command: undefined,  // used to
+    edge_color_command : undefined,           // used for changing the color of the edge
   };
 
-  line: createjs.Shape;
-  line_create_command;
-  line_quadratic_curve_command;
   label: string;
 
   private source_node: NodeElement;
@@ -34,9 +35,9 @@ export class EdgeElement extends createjs.Container{
     this.line.graphics.setStrokeStyle(2);
 
     // the command object is used to later alter the color of the line
-    this.graphics_commands.edge_color_command = this.line.graphics.beginStroke(EdgeElement.DEFAULT_COLOR).command;
-    this.line_create_command= this.line.graphics.moveTo(sx, sy).command;
-    this.line_quadratic_curve_command= this.line.graphics.quadraticCurveTo((sx+dx)/2, (sy+dy)/2, dx, dy).command;
+    this.render_commands.edge_color_command = this.line.graphics.beginStroke(EdgeElement.DEFAULT_COLOR).command;
+    this.render_commands.line_create_command= this.line.graphics.moveTo(sx, sy).command;
+    this.render_commands.line_quadratic_curve_command= this.line.graphics.quadraticCurveTo((sx+dx)/2, (sy+dy)/2, dx, dy).command;
 
     this.line.graphics.endStroke();
     this.addChild(this.line);
@@ -47,14 +48,17 @@ export class EdgeElement extends createjs.Container{
 
 
   updateEdgePosition(){
-    this.line_create_command.x= this.source_node.x;
-    this.line_create_command.y= this.source_node.y;
+    // recompute the start point of line
+    this.render_commands.line_create_command.x= this.source_node.x;
+    this.render_commands.line_create_command.y= this.source_node.y;
 
-    this.line_quadratic_curve_command.cpx= (this.source_node.x+this.destination_node.x)/2;
-    this.line_quadratic_curve_command.cpy= (this.source_node.y+this.destination_node.y)/2;
+    // recompute the center control point of this line
+    this.render_commands.line_quadratic_curve_command.cpx= (this.source_node.x+this.destination_node.x)/2;
+    this.render_commands.line_quadratic_curve_command.cpy= (this.source_node.y+this.destination_node.y)/2;
 
-    this.line_quadratic_curve_command.x= this.destination_node.x;
-    this.line_quadratic_curve_command.y= this.destination_node.y;
+    // recompute the end point of this line
+    this.render_commands.line_quadratic_curve_command.x= this.destination_node.x;
+    this.render_commands.line_quadratic_curve_command.y= this.destination_node.y;
   }
 
   setSourceNode(node: NodeElement){
@@ -72,21 +76,21 @@ export class EdgeElement extends createjs.Container{
   getDestinationNode(): NodeElement{return this.destination_node;}
 
   setSourcePosition(x:number, y:number){
-    this.line_create_command.x = x;
-    this.line_create_command.y = y;
+    this.render_commands.line_create_command.x = x;
+    this.render_commands.line_create_command.y = y;
   }
 
   setDestinationPosition(x:number, y:number){
-    this.line_quadratic_curve_command.x= x;
-    this.line_quadratic_curve_command.y= y;
+    this.render_commands.line_quadratic_curve_command.x= x;
+    this.render_commands.line_quadratic_curve_command.y= y;
   }
 
   setHighlightColor(){
-    this.graphics_commands.edge_color_command.style = EdgeElement.HIGHLIGHT_COLOR;
+    this.render_commands.edge_color_command.style = EdgeElement.HIGHLIGHT_COLOR;
   }
 
   setDefaultColor(){
-    this.graphics_commands.edge_color_command.style = EdgeElement.DEFAULT_COLOR;
+    this.render_commands.edge_color_command.style = EdgeElement.DEFAULT_COLOR;
   }
 
   private setNodePositionListeners(source_node: NodeElement, destination_node:NodeElement) {
