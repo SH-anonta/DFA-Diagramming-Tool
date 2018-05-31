@@ -17,6 +17,14 @@ export interface DiagramEventHandler {
   edgeMouseDown(event: any);
   edgeMouseUp(event: any);
 
+  // edge center control point events
+  edgeCenterClicked(event: any);
+  edgeCenterDoubleClicked(event: any);
+  edgeCenterMouseDown(event: any);
+  edgeCenterMouseUp(event: any);
+  edgeCenterPressMove(event: any);
+
+
   // select layer events
   selectionLayerClicked(event: any);
   selectionLayerDoubleClicked(event: any);

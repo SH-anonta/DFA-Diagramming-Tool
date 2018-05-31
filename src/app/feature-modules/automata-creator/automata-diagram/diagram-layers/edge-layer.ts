@@ -100,6 +100,26 @@ export class DiagramEdgeLayer extends createjs.Container{
     edge.addEventListener('mouseup', (event: any)=>{
       this.director.edgeMouseUp(event);
     });
+
+
+    // edge center control point event handlers
+    let center_control_point = edge.getCenterControlPointELemnt();
+    center_control_point.addEventListener('click', (event: any) =>{
+      this.director.edgeCenterClicked(event);
+    });
+    center_control_point.addEventListener('doubleclick', (event: any) =>{
+      this.director.edgeCenterDoubleClicked(event);
+    });
+    center_control_point.addEventListener('mousedown', (event: any) =>{
+      this.director.edgeCenterMouseDown(event);
+    });
+    center_control_point.addEventListener('mouseup', (event: any) =>{
+      this.director.edgeCenterMouseUp(event);
+    });
+    center_control_point.addEventListener('pressmove', (event: any) =>{
+      this.director.edgeCenterPressMove(event);
+    });
+
   }
 
   deselectAllEdges(){

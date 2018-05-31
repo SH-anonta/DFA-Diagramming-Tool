@@ -107,6 +107,23 @@ export class DiagramDirector implements DiagramEventHandler {
     this.current_mode.edgeMouseUp(event)
   }
 
+  // edge center control point events
+  edgeCenterClicked(event: any){
+   this.current_mode.edgeCenterClicked(event);
+  }
+  edgeCenterDoubleClicked(event: any){
+    this.current_mode.edgeCenterDoubleClicked(event);
+  }
+  edgeCenterMouseDown(event: any){
+    this.current_mode.edgeCenterMouseDown(event);
+  }
+  edgeCenterMouseUp(event: any){
+    this.current_mode.edgeCenterMouseDown(event);
+  }
+  edgeCenterPressMove(event: any){
+    this.current_mode.edgeCenterMouseDown(event);
+  }
+
   // todo delete
   createNewEdge(nodea: NodeElement, nodeb: NodeElement){
     return this.current_mode.createNewEdge(nodea, nodeb);

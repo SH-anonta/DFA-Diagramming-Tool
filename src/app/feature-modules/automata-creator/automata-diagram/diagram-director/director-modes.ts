@@ -183,6 +183,23 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
   edgeMouseUp(event: any){
 
   }
+
+  // edge center control point events
+  edgeCenterClicked(event: any){
+
+  }
+  edgeCenterDoubleClicked(event: any){
+
+  }
+  edgeCenterMouseDown(event: any){
+
+  }
+  edgeCenterMouseUp(event: any){
+
+  }
+  edgeCenterPressMove(event: any){
+
+  }
 }
 
 

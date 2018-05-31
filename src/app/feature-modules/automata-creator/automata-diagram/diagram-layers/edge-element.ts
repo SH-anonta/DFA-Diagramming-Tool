@@ -17,8 +17,11 @@ export class EdgeElement extends createjs.Container{
 
   label: string;
 
+  // incident nodes
   private source_node: NodeElement;
   private destination_node: NodeElement;
+
+  private center_point: createjs.Container = new createjs.Container();
 
   // Take two nodes that this edge connects
   constructor(sx: number, sy: number, dx: number, dy: number,
@@ -38,12 +41,33 @@ export class EdgeElement extends createjs.Container{
     this.render_commands.line_quadratic_curve_command= this.line.graphics.quadraticCurveTo((sx+dx)/2, (sy+dy)/2, dx, dy).command;
 
     this.line.graphics.endStroke();
-    this.addChild(this.line);
+
+    this.initCenterPoint();
+
+    // order is important
+    this.addChild(this.line, this.center_point);
 
     // source_node and destination node may be undefined
     this.setNodePositionListeners(source_node, destination_node);
   }
 
+  private initCenterPoint() {
+    let sp = this.getSourcePoint();
+    let dp = this.getDestinationPoint();
+
+    let x = (sp.x+dp.x)/2;
+    let y = (sp.y+dp.y)/2;
+
+
+    let point = new createjs.Shape();
+    this.center_point.x = x;
+    this.center_point.y = y;
+    // point.x = x;
+    // point.y = y;
+
+    point.graphics.beginFill('#213BD0').drawCircle(0,0, 3);
+    this.center_point.addChild(point);
+  }
 
   updateEdgePosition(){
     // recompute the start point of line
@@ -51,8 +75,8 @@ export class EdgeElement extends createjs.Container{
     this.render_commands.line_create_command.y= this.source_node.y;
 
     // recompute the center control point of this line
-    this.render_commands.line_quadratic_curve_command.cpx= (this.source_node.x+this.destination_node.x)/2;
-    this.render_commands.line_quadratic_curve_command.cpy= (this.source_node.y+this.destination_node.y)/2;
+    this.center_point.x = this.render_commands.line_quadratic_curve_command.cpx= (this.source_node.x+this.destination_node.x)/2;
+    this.center_point.y = this.render_commands.line_quadratic_curve_command.cpy= (this.source_node.y+this.destination_node.y)/2;
 
     // recompute the end point of this line
     this.render_commands.line_quadratic_curve_command.x= this.destination_node.x;
@@ -83,6 +107,14 @@ export class EdgeElement extends createjs.Container{
     this.render_commands.line_quadratic_curve_command.y= y;
   }
 
+  getSourcePoint(){
+    return {x: this.render_commands.line_create_command.x, y: this.render_commands.line_create_command.y};
+  }
+
+  getDestinationPoint(){
+    return {x: this.render_commands.line_quadratic_curve_command.x, y: this.render_commands.line_quadratic_curve_command.y};
+  }
+
   setHighlightColor(){
     this.render_commands.edge_color_command.style = EdgeElement.HIGHLIGHT_COLOR;
   }
@@ -104,5 +136,9 @@ export class EdgeElement extends createjs.Container{
         this.updateEdgePosition();
       });
     }
+  }
+
+  getCenterControlPointELemnt(){
+    return this.center_point;
   }
 }
