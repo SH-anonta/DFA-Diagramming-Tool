@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
-import {DiagramNodesLayer} from './node-layer';
-import {NodeElement} from './node-element';
-import {DiagramSelectionLayer} from './selection-layer';
+import {DiagramNodesLayer} from './diagram-layers/node-layer';
+import {NodeElement} from './diagram-layers/node-element';
+import {DiagramSelectionLayer} from './diagram-layers/selection-layer';
 
 describe('DFA Diagram', ()=>{
   describe('Node Layer from AutomataCreator-Diagram', () => {

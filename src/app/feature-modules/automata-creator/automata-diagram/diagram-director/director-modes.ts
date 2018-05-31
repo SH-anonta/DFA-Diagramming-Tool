@@ -1,7 +1,7 @@
 import {DFADiagram} from '../diagram';
-import {DiagramSelectionLayer} from '../selection-layer';
-import {DiagramNodesLayer} from '../node-layer';
-import {DiagramEdgeLayer} from '../edge-layer';
+import {DiagramSelectionLayer} from '../diagram-layers/selection-layer';
+import {DiagramNodesLayer} from '../diagram-layers/node-layer';
+import {DiagramEdgeLayer} from '../diagram-layers/edge-layer';
 import {
   CreateEdgeAction,
   CreateNodeAction,
@@ -10,8 +10,8 @@ import {
   MoveNodesAction,
   ToggleNodeAcceptStateStatusAction
 } from '../diagram-actions/actions';
-import {NodeElement} from '../node-element';
-import {EdgeElement} from '../edge-element';
+import {NodeElement} from '../diagram-layers/node-element';
+import {EdgeElement} from '../diagram-layers/edge-element';
 import {DiagramEventHandler} from './diagram-event-handler';
 
 export class DiagramDirectorDefaultMode implements DiagramEventHandler{

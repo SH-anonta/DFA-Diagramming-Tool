@@ -1,7 +1,7 @@
-import {DiagramNodesLayer} from '../node-layer';
-import {DiagramEdgeLayer} from '../edge-layer';
-import {EdgeElement} from '../edge-element';
-import {NodeElement} from '../node-element';
+import {DiagramNodesLayer} from '../diagram-layers/node-layer';
+import {DiagramEdgeLayer} from '../diagram-layers/edge-layer';
+import {EdgeElement} from '../diagram-layers/edge-element';
+import {NodeElement} from '../diagram-layers/node-element';
 
 // action classes that encapsulate logic for manipulating the diagram
 
