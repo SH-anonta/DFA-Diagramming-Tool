@@ -186,7 +186,10 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
 
   // edge center control point events
   edgeCenterClicked(event: any){
+    // prevent the edge element right below this point from receiving this event
+    // event.stopPropagation();
 
+    // console.log(event.currentTarget);
   }
   edgeCenterDoubleClicked(event: any){
 
@@ -198,7 +201,13 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
 
   }
   edgeCenterPressMove(event: any){
+    // prevent the edge element right below this point from receiving this event
+    event.stopPropagation();
 
+    console.log('press');
+    let edge = event.currentTarget.getParentEdge();
+    edge.setCenterControlPointPosition(event.stageX, event.stageY);
+    this.updateDiagram();
   }
 }
 
