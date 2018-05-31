@@ -1,6 +1,20 @@
 import * as createjs from "createjs-module";
 import {NodeElement} from './node-element';
 
+function centerOfQuadraticCurve(x1,y1, x2,y2, x3,y3){
+  return {
+    x : .25*x1 + .5*x2 + .25*x3,
+    y : .25*y1 + .5*y2 + .25*y3,
+  };
+}
+
+function centerControlPointOfQuadraticCurve(x1,y1, x3,y3, center_x, center_y){
+  return {
+    x : 2*(center_x - .25*x1 - .25*x3),
+    y : 2*(center_y - .25*y1 - .25*y3),
+  };
+}
+
 export class EdgeCenterControlPoint extends createjs.Container{
   constructor(private parent_edge: EdgeElement){
     super();
@@ -155,7 +169,12 @@ export class EdgeElement extends createjs.Container{
     this.center_point.x= x;
     this.center_point.y= y;
 
-    this.render_commands.line_quadratic_curve_command.cpx = x;
-    this.render_commands.line_quadratic_curve_command.cpy = y;
+    let p1 = this.getSourcePoint();
+    let p3 = this.getDestinationPoint();
+
+    let center_point = centerControlPointOfQuadraticCurve(p1.x, p1.y, p3.x, p3.y, x,y,);
+
+    this.render_commands.line_quadratic_curve_command.cpx = center_point.x;
+    this.render_commands.line_quadratic_curve_command.cpy = center_point.y;
   }
 }
