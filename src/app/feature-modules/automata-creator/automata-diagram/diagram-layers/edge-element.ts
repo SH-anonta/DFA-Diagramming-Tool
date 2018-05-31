@@ -90,20 +90,43 @@ export class EdgeElement extends createjs.Container{
   }
 
   updateEdgePosition(){
+    let src_x = this.source_node.x;
+    let src_y = this.source_node.y;
+
+    let dest_x = this.destination_node.x;
+    let dest_y = this.destination_node.y;
+
+    let ctr_x = this.render_commands.line_quadratic_curve_command.cpx;
+    let ctr_y = this.render_commands.line_quadratic_curve_command.cpy;
+
+    // difference of source position, previous and now
+    let dsx = src_x - this.render_commands.line_create_command.x;
+    let dsy = src_y - this.render_commands.line_create_command.y;
+
+    // difference of destination position, previous and now
+    let ddx = src_x - this.render_commands.line_quadratic_curve_command.x;
+    let ddy = src_y - this.render_commands.line_quadratic_curve_command.y;
+
     // recompute the start point of line
-    this.render_commands.line_create_command.x= this.source_node.x;
-    this.render_commands.line_create_command.y= this.source_node.y;
+    this.render_commands.line_create_command.x= src_x;
+    this.render_commands.line_create_command.y= src_y;
 
     // recompute the center control point of this line
-    let ix = (this.source_node.x+this.destination_node.x)/2;
-    let iy = (this.source_node.y+this.destination_node.y)/2;
+    // let ix = (src_x+dest_x)/2;
+    // let iy = (src_y+dest_y)/2;
 
-    this.center_point.x = this.render_commands.line_quadratic_curve_command.cpx= ix;
-    this.center_point.y = this.render_commands.line_quadratic_curve_command.cpy= iy;
+    // this.center_point.x = this.render_commands.line_quadratic_curve_command.cpx= ix;
+    // this.center_point.y = this.render_commands.line_quadratic_curve_command.cpy= iy;
 
     // recompute the end point of this line
     this.render_commands.line_quadratic_curve_command.x= this.destination_node.x;
     this.render_commands.line_quadratic_curve_command.y= this.destination_node.y;
+
+    // update center point
+    let curve_center_point = centerOfQuadraticCurve(src_x, src_y, ctr_x, ctr_y, dest_x, dest_y);
+
+    this.center_point.x = curve_center_point.x;
+    this.center_point.y = curve_center_point.y;
   }
 
   setSourceNode(node: NodeElement){
