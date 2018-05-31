@@ -146,9 +146,10 @@ export class DiagramEdgeLayer extends createjs.Container{
   addEdge(edge: EdgeElement){
     let idx = this.edges.findIndex((x) => {return edge === x;});
 
+    // if the edge does not already exist in this layer
     if(idx == -1){
       this.addChild(edge);
-      this.edges.splice(idx, 1);
+      this.edges.push(edge);
     }
 
   }
@@ -164,7 +165,6 @@ export class DiagramEdgeLayer extends createjs.Container{
   }
 
   removeFloatingEdge(){
-
     this.removeEdge(this.floating_edge);
     this.floating_edge = undefined;
   }
@@ -172,6 +172,7 @@ export class DiagramEdgeLayer extends createjs.Container{
   undefineFloatingEdge(){
     this.floating_edge = undefined;
   }
+
 
   setDirector(director: DiagramDirector){
     this.director = director;

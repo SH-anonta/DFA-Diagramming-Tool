@@ -336,7 +336,8 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
       this.floating_edge = this.edge_layer.createFloatingEdge(x,y,x,y);
       this.current_phase = EdgeCreationPhase.destination_node_selection;
 
-      this.floating_edge.setSourceNode(event.currentTarget);
+      this.floating_edge.setSourcePosition(event.currentTarget.x, event.currentTarget.y);
+
       this.updateDiagram();
     }
   }
@@ -365,6 +366,7 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
       else{
         // this.floating_edge.setDestinationPosition(destination_node.x, destination_node.y);
 
+        this.floating_edge.setSourceNode(event.currentTarget);
         this.floating_edge.setDestinationNode(destination_node);
 
         // associate the edge to the destination node and source node
