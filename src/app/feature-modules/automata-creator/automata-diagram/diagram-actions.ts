@@ -1,5 +1,7 @@
-import {DiagramNodesLayer, NodeElement} from './node-layer';
-import {DiagramEdgeLayer, EdgeElement} from './edge-layer';
+import {DiagramNodesLayer} from './node-layer';
+import {DiagramEdgeLayer} from './edge-layer';
+import {EdgeElement} from './edge-element';
+import {NodeElement} from './node-element';
 
 export class ActionExecutor{
   // stacks for keeping track of what actions have been executed

@@ -9,8 +9,10 @@ import {
 } from './diagram-actions';
 
 import {DiagramSelectionLayer} from './selection-layer';
-import {DiagramNodesLayer, NodeElement} from './node-layer';
-import {DiagramEdgeLayer, EdgeElement} from './edge-layer';
+import {DiagramNodesLayer} from './node-layer';
+import {DiagramEdgeLayer} from './edge-layer';
+import {EdgeElement} from './edge-element';
+import {NodeElement} from './node-element';
 
 //todo move mouse event data out of default direct mode
 interface DiagramEventHandler {
