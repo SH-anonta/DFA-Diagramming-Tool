@@ -1,4 +1,4 @@
-import {DiagramDirector} from './diagram-directors';
+import {DiagramDirector} from './diagram-director/diagram-director';
 import * as createjs from "createjs-module";
 import {NodeElement} from './node-element';
 

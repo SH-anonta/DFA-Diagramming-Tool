@@ -1,6 +1,6 @@
 import * as createjs from 'createjs-module';
 import {DiagramSelectionLayer} from './selection-layer';
-import {DiagramDirector} from './diagram-directors';
+import {DiagramDirector} from './diagram-director/diagram-director';
 import {DiagramNodesLayer} from './node-layer';
 import {DiagramEdgeLayer} from './edge-layer';
 

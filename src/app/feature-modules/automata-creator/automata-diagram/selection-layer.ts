@@ -1,5 +1,5 @@
 // all logic for selection of nodes
-import {DiagramDirector, DiagramDirectorDefaultMode} from './diagram-directors';
+import {DiagramDirector} from './diagram-director/diagram-director';
 import * as createjs from "createjs-module";
 
 export class DiagramSelectionLayer extends createjs.Container{

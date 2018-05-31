@@ -1,6 +1,6 @@
 // this class only contains logic for drawing line that represent edges
 import * as createjs from "createjs-module";
-import {DiagramDirector} from './diagram-directors';
+import {DiagramDirector} from './diagram-director/diagram-director';
 import {EdgeElement} from './edge-element';
 import {NodeElement} from './node-element';
 
