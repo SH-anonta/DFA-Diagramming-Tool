@@ -169,3 +169,24 @@ export class CreateEdgeAction implements Action{
     this.edge_layer.addEdge(this.edge);
   }
 }
+
+export class DeleteEdgeAction implements Action{
+
+  private readonly deleted_edge: EdgeElement;
+
+  constructor(private edge_layer: DiagramEdgeLayer, private edge: EdgeElement){
+    this.deleted_edge = edge;
+  }
+
+  execute(){
+    this.edge_layer.removeEdge(this.edge);
+  }
+
+  undo(){
+    this.edge_layer.addEdge(this.deleted_edge);
+  }
+
+  redo(){
+    this.edge_layer.removeEdge(this.deleted_edge);
+  }
+}

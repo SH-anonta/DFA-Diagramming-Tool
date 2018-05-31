@@ -154,7 +154,6 @@ export class DiagramEdgeLayer extends createjs.Container{
 
   }
 
-  // todo remove edge from node elements
   removeEdge(edge: EdgeElement){
     let idx = this.edges.findIndex((x) => {return edge === x;});
 

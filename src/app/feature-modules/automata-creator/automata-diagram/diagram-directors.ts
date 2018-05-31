@@ -2,7 +2,7 @@ import * as createjs from "createjs-module";
 import {DFADiagram} from './diagram';
 import {
   ActionExecutor, CreateEdgeAction,
-  CreateNodeAction,
+  CreateNodeAction, DeleteEdgeAction,
   DeleteSelectedNodesAction,
   MoveNodesAction,
   ToggleNodeAcceptStateStatusAction
@@ -157,10 +157,16 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
   // event handlers
   deleteButtonPressedOnPageBody() {
     // delete button pressed outside of any input fields.
-    // this indicates the ues wants to delete selected nodes
-    // this.node_layer.deleteSelectedNodes();
+    // this indicates the ues wants to delete selected nodes or the selected edge
 
-    this.action_executor.execute(new DeleteSelectedNodesAction(this.node_layer));
+    if(this.node_layer.getSelectedNodes().length > 0){
+      this.action_executor.execute(new DeleteSelectedNodesAction(this.node_layer));
+    }
+
+    let selected_edge = this.edge_layer.getSelectedEdge();
+    if(selected_edge != null){
+      this.action_executor.execute(new DeleteEdgeAction(this.edge_layer, selected_edge));
+    }
 
     this.updateDiagram();
   }
