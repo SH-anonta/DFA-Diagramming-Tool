@@ -2,9 +2,6 @@ import {DiagramDirector} from './diagram-directors';
 import * as createjs from "createjs-module";
 import {NodeElement} from './node-element';
 
-
-
-
 export class DiagramNodesLayer extends createjs.Container{
   private nodes: NodeElement[]= [];
   private director: DiagramDirector;

@@ -1,18 +1,19 @@
 import * as createjs from "createjs-module";
 import {DFADiagram} from './diagram';
 import {
-  ActionExecutor, CreateEdgeAction,
+  CreateEdgeAction,
   CreateNodeAction, DeleteEdgeAction,
   DeleteSelectedNodesAction,
   MoveNodesAction,
   ToggleNodeAcceptStateStatusAction
-} from './diagram-actions';
+} from './diagram-actions/actions';
 
 import {DiagramSelectionLayer} from './selection-layer';
 import {DiagramNodesLayer} from './node-layer';
 import {DiagramEdgeLayer} from './edge-layer';
 import {EdgeElement} from './edge-element';
 import {NodeElement} from './node-element';
+import {ActionExecutor} from './diagram-actions/action-executor';
 
 //todo move mouse event data out of default direct mode
 interface DiagramEventHandler {

@@ -1,13 +1,14 @@
 import {TestBed} from '@angular/core/testing';
-import {DFADiagram, DiagramNodesLayer, DiagramSelectionLayer, NodeElement} from './diagram';
-
+import {DiagramNodesLayer} from './node-layer';
+import {NodeElement} from './node-element';
+import {DiagramSelectionLayer} from './selection-layer';
 
 describe('DFA Diagram', ()=>{
   describe('Node Layer from AutomataCreator-Diagram', () => {
 
     beforeEach(() => {
       this.director = jasmine.createSpy('director');
-      this.node_layer = new DiagramNodesLayer(this.director, 1000, 1000);
+      this.node_layer = new DiagramNodesLayer(1000, 1000);
 
       this.node1_label = 'Node1';
       this.node1_x = 60;
@@ -26,7 +27,7 @@ describe('DFA Diagram', ()=>{
       // the node_layer object created at beforeEach has some nodes pre inserted for convenience of other tests
       // so this spec does not the mentioned node_layer object, instead creates a new one
       let fake_director: any = jasmine.createSpy('director');
-      let new_node_layer = new DiagramNodesLayer(fake_director, 1000,1000);
+      let new_node_layer = new DiagramNodesLayer(1000,1000);
 
       expect(new_node_layer.getAllNodes().length).toEqual(0);
     });
@@ -196,7 +197,7 @@ describe('DFA Diagram', ()=>{
   describe('SelectionLayer', function () {
     it('Should be creatable', ()=>{
       let director:any = jasmine.createSpy('DiagramDirectorDefaultMode');
-      let temp = new DiagramSelectionLayer(director, 100, 100);
+      let temp = new DiagramSelectionLayer(100, 100);
     });
   });
 });
