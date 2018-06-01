@@ -2,11 +2,11 @@ import {Action} from './actions';
 
 export class ActionExecutor{
   // stacks for keeping track of what actions have been executed
-  // this also allows easy implementation of undo, redo mechanisms
+  // this also allows easy implementation of undoChanges, redoChanges mechanisms
   private done_actions: Action[]= [];
   private undone_actions: Action[]= [];
 
-  // Max size of undo, redo stacks
+  // Max size of undoChanges, redoChanges stacks
   readonly MAX_ACTION_HISTORY_COUNT= 100;
 
   private clearUndoneActions(){
@@ -14,7 +14,7 @@ export class ActionExecutor{
   }
 
   execute(action: Action){
-    // important is important in case action.redo() raises an exception
+    // important is important in case action.redoChanges() raises an exception
     action.execute();
     this.done_actions.push(action);
     this.clearUndoneActions();

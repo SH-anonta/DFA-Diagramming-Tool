@@ -13,10 +13,12 @@ import {
 import {NodeElement} from '../diagram-layers/node-element';
 import {EdgeElement} from '../diagram-layers/edge-element';
 import {DiagramEventHandler} from './diagram-event-handler';
+import {ActionExecutor} from '../diagram-actions/action-executor';
+import {ExternalCommandsHandler} from './diagram-controls';
 
-export class DiagramDirectorDefaultMode implements DiagramEventHandler{
+export class DiagramDirectorDefaultMode implements DiagramEventHandler, ExternalCommandsHandler{
 
-  constructor(protected action_executor,
+  constructor(protected action_executor: ActionExecutor,
               protected stage: createjs.Stage,
               protected diagram: DFADiagram,
               protected selection_layer: DiagramSelectionLayer,
@@ -207,6 +209,17 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler{
     console.log('press');
     let edge = event.currentTarget.getParentEdge();
     edge.setCenterControlPointPosition(event.stageX, event.stageY);
+    this.updateDiagram();
+  }
+
+  // commands sent from outside of the diagram, by method call and not by some event
+  undoChanges(){
+    this.action_executor.undoAction();
+    this.updateDiagram();
+  }
+
+  redoChanges(){
+    this.action_executor.redoAction();
     this.updateDiagram();
   }
 }

@@ -5,15 +5,15 @@ import {DFADiagram} from '../diagram';
 import {DiagramSelectionLayer} from '../diagram-layers/selection-layer';
 import {DiagramNodesLayer} from '../diagram-layers/node-layer';
 import {DiagramEdgeLayer} from '../diagram-layers/edge-layer';
-import {EdgeElement} from '../diagram-layers/edge-element';
 import {NodeElement} from '../diagram-layers/node-element';
 import {ActionExecutor} from '../diagram-actions/action-executor';
 import {DiagramDirectorDefaultMode, DiagramDirectorEdgeCreationMode} from './director-modes';
 import {DiagramEventHandler} from './diagram-event-handler';
+import {ExternalCommandsHandler} from './diagram-controls';
 
 //todo move mouse event data out of default direct mode
 
-export class DiagramDirector implements DiagramEventHandler {
+export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHandler {
   private action_executor = new ActionExecutor();
   public readonly default_mode: DiagramDirectorDefaultMode;
   public readonly edge_creation_mode: DiagramDirectorEdgeCreationMode;
@@ -127,5 +127,13 @@ export class DiagramDirector implements DiagramEventHandler {
   // todo delete
   createNewEdge(nodea: NodeElement, nodeb: NodeElement){
     return this.current_mode.createNewEdge(nodea, nodeb);
+  }
+
+  undoChanges(){
+    this.current_mode.undoChanges();
+  }
+
+  redoChanges(){
+    this.current_mode.redoChanges();
   }
 }

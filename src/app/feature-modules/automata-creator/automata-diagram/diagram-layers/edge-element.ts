@@ -158,7 +158,10 @@ export class EdgeElement extends createjs.Container{
   }
 
   getDestinationPoint(){
-    return {x: this.render_commands.line_quadratic_curve_command.x, y: this.render_commands.line_quadratic_curve_command.y};
+    return {
+      x: this.render_commands.line_quadratic_curve_command.x,
+      y: this.render_commands.line_quadratic_curve_command.y
+    };
   }
 
   setHighlightColor(){

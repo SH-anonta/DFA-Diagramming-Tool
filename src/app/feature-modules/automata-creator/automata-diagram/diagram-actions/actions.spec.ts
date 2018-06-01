@@ -22,13 +22,13 @@ describe('Action', ()=>{
       expect(this.node_layer.createNewNode).toHaveBeenCalledWith(this.node_lable, this.node_x, this.node_y);
     });
 
-    it('Should add previously created node on redo', ()=>{
+    it('Should add previously created node on redoChanges', ()=>{
       this.action.redo();
       expect(this.node_layer.addNode).toHaveBeenCalledTimes(1);
     });
 
-    it('Should remove previously created node on undo', ()=>{
-      this.action.undo();
+    it('Should remove previously created node on undoChanges', ()=>{
+      this.action.undoChanges();
       expect(this.node_layer.deleteNode).toHaveBeenCalledTimes(1);
     });
   });

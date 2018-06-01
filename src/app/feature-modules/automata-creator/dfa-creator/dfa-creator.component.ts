@@ -10,7 +10,7 @@ import {HostListener} from '@angular/core';
 export class DfaCreatorComponent implements OnInit, AfterViewInit{
 
   @ViewChild('MainCanvas') canvas_ref: ElementRef;
-  dfa_diagram: DFADiagram;
+  diagram: DFADiagram;
 
   constructor() { }
 
@@ -19,9 +19,15 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit(){
-    this.dfa_diagram = new DFADiagram(this.canvas_ref.nativeElement);
+    this.diagram = new DFADiagram(this.canvas_ref.nativeElement);
   }
 
 
+  onUndoClick() {
+    this.diagram.undoChanges();
+  }
 
+  onRedoClick() {
+    this.diagram.redoChanges();
+  }
 }

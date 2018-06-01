@@ -3,9 +3,10 @@ import {DiagramSelectionLayer} from './diagram-layers/selection-layer';
 import {DiagramDirector} from './diagram-director/diagram-director';
 import {DiagramNodesLayer} from './diagram-layers/node-layer';
 import {DiagramEdgeLayer} from './diagram-layers/edge-layer';
+import {ExternalCommandsHandler} from './diagram-director/diagram-controls';
 
 
-export class DFADiagram {
+export class DFADiagram implements ExternalCommandsHandler{
   ctrl_is_pressed: boolean= false;
   shift_is_pressed: boolean= false;
 
@@ -113,4 +114,12 @@ export class DFADiagram {
       }
     });
   }
+
+  undoChanges(){
+    this.director.undoChanges();
+  }
+  redoChanges(){
+    this.director.redoChanges();
+  }
+
 }
