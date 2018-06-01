@@ -230,6 +230,32 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
     this.action_executor.redoAction();
     this.updateDiagram();
   }
+
+  deleteSelectedNodesOrEdge(){
+    // delete button pressed outside of any input fields.
+    // this indicates the ues wants to delete selected nodes or the selected edge
+
+    if(this.node_layer.getSelectedNodes().length > 0){
+      this.action_executor.execute(new DeleteSelectedNodesAction(this.node_layer, this.edge_layer));
+    }
+
+    let selected_edge = this.edge_layer.getSelectedEdge();
+    if(selected_edge != null){
+      this.action_executor.execute(new DeleteEdgeAction(this.edge_layer, selected_edge));
+    }
+
+    this.updateDiagram();
+  }
+
+  switchToDefaultMode(){
+    // dummy methods, not to be used
+    // exists only because the ExternalCommandsHandler interface requires it
+  }
+
+  switchToEdgeCreationMode(){
+    // dummy methods, not to be used
+    // exists only because the ExternalCommandsHandler interface requires it
+  }
 }
 
 

@@ -138,4 +138,16 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
   redoChanges(){
     this.current_mode.redoChanges();
   }
+
+  deleteSelectedNodesOrEdge(){
+    this.current_mode.deleteSelectedNodesOrEdge();
+  }
+
+  switchToDefaultMode(){
+    this.current_mode = this.default_mode;
+  }
+
+  switchToEdgeCreationMode(){
+    this.current_mode = this.edge_creation_mode;
+  }
 }

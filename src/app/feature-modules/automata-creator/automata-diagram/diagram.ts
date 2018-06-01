@@ -63,58 +63,23 @@ export class DFADiagram implements ExternalCommandsHandler{
   }
 
   private setEventListeners() {
-    // this.canvas.addEventListener('keydown', (event: KeyboardEvent)=>{
-    document.addEventListener('keydown', (event: KeyboardEvent)=>{
-      // console.log(event);
-      // check if delete key is pressed
-
-      // execute only if the delete is not pressed in an input element
-      if(event.target !== document.body){
-        return;
-      }
-
-      if(event.keyCode === 46){
-        // console.log('Delete pressed');
-        this.director.deleteButtonPressedOnPageBody();
-      }
-      else if(event.ctrlKey && event.key == 'z'){
-        this.director.ctrlZPressed();
-      }
-      else if(event.ctrlKey && event.key == 'y'){
-        this.director.ctrlYPressed();
-      }
-
-
-    });
-
 
     // The custom events emitted by createjs library does not support keyevents
     // Warning: inefficient
     document.addEventListener('keydown', (event: any) =>{
       this.ctrl_is_pressed = event.ctrlKey;
       this.shift_is_pressed = event.shiftKey;
-
-
-      // todo: remove, mode switching of diagram director should be set from outside
-      if(event.keyCode == 16){
-        // if the shift button was pressed
-        this.director.switchMode(this.director.edge_creation_mode)
-      }
     });
 
     document.addEventListener('keyup', (event: any) =>{
       this.ctrl_is_pressed = event.ctrlKey;
       this.shift_is_pressed = event.shiftKey;
       // console.log('ctrl up');
-
-      // todo: remove, mode switching of diagram director should be set from outside
-      if(event.keyCode == 16){
-        // if the shift button was released,
-        this.director.switchMode(this.director.default_mode)
-      }
     });
   }
 
+
+  // Methods exposed to the outside
   undoChanges(){
     this.director.undoChanges();
   }
@@ -122,4 +87,15 @@ export class DFADiagram implements ExternalCommandsHandler{
     this.director.redoChanges();
   }
 
+  deleteSelectedNodesOrEdge(){
+    this.director.deleteSelectedNodesOrEdge();
+  }
+
+  switchToDefaultMode(){
+    this.director.switchMode(this.director.default_mode);
+  }
+
+  switchToEdgeCreationMode(){
+    this.director.switchMode(this.director.edge_creation_mode);
+  }
 }
