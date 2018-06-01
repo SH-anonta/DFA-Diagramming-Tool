@@ -49,18 +49,6 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
     this.current_mode.updateDiagram();
   }
 
-  deleteButtonPressedOnPageBody() {
-    this.current_mode.deleteButtonPressedOnPageBody();
-  }
-
-  ctrlZPressed(){
-    this.current_mode.ctrlZPressed();
-  }
-
-  ctrlYPressed(){
-    this.current_mode.ctrlYPressed();
-  }
-
   // Selection layer action handlers
   selectionLayerClicked(event: any){
     this.current_mode.selectionLayerClicked(event);

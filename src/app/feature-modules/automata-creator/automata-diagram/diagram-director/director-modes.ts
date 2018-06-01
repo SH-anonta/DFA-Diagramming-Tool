@@ -38,23 +38,6 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
     this.stage.update();
   }
 
-  // event handlers
-  deleteButtonPressedOnPageBody() {
-    // delete button pressed outside of any input fields.
-    // this indicates the ues wants to delete selected nodes or the selected edge
-
-    if(this.node_layer.getSelectedNodes().length > 0){
-      this.action_executor.execute(new DeleteSelectedNodesAction(this.node_layer, this.edge_layer));
-    }
-
-    let selected_edge = this.edge_layer.getSelectedEdge();
-    if(selected_edge != null){
-      this.action_executor.execute(new DeleteEdgeAction(this.edge_layer, selected_edge));
-    }
-
-    this.updateDiagram();
-  }
-
   // In response to actions performed on nodes
   nodeClicked(event: any){
     let dx = event.stageX - MouseData.initial_mouse_x;
@@ -148,16 +131,6 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
   selectionLayerDoubleClicked(event: any){
     this.action_executor.execute(new CreateNodeAction(this.node_layer, 'New', event.stageX, event.stageY));
-    this.updateDiagram();
-  }
-
-  ctrlZPressed(){
-    this.action_executor.undoAction();
-    this.updateDiagram();
-  }
-
-  ctrlYPressed(){
-    this.action_executor.redoAction();
     this.updateDiagram();
   }
 

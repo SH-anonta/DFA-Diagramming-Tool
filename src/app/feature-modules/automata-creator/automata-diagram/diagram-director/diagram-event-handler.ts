@@ -1,8 +1,5 @@
 export interface DiagramEventHandler {
   updateDiagram();
-  deleteButtonPressedOnPageBody(event: any);
-  ctrlZPressed(event: any);
-  ctrlYPressed(event: any);
 
   // node events
   nodeClicked(event: any);
