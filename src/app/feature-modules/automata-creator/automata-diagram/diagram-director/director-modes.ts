@@ -16,6 +16,14 @@ import {DiagramEventHandler} from './diagram-event-handler';
 import {ActionExecutor} from '../diagram-actions/action-executor';
 import {ExternalCommandsHandler} from './diagram-controls';
 
+// todo: move 'press move performed' calculation into this class
+class MouseData {
+  static initial_mouse_x= 0;
+  static initial_mouse_y= 0;
+  static last_mouse_x= 0;
+  static last_mouse_y= 0;
+}
+
 export class DiagramDirectorDefaultMode implements DiagramEventHandler, ExternalCommandsHandler{
 
   constructor(protected action_executor: ActionExecutor,
@@ -49,8 +57,8 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
   // In response to actions performed on nodes
   nodeClicked(event: any){
-    let dx = event.stageX - this.initial_mouse_x;
-    let dy = event.stageY - this.initial_mouse_y;
+    let dx = event.stageX - MouseData.initial_mouse_x;
+    let dy = event.stageY - MouseData.initial_mouse_y;
     let drag_performed = !(dx == 0 && dy == 0);
 
     if(!this.diagram.ctrl_is_pressed && !drag_performed){
@@ -66,21 +74,16 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
     this.updateDiagram();
   }
 
-  initial_mouse_x= 0;
-  initial_mouse_y= 0;
-  last_mouse_x= 0;
-  last_mouse_y= 0;
-
   nodeMouseDown(event: any){
     // drag_offset is used to keep track of where the mouse pointer is pressed on the node element
     event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
 
     //Values used for making decisions
-    this.last_mouse_x= event.stageX;
-    this.last_mouse_y= event.stageY;
+    MouseData.last_mouse_x= event.stageX;
+    MouseData.last_mouse_y= event.stageY;
 
-    this.initial_mouse_x= event.stageX;
-    this.initial_mouse_y= event.stageY;
+    MouseData.initial_mouse_x= event.stageX;
+    MouseData.initial_mouse_y= event.stageY;
 
     this.edge_layer.deselectAllEdges();
 
@@ -108,13 +111,13 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
     // event.currentTarget.x = event.stageX - event.currentTarget.drag_offset.x;
     // event.currentTarget.y = event.stageY - event.currentTarget.drag_offset.y;
 
-    let tx=  event.stageX - this.last_mouse_x;
-    let ty=  event.stageY - this.last_mouse_y;
+    let tx=  event.stageX - MouseData.last_mouse_x;
+    let ty=  event.stageY - MouseData.last_mouse_y;
 
     this.node_layer.translateSelectedNodes(tx, ty);
 
-    this.last_mouse_x= event.stageX;
-    this.last_mouse_y= event.stageY;
+    MouseData.last_mouse_x= event.stageX;
+    MouseData.last_mouse_y= event.stageY;
 
     this.updateDiagram();
 
@@ -125,8 +128,8 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
     // moving of nodes has been completed
     // console.log('Press up');
 
-    let dx = event.stageX-this.initial_mouse_x;
-    let dy = event.stageY-this.initial_mouse_y;
+    let dx = event.stageX-MouseData.initial_mouse_x;
+    let dy = event.stageY-MouseData.initial_mouse_y;
 
     // if the has moved after mouesdown event was fired
     if(dx != 0 || dy != 0){
@@ -166,6 +169,11 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
   // this method gets called when the director switches to this mode
   onSwitchHook(){
     // intentionally do nothing
+  }
+
+  // this method gets called before the director mode gets switched
+  beforeSwitchHook(){
+
   }
 
   edgeClicked(event: any) {
@@ -245,6 +253,11 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
     super(action_executor, stage, diagram, selection_layer, node_layer, edge_layer);
   }
 
+  beforeSwitchHook(){
+    if(this.current_phase == EdgeCreationPhase.source_node_selection){
+      this.edge_layer.removeFloatingEdge();
+    }
+  }
 
   // mouse events
   nodeMouseDown(event: any){

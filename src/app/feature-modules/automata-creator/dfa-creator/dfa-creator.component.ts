@@ -22,11 +22,17 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
   }
 
 
-  onUndoClick() {
+  onUndoClick(event: any) {
     this.diagram.undoChanges();
+
+    // remove focus from button after click, focus causes problems for shortcuts
+    event.target.blur();
   }
 
-  onRedoClick() {
+  onRedoClick(event: any) {
     this.diagram.redoChanges();
+
+    // remove focus from button after click, focus causes problems for shortcuts
+    event.target.blur();
   }
 }
