@@ -1,6 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {DFADiagram} from '../automata-diagram/diagram';
-import {HostListener} from '@angular/core';
 
 @Component({
   selector: 'app-dfa-creator',

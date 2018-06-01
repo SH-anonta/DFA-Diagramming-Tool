@@ -36,8 +36,10 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
   }
 
   switchMode(mode: DiagramDirectorDefaultMode){
+    this.current_mode.beforeSwitchHook();
     this.current_mode  = mode;
-    this.current_mode.onSwitchHook()
+    this.current_mode.onSwitchHook();
+    this.current_mode.updateDiagram();
   }
 
   // methods for handling events that occur on different components of the diagram
