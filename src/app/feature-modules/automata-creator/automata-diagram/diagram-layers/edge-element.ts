@@ -93,36 +93,25 @@ export class EdgeElement extends createjs.Container{
     // Important:
     // Center point is the mid point of the line
     // Center Control point is the middle control point that defines this besier curve line)
-    let old_src_x = this.render_commands.line_create_command.x;
-    let old_src_y = this.render_commands.line_create_command.y;
 
-    let old_dest_x = this.render_commands.line_quadratic_curve_command.x;
-    let old_dest_y = this.render_commands.line_quadratic_curve_command.y;
-
-    let src_x = this.source_node.x;
-    let src_y = this.source_node.y;
-
-    let dest_x = this.destination_node.x;
-    let dest_y = this.destination_node.y;
+    let old_src_pos = this.getSourcePoint();
+    let old_dest_pos = this.getDestinationPoint();
+    let src_pos = this.source_node.getPosition();
+    let dest_pos = this.destination_node.getPosition();
 
     // previous centroid, mid point of the line was straight
-    let old_centroid_x = (old_dest_x+old_src_x)/2;
-    let old_centroid_y = (old_dest_y+old_src_y)/2;
+    let old_centroid_x = (old_dest_pos.x+old_src_pos.x)/2;
+    let old_centroid_y = (old_dest_pos.y+old_src_pos.y)/2;
 
     // current centroid, mid point of the line was straight
-    let centroid_x = (src_x+dest_x)/2;
-    let centroid_y = (src_y+dest_y)/2;
+    let centroid_x = (src_pos.x+dest_pos.x)/2;
+    let centroid_y = (src_pos.y+dest_pos.y)/2;
 
     // All above values are needed to compute the new position for the center control point
     // The center control point is translated as much as the centroid is translated
 
-    // recompute the start point of line
-    this.render_commands.line_create_command.x= src_x;
-    this.render_commands.line_create_command.y= src_y;
-
-    // recompute the end point of this line
-    this.render_commands.line_quadratic_curve_command.x= this.destination_node.x;
-    this.render_commands.line_quadratic_curve_command.y= this.destination_node.y;
+    this.setSourcePosition(src_pos.x, src_pos.y);
+    this.setDestinationPosition(dest_pos.x, dest_pos.y);
 
     // recompute the center control point of this line
     this.render_commands.line_quadratic_curve_command.cpx+= centroid_x-old_centroid_x;
@@ -132,7 +121,7 @@ export class EdgeElement extends createjs.Container{
     let cpy = this.render_commands.line_quadratic_curve_command.cpy;
 
     // update center point
-    let curve_center_point = centerOfQuadraticCurve(src_x, src_y, cpx, cpy, dest_x, dest_y);
+    let curve_center_point = centerOfQuadraticCurve(src_pos.x, src_pos.y, cpx, cpy, dest_pos.x, dest_pos.y);
 
     this.center_point.x = curve_center_point.x;
     this.center_point.y = curve_center_point.y;

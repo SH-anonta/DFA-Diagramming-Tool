@@ -123,4 +123,11 @@ export class NodeElement extends createjs.Container{
   addNodePositionListener(observer: any){
     return this.node_position_change.subscribe(observer);
   }
+
+  getPosition(){
+    return {
+      x : this.x,
+      y : this.y
+    }
+  }
 }
