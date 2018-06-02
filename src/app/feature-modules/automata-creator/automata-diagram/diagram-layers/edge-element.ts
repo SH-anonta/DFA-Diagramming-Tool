@@ -90,40 +90,49 @@ export class EdgeElement extends createjs.Container{
   }
 
   updateEdgePosition(){
+    // Important:
+    // Center point is the mid point of the line
+    // Center Control point is the middle control point that defines this besier curve line)
+    let old_src_x = this.render_commands.line_create_command.x;
+    let old_src_y = this.render_commands.line_create_command.y;
+
+    let old_dest_x = this.render_commands.line_quadratic_curve_command.x;
+    let old_dest_y = this.render_commands.line_quadratic_curve_command.y;
+
+    let old_cpx = this.render_commands.line_quadratic_curve_command.cpx;
+    let old_cpy = this.render_commands.line_quadratic_curve_command.cpy;
+
     let src_x = this.source_node.x;
     let src_y = this.source_node.y;
 
     let dest_x = this.destination_node.x;
     let dest_y = this.destination_node.y;
 
-    let ctr_x = this.render_commands.line_quadratic_curve_command.cpx;
-    let ctr_y = this.render_commands.line_quadratic_curve_command.cpy;
+    // previous centroid, mid point of the line was straight
+    let old_centroid_x = (old_dest_x+old_src_x)/2;
+    let old_centroid_y = (old_dest_y+old_src_y)/2;
 
-    // difference of source position, previous and now
-    let dsx = src_x - this.render_commands.line_create_command.x;
-    let dsy = src_y - this.render_commands.line_create_command.y;
+    // current centroid, mid point of the line was straight
+    let centroid_x = (src_x+dest_x)/2;
+    let centroid_y = (src_y+dest_y)/2;
 
-    // difference of destination position, previous and now
-    let ddx = src_x - this.render_commands.line_quadratic_curve_command.x;
-    let ddy = src_y - this.render_commands.line_quadratic_curve_command.y;
+    // All above values are needed to compute the new position for the center control point
+    // The center control point is translated as much as the centroid is translated
 
     // recompute the start point of line
     this.render_commands.line_create_command.x= src_x;
     this.render_commands.line_create_command.y= src_y;
 
-    // recompute the center control point of this line
-    // let ix = (src_x+dest_x)/2;
-    // let iy = (src_y+dest_y)/2;
-
-    // this.center_point.x = this.render_commands.line_quadratic_curve_command.cpx= ix;
-    // this.center_point.y = this.render_commands.line_quadratic_curve_command.cpy= iy;
-
     // recompute the end point of this line
     this.render_commands.line_quadratic_curve_command.x= this.destination_node.x;
     this.render_commands.line_quadratic_curve_command.y= this.destination_node.y;
 
+    // recompute the center control point of this line
+    this.render_commands.line_quadratic_curve_command.cpx-= old_centroid_x-centroid_x;
+    this.render_commands.line_quadratic_curve_command.cpy-= old_centroid_y-centroid_y;
+
     // update center point
-    let curve_center_point = centerOfQuadraticCurve(src_x, src_y, ctr_x, ctr_y, dest_x, dest_y);
+    let curve_center_point = centerOfQuadraticCurve(src_x, src_y, old_cpx, old_cpy, dest_x, dest_y);
 
     this.center_point.x = curve_center_point.x;
     this.center_point.y = curve_center_point.y;
