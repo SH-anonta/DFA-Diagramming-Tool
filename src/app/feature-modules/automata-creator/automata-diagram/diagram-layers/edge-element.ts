@@ -138,17 +138,15 @@ export class EdgeElement extends createjs.Container{
     this.center_point.y = curve_center_point.y;
   }
 
-  setSourceNode(node: NodeElement){
-    this.source_node = node;
-    this.setNodePositionListeners(node, undefined);
+  setIncidentNodes(src_node: NodeElement, dest_node: NodeElement){
+    this.source_node = src_node;
+    this.destination_node= dest_node;
+
+    this.setNodePositionListeners(src_node, dest_node);
+    this.straightenEdge();
   }
 
   getSourceNode(): NodeElement{return this.source_node;}
-
-  setDestinationNode(node: NodeElement){
-    this.destination_node= node;
-    this.setNodePositionListeners(undefined, node);
-  }
 
   getDestinationNode(): NodeElement{return this.destination_node;}
 
@@ -200,7 +198,7 @@ export class EdgeElement extends createjs.Container{
     return this.center_point;
   }
 
-  setCenterControlPointPosition(x: number, y: number){
+  setEdgeCentroidPosition(x: number, y: number){
     this.center_point.x= x;
     this.center_point.y= y;
 
@@ -211,5 +209,19 @@ export class EdgeElement extends createjs.Container{
 
     this.render_commands.line_quadratic_curve_command.cpx = center_point.x;
     this.render_commands.line_quadratic_curve_command.cpy = center_point.y;
+  }
+
+  // return the position of the mid point if the edge were a straight line
+  getEdgeCentroid(){
+    return {
+      x : (this.source_node.x + this.destination_node.x)/2,
+      y : (this.source_node.y + this.destination_node.y)/2,
+    }
+  }
+
+  // Make the edge a straight line
+  straightenEdge(){
+    let centroid = this.getEdgeCentroid();
+    this.setEdgeCentroidPosition(centroid.x, centroid.y);
   }
 }

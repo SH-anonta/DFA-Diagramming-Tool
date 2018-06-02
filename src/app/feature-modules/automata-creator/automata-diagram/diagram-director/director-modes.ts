@@ -189,7 +189,7 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
     console.log('press');
     let edge = event.currentTarget.getParentEdge();
-    edge.setCenterControlPointPosition(event.stageX, event.stageY);
+    edge.setEdgeCentroidPosition(event.stageX, event.stageY);
     this.updateDiagram();
   }
 
@@ -298,8 +298,7 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
       else{
         // this.floating_edge.setDestinationPosition(destination_node.x, destination_node.y);
 
-        this.floating_edge.setSourceNode(event.currentTarget);
-        this.floating_edge.setDestinationNode(destination_node);
+        this.floating_edge.setIncidentNodes(event.currentTarget, destination_node);
 
         // associate the edge to the destination node and source node
         // so it is connected to them
