@@ -168,19 +168,18 @@ export class EdgeElement extends createjs.Container{
     this.render_commands.edge_color_command.style = EdgeElement.DEFAULT_COLOR;
   }
 
-  private setNodePositionListeners(source_node: NodeElement, destination_node:NodeElement) {
+  getCenterPointPosition(){
+    return {
+      x: this.center_point.x,
+      y: this.center_point.y,
+    };
+  }
 
-    if(source_node){
-      source_node.addNodePositionListener((node: NodeElement) =>{
-        this.updateEdgePosition();
-      });
-    }
-
-    if(destination_node){
-      destination_node.addNodePositionListener((node: NodeElement) =>{
-        this.updateEdgePosition();
-      });
-    }
+  getCenterControlPointPosition(){
+    return {
+      x : this.render_commands.line_quadratic_curve_command.cpx,
+      y : this.render_commands.line_quadratic_curve_command.cpy,
+    };
   }
 
   getCenterControlPointELemnt(){
@@ -194,7 +193,7 @@ export class EdgeElement extends createjs.Container{
     let p1 = this.getSourcePoint();
     let p3 = this.getDestinationPoint();
 
-    let center_point = centerControlPointOfQuadraticCurve(p1.x, p1.y, p3.x, p3.y, x,y,);
+    let center_point = centerControlPointOfQuadraticCurve(p1.x, p1.y, p3.x, p3.y, x,y);
 
     this.render_commands.line_quadratic_curve_command.cpx = center_point.x;
     this.render_commands.line_quadratic_curve_command.cpy = center_point.y;
@@ -213,4 +212,20 @@ export class EdgeElement extends createjs.Container{
     let centroid = this.getEdgeCentroid();
     this.setEdgeCentroidPosition(centroid.x, centroid.y);
   }
+
+  private setNodePositionListeners(source_node: NodeElement, destination_node:NodeElement) {
+
+    if(source_node){
+      source_node.addNodePositionListener((node: NodeElement) =>{
+        this.updateEdgePosition();
+      });
+    }
+
+    if(destination_node){
+      destination_node.addNodePositionListener((node: NodeElement) =>{
+        this.updateEdgePosition();
+      });
+    }
+  }
+
 }

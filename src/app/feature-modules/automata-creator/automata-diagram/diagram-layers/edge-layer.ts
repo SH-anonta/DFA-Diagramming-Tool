@@ -97,7 +97,7 @@ export class DiagramEdgeLayer extends createjs.Container{
       this.director.edgeMouseDown(event);
     });
 
-    edge.addEventListener('mouseup', (event: any)=>{
+    edge.addEventListener('pressup', (event: any)=>{
       this.director.edgeMouseUp(event);
     });
 
@@ -113,7 +113,7 @@ export class DiagramEdgeLayer extends createjs.Container{
     center_control_point.addEventListener('mousedown', (event: any) =>{
       this.director.edgeCenterMouseDown(event);
     });
-    center_control_point.addEventListener('mouseup', (event: any) =>{
+    center_control_point.addEventListener('pressup', (event: any) =>{
       this.director.edgeCenterMouseUp(event);
     });
     center_control_point.addEventListener('pressmove', (event: any) =>{

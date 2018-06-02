@@ -7,7 +7,7 @@ import {
   CreateNodeAction,
   DeleteEdgeAction,
   DeleteSelectedNodesAction,
-  MoveNodesAction,
+  MoveNodesAction, MoveEdgeCentroid,
   ToggleNodeAcceptStateStatusAction
 } from '../diagram-actions/actions';
 import {NodeElement} from '../diagram-layers/node-element';
@@ -17,9 +17,11 @@ import {ActionExecutor} from '../diagram-actions/action-executor';
 import {ExternalCommandsHandler} from './diagram-controls';
 
 // todo: move 'press move performed' calculation into this class
+// todo: update values in this class from a safer place, as of now DirectorMode classes are updating them
 class MouseData {
   static initial_mouse_x= 0;
   static initial_mouse_y= 0;
+
   static last_mouse_x= 0;
   static last_mouse_y= 0;
 }
@@ -178,16 +180,23 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
   }
   edgeCenterMouseDown(event: any){
-
+    MouseData.initial_mouse_x = event.stageX;
+    MouseData.initial_mouse_y = event.stageY;
   }
+
   edgeCenterMouseUp(event: any){
-
+    // todo, do action only if pressmove was performed
+    console.log(MouseData.initial_mouse_x);
+    this.action_executor.execute(new MoveEdgeCentroid(event.currentTarget.getParentEdge(),
+      {x: MouseData.initial_mouse_x, y: MouseData.initial_mouse_y},
+      {x: event.stageX, y: event.stageY}));
   }
+
   edgeCenterPressMove(event: any){
     // prevent the edge element right below this point from receiving this event
     event.stopPropagation();
 
-    console.log('press');
+    // console.log('press');
     let edge = event.currentTarget.getParentEdge();
     edge.setEdgeCentroidPosition(event.stageX, event.stageY);
     this.updateDiagram();

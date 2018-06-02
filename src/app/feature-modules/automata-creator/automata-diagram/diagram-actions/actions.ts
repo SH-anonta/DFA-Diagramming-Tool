@@ -164,3 +164,23 @@ export class DeleteEdgeAction implements Action{
     this.edge_layer.removeEdge(this.deleted_edge);
   }
 }
+
+// move the mid point of the line that represents the edge
+// this mid point is used to change the curve of the line
+export class MoveEdgeCentroid implements Action{
+
+  constructor(private edge: EdgeElement, private old_position, private new_position){
+  }
+
+  execute(){
+    this.edge.setEdgeCentroidPosition(this.new_position.x, this.new_position.y);
+  }
+
+  undo(){
+    this.edge.setEdgeCentroidPosition(this.old_position.x, this.old_position.y);
+  }
+
+  redo(){
+    this.edge.setEdgeCentroidPosition(this.new_position.x, this.new_position.y);
+  }
+}
