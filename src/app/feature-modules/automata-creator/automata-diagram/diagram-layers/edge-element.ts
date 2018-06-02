@@ -99,9 +99,6 @@ export class EdgeElement extends createjs.Container{
     let old_dest_x = this.render_commands.line_quadratic_curve_command.x;
     let old_dest_y = this.render_commands.line_quadratic_curve_command.y;
 
-    let old_cpx = this.render_commands.line_quadratic_curve_command.cpx;
-    let old_cpy = this.render_commands.line_quadratic_curve_command.cpy;
-
     let src_x = this.source_node.x;
     let src_y = this.source_node.y;
 
@@ -128,11 +125,14 @@ export class EdgeElement extends createjs.Container{
     this.render_commands.line_quadratic_curve_command.y= this.destination_node.y;
 
     // recompute the center control point of this line
-    this.render_commands.line_quadratic_curve_command.cpx-= old_centroid_x-centroid_x;
-    this.render_commands.line_quadratic_curve_command.cpy-= old_centroid_y-centroid_y;
+    this.render_commands.line_quadratic_curve_command.cpx+= centroid_x-old_centroid_x;
+    this.render_commands.line_quadratic_curve_command.cpy+= centroid_y-old_centroid_y;
+
+    let cpx = this.render_commands.line_quadratic_curve_command.cpx;
+    let cpy = this.render_commands.line_quadratic_curve_command.cpy;
 
     // update center point
-    let curve_center_point = centerOfQuadraticCurve(src_x, src_y, old_cpx, old_cpy, dest_x, dest_y);
+    let curve_center_point = centerOfQuadraticCurve(src_x, src_y, cpx, cpy, dest_x, dest_y);
 
     this.center_point.x = curve_center_point.x;
     this.center_point.y = curve_center_point.y;
