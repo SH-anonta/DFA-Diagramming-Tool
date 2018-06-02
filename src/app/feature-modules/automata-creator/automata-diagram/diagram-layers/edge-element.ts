@@ -39,6 +39,8 @@ export class EdgeCenterControlPoint extends createjs.Container{
   }
 }
 
+
+// todo: Force edge to be created with two nodes instead of start and end position
 export class EdgeElement extends createjs.Container{
   private static DEFAULT_COLOR: string = '#000000';
   private static HIGHLIGHT_COLOR: string =  '#213bd0';
@@ -131,8 +133,16 @@ export class EdgeElement extends createjs.Container{
     this.source_node = src_node;
     this.destination_node= dest_node;
 
+    this.updateEndPointPositionsFromIncidentNodes();
     this.setNodePositionListeners(src_node, dest_node);
     this.straightenEdge();
+  }
+
+  updateEndPointPositionsFromIncidentNodes(){
+    this.render_commands.line_create_command.x = this.source_node.x;
+    this.render_commands.line_create_command.y = this.source_node.y;
+    this.render_commands.line_quadratic_curve_command.x = this.destination_node.x;
+    this.render_commands.line_quadratic_curve_command.y = this.destination_node.y;
   }
 
   getSourceNode(): NodeElement{return this.source_node;}
@@ -150,7 +160,12 @@ export class EdgeElement extends createjs.Container{
   }
 
   getSourcePoint(){
-    return {x: this.render_commands.line_create_command.x, y: this.render_commands.line_create_command.y};
+    return {
+      x: this.render_commands.line_create_command.x,
+      y: this.render_commands.line_create_command.y
+    };
+
+    // return {x: this.source_node.x, y: this.source_node.y};
   }
 
   getDestinationPoint(){
@@ -158,6 +173,8 @@ export class EdgeElement extends createjs.Container{
       x: this.render_commands.line_quadratic_curve_command.x,
       y: this.render_commands.line_quadratic_curve_command.y
     };
+
+    // return {x: this.destination_node.x, y: this.destination_node.y};
   }
 
   setHighlightColor(){
@@ -186,7 +203,8 @@ export class EdgeElement extends createjs.Container{
     return this.center_point;
   }
 
-  setEdgeCentroidPosition(x: number, y: number){
+  // Move the edge line's mid point to a certain position
+  setEdgeCenterPointPosition(x: number, y: number){
     this.center_point.x= x;
     this.center_point.y= y;
 
@@ -204,13 +222,13 @@ export class EdgeElement extends createjs.Container{
     return {
       x : (this.source_node.x + this.destination_node.x)/2,
       y : (this.source_node.y + this.destination_node.y)/2,
-    }
+    };
   }
 
   // Make the edge a straight line
   straightenEdge(){
     let centroid = this.getEdgeCentroid();
-    this.setEdgeCentroidPosition(centroid.x, centroid.y);
+    this.setEdgeCenterPointPosition(centroid.x, centroid.y);
   }
 
   private setNodePositionListeners(source_node: NodeElement, destination_node:NodeElement) {

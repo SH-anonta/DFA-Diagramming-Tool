@@ -173,14 +173,14 @@ export class MoveEdgeCentroid implements Action{
   }
 
   execute(){
-    this.edge.setEdgeCentroidPosition(this.new_position.x, this.new_position.y);
+    this.edge.setEdgeCenterPointPosition(this.new_position.x, this.new_position.y);
   }
 
   undo(){
-    this.edge.setEdgeCentroidPosition(this.old_position.x, this.old_position.y);
+    this.edge.setEdgeCenterPointPosition(this.old_position.x, this.old_position.y);
   }
 
   redo(){
-    this.edge.setEdgeCentroidPosition(this.new_position.x, this.new_position.y);
+    this.edge.setEdgeCenterPointPosition(this.new_position.x, this.new_position.y);
   }
 }

@@ -186,7 +186,6 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
   edgeCenterMouseUp(event: any){
     // todo, do action only if pressmove was performed
-    console.log(MouseData.initial_mouse_x);
     this.action_executor.execute(new MoveEdgeCentroid(event.currentTarget.getParentEdge(),
       {x: MouseData.initial_mouse_x, y: MouseData.initial_mouse_y},
       {x: event.stageX, y: event.stageY}));
@@ -198,7 +197,7 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
     // console.log('press');
     let edge = event.currentTarget.getParentEdge();
-    edge.setEdgeCentroidPosition(event.stageX, event.stageY);
+    edge.setEdgeCenterPointPosition(event.stageX, event.stageY);
     this.updateDiagram();
   }
 

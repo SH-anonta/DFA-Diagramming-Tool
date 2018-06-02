@@ -60,8 +60,6 @@ export class DiagramEdgeLayer extends createjs.Container{
   removeEdge(edge: EdgeElement){
     let idx = this.edges.findIndex((x) => {return edge === x;});
 
-    console.log('Remove request', idx);
-
     if(idx != -1){
       this.edges.splice(idx, 1);
     }
