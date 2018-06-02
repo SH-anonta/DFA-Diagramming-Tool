@@ -253,7 +253,8 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
   }
 
   beforeSwitchHook(){
-    if(this.current_phase == EdgeCreationPhase.source_node_selection){
+    // console.log('AAAAAAAAAA');
+    if(this.current_phase != EdgeCreationPhase.source_node_selection){
       this.edge_layer.removeFloatingEdge();
     }
   }

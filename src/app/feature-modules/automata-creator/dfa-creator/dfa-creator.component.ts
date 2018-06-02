@@ -59,6 +59,7 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
 
     document.addEventListener('keyup', (event: any) =>{
       if(event.keyCode == 16){
+
         // if the shift button was released,
         this.diagram.switchToDefaultMode();
       }
