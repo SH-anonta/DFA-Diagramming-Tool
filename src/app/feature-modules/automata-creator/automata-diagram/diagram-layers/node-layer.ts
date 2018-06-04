@@ -1,6 +1,7 @@
 import {DiagramDirector} from '../diagram-director/diagram-director';
 import * as createjs from "createjs-module";
 import {NodeElement} from './node-element';
+import {templateJitUrl} from '@angular/compiler';
 
 export class DiagramNodesLayer extends createjs.Container{
   private nodes: NodeElement[]= [];
@@ -152,4 +153,17 @@ export class DiagramNodesLayer extends createjs.Container{
     return false;
   }
 
+  // x1, y1 -> top left
+  // x2, y2 -> bottom right
+  getNodesWithinRect(x1, y1, x2, y2): NodeElement[]{
+    return this.nodes.filter((node: NodeElement) =>{
+      return node.x >= x1 && node.x <= x2 && node.y >= y1 && node.y <= y2;
+    });
+  }
+
+  selectNodes(nodes: NodeElement[]){
+    for(let node of nodes){
+      node.is_selected = true;
+    }
+  }
 }

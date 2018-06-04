@@ -2,6 +2,7 @@
 import {DiagramDirector} from '../diagram-director/diagram-director';
 import * as createjs from "createjs-module";
 import construct = Reflect.construct;
+import {templateJitUrl} from '@angular/compiler';
 
 
 export class SelectionRect extends createjs.Container {
@@ -9,7 +10,7 @@ export class SelectionRect extends createjs.Container {
   private static DEFAULT_OPACITY  = .5;
 
   private render_cmd= {
-    rect_cmd : undefined,
+    rect : undefined,
   };
 
   constructor(x,y){
@@ -20,7 +21,7 @@ export class SelectionRect extends createjs.Container {
     // this.y = y;
     let rect = new createjs.Shape();
 
-    this.render_cmd.rect_cmd = rect.graphics.beginFill('blue').rect(x,y,0,0).command;
+    this.render_cmd.rect = rect.graphics.beginFill('blue').rect(x,y,0,0).command;
     rect.graphics.endFill();
 
     rect.alpha  = .2;
@@ -28,16 +29,26 @@ export class SelectionRect extends createjs.Container {
   }
 
   setTopLeftPoint(x, y){
-    this.render_cmd.rect_cmd.x = x;
-    this.render_cmd.rect_cmd.y = y;
+    this.render_cmd.rect.x = x;
+    this.render_cmd.rect.y = y;
   }
 
   setBottomRightPoint(x, y){
-    // let point = this.globalToLocal(x, y);
-    let point = {x: x, y: y};
+    this.render_cmd.rect.w = x-this.render_cmd.rect.x;
+    this.render_cmd.rect.h = y-this.render_cmd.rect.y;
+  }
 
-    this.render_cmd.rect_cmd.w = point.x-this.render_cmd.rect_cmd.x;
-    this.render_cmd.rect_cmd.h = point.y-this.render_cmd.rect_cmd.y;
+  getSelectionPoints(){
+    return {
+      top_left : {
+        x : this.render_cmd.rect.x,
+        y : this.render_cmd.rect.y
+      },
+      bottom_right : {
+        x : this.render_cmd.rect.x + this.render_cmd.rect.w,
+        y : this.render_cmd.rect.y + this.render_cmd.rect.h,
+      },
+    };
   }
 }
 

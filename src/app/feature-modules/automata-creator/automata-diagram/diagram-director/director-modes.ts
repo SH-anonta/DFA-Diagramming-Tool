@@ -140,18 +140,22 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
   }
 
   selectionLayerMouseUp(event: any){
+    let points = this.selection_rect.getSelectionPoints();
     this.selection_overlay_layer.removeSelectionRectangle();
-    console.log('Up');
+
+    let selected_nodes = this.node_layer.getNodesWithinRect(points.top_left.x, points.top_left.y, points.bottom_right.x, points.bottom_right.y);
+    this.node_layer.selectNodes(selected_nodes);
+    // console.log('Up');
     this.updateDiagram();
   }
   selectionLayerPressDown(event: any){
-    this.selection_rect  = this.selection_overlay_layer.createSelectionRectangle(event.stageX, event.stageY);
-    console.log('Down');
+    this.selection_rect = this.selection_overlay_layer.createSelectionRectangle(event.stageX, event.stageY);
+    // console.log('Down');
     this.updateDiagram();
   }
   selectionLayerPressMove(event: any){
     this.selection_rect.setBottomRightPoint(event.stageX, event.stageY);
-    console.log('pressmove');
+    // console.log('pressmove');
     this.updateDiagram();
   }
 
