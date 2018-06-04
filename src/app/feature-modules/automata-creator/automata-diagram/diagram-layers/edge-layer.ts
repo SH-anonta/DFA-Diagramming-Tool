@@ -3,22 +3,22 @@ import * as createjs from "createjs-module";
 import {DiagramDirector} from '../diagram-director/diagram-director';
 import {EdgeElement} from './edge-element';
 import {NodeElement} from './node-element';
+import {QuadCurveLine} from './quad-curve-line';
 
 
 export class DiagramEdgeLayer extends createjs.Container{
   private edges: EdgeElement[]= [];
-  private floating_edge: EdgeElement;
+  private floating_line: QuadCurveLine;
   private director: DiagramDirector;
 
   // only one edge can be selected at a time
   private selected_edge: EdgeElement = null;
 
   // node selection logic, changing the value of this property also changes the diagram
-  createFloatingEdge(sx: number, sy: number, dx: number, dy: number){
-    this.floating_edge = this.createEdgeWithoutNodes(sx, sy, dx, dy);
-
-    this.setEventListenersToEdge(this.floating_edge);
-    return this.floating_edge;
+  createFloatingLine(sx: number, sy: number, dx: number, dy: number){
+    this.floating_line = new QuadCurveLine(sx, sy, dx, dy);
+    this.addChild(this.floating_line);
+    return this.floating_line;
   }
 
   constructor(){
@@ -27,22 +27,14 @@ export class DiagramEdgeLayer extends createjs.Container{
   }
 
   // creates new edge between two nodes and return the created edge
-  createEdgeWithoutNodes(sx: number, sy: number, dx: number, dy: number,
-                         end_point_a?: NodeElement, end_point_b?: NodeElement): EdgeElement{
-    let edge = new EdgeElement(sx, sy, dx, dy, end_point_a, end_point_b);
-    this.edges.push(edge);
-    this.addChild(edge);
-
-    return edge;
-  }
 
   createEdge(src_node: NodeElement, dest_node: NodeElement): EdgeElement{
-    let edge = new EdgeElement(src_node.x, src_node.y, dest_node.x, dest_node.y, src_node, dest_node);
+    let edge = new EdgeElement(src_node, dest_node);
+
     this.edges.push(edge);
     this.addChild(edge);
 
     this.setEventListenersToEdge(edge);
-
     return edge;
   }
 
@@ -66,13 +58,13 @@ export class DiagramEdgeLayer extends createjs.Container{
     this.removeChild(edge);
   }
 
-  removeFloatingEdge(){
-    this.removeEdge(this.floating_edge);
-    this.floating_edge = undefined;
+  removeFloatingLine(){
+    this.removeChild(this.floating_line);
+    this.floating_line = undefined;
   }
 
-  undefineFloatingEdge(){
-    this.floating_edge = undefined;
+  undefineFloatingLine(){
+    this.floating_line = undefined;
   }
 
 

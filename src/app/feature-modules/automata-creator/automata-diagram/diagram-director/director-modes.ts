@@ -15,6 +15,7 @@ import {EdgeElement} from '../diagram-layers/edge-element';
 import {DiagramEventHandler} from './diagram-event-handler';
 import {ActionExecutor} from '../diagram-actions/action-executor';
 import {ExternalCommandsHandler} from './diagram-controls';
+import {QuadCurveLine} from '../diagram-layers/quad-curve-line';
 
 // todo: move 'press move performed' calculation into this class
 // todo: update values in this class from a safer place, as of now DirectorMode classes are updating them
@@ -247,7 +248,7 @@ enum EdgeCreationPhase{
 
 export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
   private current_phase: EdgeCreationPhase = EdgeCreationPhase.source_node_selection;
-  private floating_edge: EdgeElement;
+  private floating_line: QuadCurveLine;
 
 
   constructor(action_executor,
@@ -263,7 +264,7 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
   beforeSwitchHook(){
     // console.log('AAAAAAAAAA');
     if(this.current_phase != EdgeCreationPhase.source_node_selection){
-      this.edge_layer.removeFloatingEdge();
+      this.edge_layer.removeFloatingLine();
     }
   }
 
@@ -273,10 +274,10 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
       let x = event.currentTarget.x;
       let y = event.currentTarget.y;
 
-      this.floating_edge = this.edge_layer.createFloatingEdge(x,y,x,y);
+      this.floating_line = this.edge_layer.createFloatingLine(x,y,x,y);
       this.current_phase = EdgeCreationPhase.destination_node_selection;
 
-      this.floating_edge.setSourcePosition(event.currentTarget.x, event.currentTarget.y);
+      this.floating_line.setSourcePosition(event.currentTarget.x, event.currentTarget.y);
 
       this.updateDiagram();
     }
@@ -291,43 +292,36 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
   // Important: This method gets called even if the mouse is not on top of a node
   // the currentTarget of event is set to the node which was pressed on at first
   nodePressUp(event: any){
-
+     // todo fix floating edge
     if(this.current_phase == EdgeCreationPhase.destination_node_selection){
-      // console.log('dest', event.currentTarget.label);
-
 
       // this either returns a node element which is under the mouse pointer
       // or returns false if no node is under the mouse pointer
       let destination_node: any= this.node_layer.getNodeAtStagePosition(event.stageX, event.stageY);
       if(destination_node === false){
         console.log('Node hit not detected');
-        this.edge_layer.removeFloatingEdge();
       }
       else{
-        // this.floating_edge.setDestinationPosition(destination_node.x, destination_node.y);
-
-        this.floating_edge.setIncidentNodes(event.currentTarget, destination_node);
-
         // associate the edge to the destination node and source node
         // so it is connected to them
+        // this.floating_edge.
 
-        this.floating_edge.updateEdgePosition();
-        this.action_executor.execute(new CreateEdgeAction(this.edge_layer, this.floating_edge));
+        this.action_executor.execute(new CreateEdgeAction(this.edge_layer, event.currentTarget,destination_node));
 
         // now that the edge is associated with two nodes
         // it is no longer a floating node
-        this.edge_layer.undefineFloatingEdge();
-        this.floating_edge = undefined;
+        this.floating_line = undefined;
       }
 
       this.current_phase = EdgeCreationPhase.source_node_selection;
+      this.edge_layer.removeFloatingLine();
       this.updateDiagram();
     }
   }
 
   nodePressMove(event){
     if(this.current_phase == EdgeCreationPhase.destination_node_selection){
-      this.floating_edge.setDestinationPosition(event.stageX, event.stageY);
+      this.floating_line.setDestinationPosition(event.stageX, event.stageY);
       this.updateDiagram();
     }
   }

@@ -2,6 +2,7 @@ import {DiagramNodesLayer} from '../diagram-layers/node-layer';
 import {DiagramEdgeLayer} from '../diagram-layers/edge-layer';
 import {EdgeElement} from '../diagram-layers/edge-element';
 import {NodeElement} from '../diagram-layers/node-element';
+import {setTestabilityGetter} from '@angular/core';
 
 // action classes that encapsulate logic for manipulating the diagram
 
@@ -126,13 +127,15 @@ export class MoveNodesAction implements Action{
 // Actions performed on edges
 
 export class CreateEdgeAction implements Action{
+  edge: EdgeElement;
 
-  constructor(private edge_layer: DiagramEdgeLayer, private edge: EdgeElement){
+  constructor(private edge_layer: DiagramEdgeLayer, private source_node: NodeElement, private destination_node: NodeElement){
 
   }
 
   execute(){
     // edge is assumed to be created before hand
+    this.edge = this.edge_layer.createEdge(this.source_node, this.destination_node);
   }
 
   undo(){
