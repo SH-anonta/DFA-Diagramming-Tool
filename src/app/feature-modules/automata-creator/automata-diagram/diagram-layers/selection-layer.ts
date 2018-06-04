@@ -39,14 +39,19 @@ export class SelectionRect extends createjs.Container {
   }
 
   getSelectionPoints(){
+    let x1= this.render_cmd.rect.x;
+    let x2= this.render_cmd.rect.x + this.render_cmd.rect.w;
+    let y1= this.render_cmd.rect.y;
+    let y2= this.render_cmd.rect.y + this.render_cmd.rect.h;
+
     return {
       top_left : {
-        x : this.render_cmd.rect.x,
-        y : this.render_cmd.rect.y
+        x : Math.min(x1, x2),
+        y : Math.min(y1, y2),
       },
       bottom_right : {
-        x : this.render_cmd.rect.x + this.render_cmd.rect.w,
-        y : this.render_cmd.rect.y + this.render_cmd.rect.h,
+        x : Math.max(x1, x2),
+        y : Math.max(y1, y2),
       },
     };
   }

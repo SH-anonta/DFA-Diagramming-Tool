@@ -126,8 +126,10 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
   // Selection layer action handlers
 
+  // todo move to somewhere else
   selection_rect: SelectionRect;
 
+  // todo add selection mechanism for selecting edges
   selectionLayerClicked(event: any){
     this.node_layer.deselectAllNodes();
     this.edge_layer.deselectAllEdges();
@@ -149,6 +151,7 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
     this.updateDiagram();
   }
   selectionLayerPressDown(event: any){
+    // todo move creation of selction rect to PressMove event handler for efficiency
     this.selection_rect = this.selection_overlay_layer.createSelectionRectangle(event.stageX, event.stageY);
     // console.log('Down');
     this.updateDiagram();
