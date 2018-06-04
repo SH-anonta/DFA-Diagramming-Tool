@@ -1,5 +1,5 @@
 import {DFADiagram} from '../diagram';
-import {DiagramSelectionLayer} from '../diagram-layers/selection-layer';
+import {DiagramSelectionLayer, SelectionOverlayLayer, SelectionRect} from '../diagram-layers/selection-layer';
 import {DiagramNodesLayer} from '../diagram-layers/node-layer';
 import {DiagramEdgeLayer} from '../diagram-layers/edge-layer';
 import {
@@ -11,7 +11,6 @@ import {
   ToggleNodeAcceptStateStatusAction
 } from '../diagram-actions/actions';
 import {NodeElement} from '../diagram-layers/node-element';
-import {EdgeElement} from '../diagram-layers/edge-element';
 import {DiagramEventHandler} from './diagram-event-handler';
 import {ActionExecutor} from '../diagram-actions/action-executor';
 import {ExternalCommandsHandler} from './diagram-controls';
@@ -35,6 +34,7 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
               protected selection_layer: DiagramSelectionLayer,
               protected node_layer: DiagramNodesLayer,
               protected edge_layer: DiagramEdgeLayer,
+              protected selection_overlay_layer: SelectionOverlayLayer
   ){}
 
   updateDiagram(){
@@ -126,6 +126,8 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
   // Selection layer action handlers
 
+  selection_rect: SelectionRect;
+
   selectionLayerClicked(event: any){
     this.node_layer.deselectAllNodes();
     this.edge_layer.deselectAllEdges();
@@ -134,6 +136,22 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
   selectionLayerDoubleClicked(event: any){
     this.action_executor.execute(new CreateNodeAction(this.node_layer, 'New', event.stageX, event.stageY));
+    this.updateDiagram();
+  }
+
+  selectionLayerMouseUp(event: any){
+    this.selection_overlay_layer.removeSelectionRectangle();
+    console.log('Up');
+    this.updateDiagram();
+  }
+  selectionLayerPressDown(event: any){
+    this.selection_rect  = this.selection_overlay_layer.createSelectionRectangle(event.stageX, event.stageY);
+    console.log('Down');
+    this.updateDiagram();
+  }
+  selectionLayerPressMove(event: any){
+    this.selection_rect.setBottomRightPoint(event.stageX, event.stageY);
+    console.log('pressmove');
     this.updateDiagram();
   }
 
@@ -149,7 +167,7 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
   // this method gets called before the director mode gets switched
   beforeSwitchHook(){
-
+    this.selection_overlay_layer.removeSelectionRectangle();
   }
 
   edgeClicked(event: any) {
@@ -254,11 +272,12 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
   constructor(action_executor,
               stage: createjs.Stage,
               diagram: DFADiagram,
-              selection_layer?: DiagramSelectionLayer,
-              node_layer?: DiagramNodesLayer,
-              edge_layer?: DiagramEdgeLayer){
+              selection_layer: DiagramSelectionLayer,
+              node_layer: DiagramNodesLayer,
+              edge_layer: DiagramEdgeLayer,
+              selection_overlay_layer: SelectionOverlayLayer){
 
-    super(action_executor, stage, diagram, selection_layer, node_layer, edge_layer);
+    super(action_executor, stage, diagram, selection_layer, node_layer, edge_layer, selection_overlay_layer);
   }
 
   beforeSwitchHook(){

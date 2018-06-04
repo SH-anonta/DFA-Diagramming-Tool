@@ -41,24 +41,22 @@ export class NodeElement extends createjs.Container{
   constructor(private label: string, pos_x, pos_y){
     super();
 
+    this.x = pos_x;
+    this.y = pos_y;
+
     // main circle of the node
     let circle = new createjs.Shape();
     circle.graphics.beginFill('white').drawCircle(0, 0, this.NODE_RADIUS);
-    this.x = pos_x;
-    this.y = pos_y;
 
     // circle border
     let circle_border = new createjs.Shape();
     circle_border.graphics.setStrokeStyle(1).beginStroke('black').drawCircle(0, 0, this.NODE_RADIUS);
-    this.x = pos_x;
-    this.y = pos_y;
+
 
     // accept state border
     this.accept_state_symbol = new createjs.Shape();
     this.accept_state_symbol.graphics.setStrokeStyle(1).beginStroke('black').drawCircle(0, 0, this.NODE_RADIUS-5);
     this.accept_state_symbol.alpha= 0;
-    this.x = pos_x;
-    this.y = pos_y;
 
     // label of node
     let node_label = new createjs.Text(label, "bold 15px Arial", "black");

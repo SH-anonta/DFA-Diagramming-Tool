@@ -9,6 +9,7 @@ export class DiagramNodesLayer extends createjs.Container{
 
   constructor(width: number, height: number) {
     super();
+
     let nodea = this.createNewNode('A',80,80);
     let nodeb = this.createNewNode('B', 500,100);
 

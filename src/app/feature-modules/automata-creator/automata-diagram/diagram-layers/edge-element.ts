@@ -35,10 +35,10 @@ export class EdgeElement extends createjs.Container{
   label: string;
 
   // incident nodes
-  private source_node: NodeElement;
-  private destination_node: NodeElement;
+  private readonly source_node: NodeElement;
+  private readonly destination_node: NodeElement;
 
-  private center_point: EdgeCenterControlPoint;
+  private readonly center_point: EdgeCenterControlPoint;
 
   // Take two nodes that this edge connects
   constructor(source_node: NodeElement, destination_node: NodeElement){

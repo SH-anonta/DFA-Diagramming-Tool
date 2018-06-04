@@ -2,7 +2,7 @@ import * as createjs from "createjs-module";
 import {DFADiagram} from '../diagram';
 
 
-import {DiagramSelectionLayer} from '../diagram-layers/selection-layer';
+import {DiagramSelectionLayer, SelectionOverlayLayer} from '../diagram-layers/selection-layer';
 import {DiagramNodesLayer} from '../diagram-layers/node-layer';
 import {DiagramEdgeLayer} from '../diagram-layers/edge-layer';
 import {NodeElement} from '../diagram-layers/node-element';
@@ -24,13 +24,26 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
               diagram: DFADiagram,
               selection_layer: DiagramSelectionLayer,
               node_layer: DiagramNodesLayer,
-              edge_layer: DiagramEdgeLayer){
+              edge_layer: DiagramEdgeLayer,
+              selection_overlay_layer: SelectionOverlayLayer){
 
     // create default mode
-    this.default_mode = new DiagramDirectorDefaultMode(this.action_executor, stage, diagram,selection_layer, node_layer, edge_layer);
+    this.default_mode = new DiagramDirectorDefaultMode(this.action_executor,
+                                                      stage,
+                                                      diagram,
+                                                      selection_layer,
+                                                      node_layer,
+                                                      edge_layer,
+                                                      selection_overlay_layer);
 
     // create edge creation mode
-    this.edge_creation_mode = new DiagramDirectorEdgeCreationMode(this.action_executor, stage, diagram,selection_layer, node_layer, edge_layer);
+    this.edge_creation_mode = new DiagramDirectorEdgeCreationMode(this.action_executor,
+                                                                  stage,
+                                                                  diagram,
+                                                                  selection_layer,
+                                                                  node_layer,
+                                                                  edge_layer,
+                                                                  selection_overlay_layer);
 
     this.current_mode = this.default_mode;
   }
@@ -63,6 +76,16 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
 
   selectionLayerDoubleClicked(event: any){
     this.current_mode.selectionLayerDoubleClicked(event);
+  }
+
+  selectionLayerMouseUp(event: any){
+    this.current_mode.selectionLayerMouseUp(event);
+  }
+  selectionLayerPressDown(event: any){
+    this.current_mode.selectionLayerPressDown(event);
+  }
+  selectionLayerPressMove(event: any){
+    this.current_mode.selectionLayerPressMove(event);
   }
 
   // In response to actions performed on nodes

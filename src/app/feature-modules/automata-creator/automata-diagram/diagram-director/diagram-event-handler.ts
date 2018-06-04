@@ -25,5 +25,8 @@ export interface DiagramEventHandler {
   // select layer events
   selectionLayerClicked(event: any);
   selectionLayerDoubleClicked(event: any);
+  selectionLayerMouseUp(event: any);
+  selectionLayerPressDown(event: any);
+  selectionLayerPressMove(event: any);
 
 }
