@@ -93,7 +93,7 @@ export class DiagramEdgeLayer extends createjs.Container{
 
 
     // edge center control point event handlers
-    let center_control_point = edge.getCenterControlPointELemnt();
+    let center_control_point = edge.getCenterControlPointElement();
     center_control_point.addEventListener('click', (event: any) =>{
       this.director.edgeCenterClicked(event);
     });

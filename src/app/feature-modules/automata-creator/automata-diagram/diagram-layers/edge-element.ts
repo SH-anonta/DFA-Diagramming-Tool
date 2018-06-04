@@ -1,20 +1,7 @@
 import * as createjs from "createjs-module";
-import {NodeElement} from './node-element';
 import {QuadCurveLine} from './quad-curve-line';
+import {NodeElement} from './node-element';
 
-function centerOfQuadraticCurve(x1,y1, x2,y2, x3,y3){
-  return {
-    x : .25*x1 + .5*x2 + .25*x3,
-    y : .25*y1 + .5*y2 + .25*y3,
-  };
-}
-
-function centerControlPointOfQuadraticCurve(x1,y1, x3,y3, center_x, center_y){
-  return {
-    x : 2*(center_x - .25*x1 - .25*x3),
-    y : 2*(center_y - .25*y1 - .25*y3),
-  };
-}
 
 export class EdgeCenterControlPoint extends createjs.Container{
   constructor(private parent_edge: EdgeElement){
@@ -104,26 +91,9 @@ export class EdgeElement extends createjs.Container{
     }
   }
 
-  // setIncidentNodes(src_node: NodeElement, dest_node: NodeElement){
-  //   this.source_node = src_node;
-  //   this.destination_node= dest_node;
-  //
-  //   this.setNodePositionListeners(src_node, dest_node);
-  //   this.straightenEdge();
-  // }
-
-
   getSourceNode(): NodeElement{return this.source_node;}
 
   getDestinationNode(): NodeElement{return this.destination_node;}
-
-  setSourcePosition(x:number, y:number){
-    this.line.setSourcePosition(x,y);
-  }
-
-  setDestinationPosition(x:number, y:number){
-    this.line.setDestinationPosition(x,y);
-  }
 
   getSourcePoint(){
     return this.line.getSourcePoint();
@@ -141,15 +111,7 @@ export class EdgeElement extends createjs.Container{
     this.line.setDefaultColor();
   }
 
-  getCenterPointPosition(){
-    return this.line.getCenterPointPosition();
-  }
-
-  getCenterControlPointPosition(){
-    return this.line.getCenterControlPointPosition();
-  }
-
-  getCenterControlPointELemnt(){
+  getCenterControlPointElement(){
     return this.center_point;
   }
 
