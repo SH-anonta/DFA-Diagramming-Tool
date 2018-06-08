@@ -1,8 +1,8 @@
 // all logic for selection of nodes
 import {DiagramDirector} from '../diagram-director/diagram-director';
 import * as createjs from "createjs-module";
-import construct = Reflect.construct;
-import {templateJitUrl} from '@angular/compiler';
+
+// todo add border to selection rectangle
 
 
 export class SelectionRect extends createjs.Container {
@@ -15,10 +15,7 @@ export class SelectionRect extends createjs.Container {
 
   constructor(x,y){
     super();
-    // ---------------------------------------
 
-    // this.x = x;
-    // this.y = y;
     let rect = new createjs.Shape();
 
     this.render_cmd.rect = rect.graphics.beginFill('blue').rect(x,y,0,0).command;
@@ -62,13 +59,6 @@ export class SelectionOverlayLayer extends createjs.Container {
 
   constructor(width: number, height: number){
     super();
-
-    // let tt = new createjs.Shape();
-    // // tt.graphics.setStrokeStyle(3);
-    // tt.graphics.beginFill('red').rect(50, 80, 100, 100);
-    // tt.alpha = .3;
-    // // tt.graphics.endStroke();
-    // this.addChild(tt);
   }
 
   createSelectionRectangle(x, y): SelectionRect{
