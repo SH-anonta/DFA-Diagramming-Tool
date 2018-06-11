@@ -176,6 +176,8 @@ export class LoopBackEdgeElement extends EdgeElement{
     this.incident_node_position_old = this.source_node.getPosition();
   }
 
+
+  //todo: check if moved center point placed within the node (it will become invisible). if so rest it's position to some default value
   // As the center point gets moved the endpoints of the line also move, unlike the base class
   setEdgeCenterPointPosition(x: number, y: number){
     super.setEdgeCenterPointPosition(x,y);

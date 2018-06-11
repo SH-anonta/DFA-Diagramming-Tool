@@ -4,6 +4,7 @@ import {DiagramDirector} from './diagram-director/diagram-director';
 import {DiagramNodesLayer} from './diagram-layers/node-layer';
 import {DiagramEdgeLayer} from './diagram-layers/edge-layer';
 import {ExternalCommandsHandler} from './diagram-director/diagram-controls';
+import {AlignmentGuidelineLayer} from './diagram-layers/alignment-guideline-layer';
 
 
 export class DFADiagram implements ExternalCommandsHandler{
@@ -21,6 +22,7 @@ export class DFADiagram implements ExternalCommandsHandler{
   readonly selection_rect_layer: DiagramSelectionLayer;
   readonly edge_layer: DiagramEdgeLayer;
   readonly selection_overlay_layer: SelectionOverlayLayer;
+  readonly alignment_guideline_layer: AlignmentGuidelineLayer;
 
 
   constructor(private canvas: HTMLCanvasElement){
@@ -34,8 +36,9 @@ export class DFADiagram implements ExternalCommandsHandler{
     this.selection_rect_layer = new DiagramSelectionLayer(canvas_width, canvas_height);
     this.nodes_layer = new DiagramNodesLayer(canvas_width, canvas_height);
     this.selection_overlay_layer = new SelectionOverlayLayer(canvas_width, canvas_height);
+    this.alignment_guideline_layer = new AlignmentGuidelineLayer(canvas_width, canvas_height);
 
-    this.director= new DiagramDirector(this.stage, this, this.selection_rect_layer, this.nodes_layer, this.edge_layer, this.selection_overlay_layer);
+    this.director= new DiagramDirector(this.stage, this, this.selection_rect_layer, this.nodes_layer, this.edge_layer, this.selection_overlay_layer, this.alignment_guideline_layer);
     this.selection_rect_layer.setDirector(this.director);
     this.nodes_layer.setDirector(this.director);
     this.edge_layer.setDirector(this.director);
@@ -45,6 +48,7 @@ export class DFADiagram implements ExternalCommandsHandler{
     this.stage.addChild(this.background);
     this.stage.addChild(this.selection_rect_layer);
     this.stage.addChild(this.edge_layer);
+    this.stage.addChild(this.alignment_guideline_layer);
     this.stage.addChild(this.nodes_layer);
     this.stage.addChild(this.selection_overlay_layer);
 

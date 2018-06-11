@@ -10,6 +10,7 @@ import {ActionExecutor} from '../diagram-actions/action-executor';
 import {DiagramDirectorDefaultMode, DiagramDirectorEdgeCreationMode} from './director-modes';
 import {DiagramEventHandler} from './diagram-event-handler';
 import {ExternalCommandsHandler} from './diagram-controls';
+import {AlignmentGuidelineLayer} from '../diagram-layers/alignment-guideline-layer';
 
 //todo move mouse event data out of default direct mode
 
@@ -25,7 +26,8 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
               selection_layer: DiagramSelectionLayer,
               node_layer: DiagramNodesLayer,
               edge_layer: DiagramEdgeLayer,
-              selection_overlay_layer: SelectionOverlayLayer){
+              selection_overlay_layer: SelectionOverlayLayer,
+              alignment_guideline_layer: AlignmentGuidelineLayer){
 
     // create default mode
     this.default_mode = new DiagramDirectorDefaultMode(this.action_executor,
@@ -34,7 +36,8 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
                                                       selection_layer,
                                                       node_layer,
                                                       edge_layer,
-                                                      selection_overlay_layer);
+                                                      selection_overlay_layer,
+                                                      alignment_guideline_layer);
 
     // create edge creation mode
     this.edge_creation_mode = new DiagramDirectorEdgeCreationMode(this.action_executor,
@@ -43,7 +46,8 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
                                                                   selection_layer,
                                                                   node_layer,
                                                                   edge_layer,
-                                                                  selection_overlay_layer);
+                                                                  selection_overlay_layer,
+                                                                  alignment_guideline_layer);
 
     this.current_mode = this.default_mode;
   }

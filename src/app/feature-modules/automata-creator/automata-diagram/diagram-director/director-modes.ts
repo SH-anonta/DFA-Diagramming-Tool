@@ -15,6 +15,7 @@ import {DiagramEventHandler} from './diagram-event-handler';
 import {ActionExecutor} from '../diagram-actions/action-executor';
 import {ExternalCommandsHandler} from './diagram-controls';
 import {QuadCurveLine} from '../diagram-layers/quad-curve-line';
+import {AlignmentGuidelineLayer} from '../diagram-layers/alignment-guideline-layer';
 
 // todo: move 'press move performed' calculation into this class
 // todo: update values in this class from a safer place, as of now DirectorMode classes are updating them
@@ -34,8 +35,8 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
               protected selection_layer: DiagramSelectionLayer,
               protected node_layer: DiagramNodesLayer,
               protected edge_layer: DiagramEdgeLayer,
-              protected selection_overlay_layer: SelectionOverlayLayer
-  ){}
+              protected selection_overlay_layer: SelectionOverlayLayer,
+              protected alignment_guideline_layer: AlignmentGuidelineLayer){}
 
   updateDiagram(){
     this.stage.update();
@@ -105,6 +106,12 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
     MouseData.last_mouse_x= event.stageX;
     MouseData.last_mouse_y= event.stageY;
 
+    // update the guidelines for aligned nodes
+    // clean up
+    this.alignment_guideline_layer.clearAllGuideLines();
+    let node_point = {x: event.currentTarget.x, y: event.currentTarget.y };
+    this.alignment_guideline_layer.placeLinesOnAlignedPoints(this.node_layer.getNodePositions(), node_point);
+
     this.updateDiagram();
 
     // console.log('Press Move');
@@ -112,6 +119,10 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
 
   nodePressUp(event: any){
     // moving of nodes has been completed
+
+    // clean up all guidelines
+    this.alignment_guideline_layer.clearAllGuideLines();
+
     // console.log('Press up');
 
     let dx = event.stageX-MouseData.initial_mouse_x;
@@ -122,6 +133,8 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
       let selected_nodes = this.node_layer.getSelectedNodes();
       this.action_executor.execute(new MoveNodesAction(selected_nodes,dx,dy));
     }
+
+    this.updateDiagram();
   }
 
   // Selection layer action handlers
@@ -282,9 +295,10 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
               selection_layer: DiagramSelectionLayer,
               node_layer: DiagramNodesLayer,
               edge_layer: DiagramEdgeLayer,
-              selection_overlay_layer: SelectionOverlayLayer){
+              selection_overlay_layer: SelectionOverlayLayer,
+              alignment_guideline_layer: AlignmentGuidelineLayer){
 
-    super(action_executor, stage, diagram, selection_layer, node_layer, edge_layer, selection_overlay_layer);
+    super(action_executor, stage, diagram, selection_layer, node_layer, edge_layer, selection_overlay_layer, alignment_guideline_layer);
   }
 
   beforeSwitchHook(){

@@ -166,4 +166,10 @@ export class DiagramNodesLayer extends createjs.Container{
       node.is_selected = true;
     }
   }
+
+  getNodePositions(){
+    return this.nodes.map((node: NodeElement)=>{
+      return {x: node.x, y: node.y};
+    });
+  }
 }
