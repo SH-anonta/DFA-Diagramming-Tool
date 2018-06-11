@@ -6,8 +6,8 @@ import * as createjs from "createjs-module";
 
 
 export class SelectionRect extends createjs.Container {
-  private static DEFAULT_COLOR  ='#1a9cff';
-  private static DEFAULT_OPACITY  = .5;
+  private static DEFAULT_COLOR  ='#3262ff';
+  private static DEFAULT_OPACITY  = 0.2;
 
   private render_cmd= {
     rect : undefined,
@@ -18,10 +18,10 @@ export class SelectionRect extends createjs.Container {
 
     let rect = new createjs.Shape();
 
-    this.render_cmd.rect = rect.graphics.beginFill('blue').rect(x,y,0,0).command;
+    this.render_cmd.rect = rect.graphics.beginFill(SelectionRect.DEFAULT_COLOR).rect(x,y,0,0).command;
     rect.graphics.endFill();
 
-    rect.alpha  = .2;
+    rect.alpha  = SelectionRect.DEFAULT_OPACITY;
     this.addChild(rect);
   }
 

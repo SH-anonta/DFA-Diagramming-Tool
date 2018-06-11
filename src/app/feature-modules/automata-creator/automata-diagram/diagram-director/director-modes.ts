@@ -318,7 +318,7 @@ export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
   // Important: This method gets called even if the mouse is not on top of a node
   // the currentTarget of event is set to the node which was pressed on at first
   nodePressUp(event: any){
-     // todo fix floating edge
+
     if(this.current_phase == EdgeCreationPhase.destination_node_selection){
 
       // this either returns a node element which is under the mouse pointer

@@ -31,14 +31,14 @@ export class EdgeCenterControlPoint extends createjs.Container{
 // todo: Force edge to be created with two nodes instead of start and end position
 export class EdgeElement extends createjs.Container{
   // the line that represents this edge, a quadratic curve line
-  line: QuadCurveLine;
-  label: string;
+  protected line: QuadCurveLine;
+  protected label: string;
 
   // incident nodes
-  private readonly source_node: NodeElement;
-  private readonly destination_node: NodeElement;
+  protected readonly source_node: NodeElement;
+  protected readonly destination_node: NodeElement;
 
-  private readonly center_point: EdgeCenterControlPoint;
+  protected readonly center_point: EdgeCenterControlPoint;
 
   // Take two nodes that this edge connects
   constructor(source_node: NodeElement, destination_node: NodeElement){
@@ -136,4 +136,81 @@ export class EdgeElement extends createjs.Container{
     let centroid = this.getEdgeCentroid();
     this.setEdgeCenterPointPosition(centroid.x, centroid.y);
   }
+}
+
+
+export class LoopBackEdgeElement extends EdgeElement{
+  private incident_node_position_old;
+
+  constructor(source_node: NodeElement, destination_node: NodeElement){
+    super(source_node, destination_node);
+
+    this.incident_node_position_old =  this.getSourcePoint();
+    this.center_point.x = source_node.x;
+    this.center_point.y = source_node.y-100;
+
+    // the super class initially draws the edge as a straight line between the two incident nodes
+    // in this case the two incident nodes are the same
+    // the straight line looks like a point and isn't visible as it is behind the node
+    // calling this method curves the line and draws it as a loop back curve
+    this.setEdgeCenterPointPosition(this.source_node.x, this.source_node.y-80);
+  }
+
+
+  updateEdgePosition(){
+    let sx = this.source_node.x;
+    let sy = this.source_node.y;
+
+    let ddx = sx-this.incident_node_position_old.x;
+    let ddy = sy-this.incident_node_position_old.y;
+
+    if(ddx != 0 || ddy != 0){
+      // if node was moved, the
+      this.line.translateLine(ddx, ddy);
+    }
+
+    this.center_point.x += ddx;
+    this.center_point.y += ddy;
+
+    // record current position of incident node as old position
+    this.incident_node_position_old = this.source_node.getPosition();
+  }
+
+  // As the center point gets moved the endpoints of the line also move, unlike the base class
+  setEdgeCenterPointPosition(x: number, y: number){
+    super.setEdgeCenterPointPosition(x,y);
+
+    const r = 30;
+
+    let sx = this.source_node.x;
+    let sy = this.source_node.y;
+
+    let dx = this.destination_node.x;
+    let dy = this.destination_node.y;
+
+    let cx = this.center_point.x;
+    let cy = this.center_point.y;
+
+    // calculate the perpindicular angle of line between center of node and centroid of l
+    const angle = (Math.PI/2)+this.getAngleOfLine(sx, sy, cx,cy);
+
+    sx = sx + r*Math.cos(angle);
+    sy = sy + r*Math.sin(angle);
+
+    dx = dx - r*Math.cos(angle);
+    dy = dy - r*Math.sin(angle);
+
+    this.line.setSourcePosition(sx, sy);
+    this.line.setDestinationPosition(dx, dy);
+    this.line.setEdgeCenterPointPosition(cx, cy);
+  }
+
+  getAngleOfLine(p1x,p1y, p2x, p2y): number{
+    let base = p1x - p2x;
+    let opposite = p1y - p2y;
+
+    return Math.atan(opposite/base);
+  }
+
+
 }

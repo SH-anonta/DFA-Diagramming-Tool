@@ -141,4 +141,19 @@ export class QuadCurveLine extends createjs.Container{
     this.render_commands.edge_color_command.style = QuadCurveLine.DEFAULT_COLOR;
   }
 
+  translateLine(sx: number, sy: number){
+    // Translate all the control points of this line
+
+    this.render_commands.line_create_command.x+= sx;
+    this.render_commands.line_create_command.y+= sy;
+
+    this.render_commands.line_quadratic_curve_command.cpx += sx;
+    this.render_commands.line_quadratic_curve_command.cpy += sy;
+
+    this.render_commands.line_quadratic_curve_command.x += sx;
+    this.render_commands.line_quadratic_curve_command.y += sy;
+
+  }
+
+
 }

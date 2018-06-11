@@ -1,7 +1,7 @@
 // this class only contains logic for drawing line that represent edges
 import * as createjs from "createjs-module";
 import {DiagramDirector} from '../diagram-director/diagram-director';
-import {EdgeElement} from './edge-element';
+import {EdgeElement, LoopBackEdgeElement} from './edge-element';
 import {NodeElement} from './node-element';
 import {QuadCurveLine} from './quad-curve-line';
 
@@ -29,7 +29,9 @@ export class DiagramEdgeLayer extends createjs.Container{
   // creates new edge between two nodes and return the created edge
 
   createEdge(src_node: NodeElement, dest_node: NodeElement): EdgeElement{
-    let edge = new EdgeElement(src_node, dest_node);
+
+
+    let edge = src_node === dest_node ? new LoopBackEdgeElement(src_node, dest_node) :  new EdgeElement(src_node, dest_node);
 
     this.edges.push(edge);
     this.addChild(edge);
