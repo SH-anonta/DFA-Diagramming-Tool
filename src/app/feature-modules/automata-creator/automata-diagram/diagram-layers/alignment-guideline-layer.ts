@@ -2,6 +2,7 @@ import * as createjs from 'createjs-module';
 
 export class AlignmentGuidelineLayer extends createjs.Container{
   private guidelines: createjs.Shape[]= [];
+  private static readonly DELTA: number= 3;
 
   constructor(canvas_width, canvas_height){
     super();
@@ -35,28 +36,20 @@ export class AlignmentGuidelineLayer extends createjs.Container{
     return line;
   }
 
-  placeLinesOnAlignedPoints(points, target_point){
+  createHorizontalLines(points){
     for(let p of points){
-      if(p.x == target_point.x && p.y == target_point.y){
-        // if the points are same, do noting
-        continue;
-      }
-
-      if(p.x == target_point.x){
-        // the points are vertically aligned, draw a vertical line
-        let line = this.createVerticalLine(p.x);
-        this.guidelines.push(line);
-        this.addChild(line);
-      }
-
-      if(p.y == target_point.y){
-        // the points are horizontally aligned, draw a horizontal line
-        let line = this.createHorizontalLine(p.y);
-        this.guidelines.push(line);
-        this.addChild(line);
-      }
+      let line = this.createHorizontalLine(p.y);
+      this.guidelines.push(line);
+      this.addChild(line);
     }
+  }
 
+  createVerticalLines(points){
+    for(let p of points){
+      let line = this.createVerticalLine(p.x);
+      this.guidelines.push(line);
+      this.addChild(line);
+    }
   }
 
   clearAllGuideLines(){

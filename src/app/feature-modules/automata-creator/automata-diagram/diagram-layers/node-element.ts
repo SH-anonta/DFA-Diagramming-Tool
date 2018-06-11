@@ -86,6 +86,12 @@ export class NodeElement extends createjs.Container{
     this.updateAllIncidentEdges();
   }
 
+  setPosition(x: number, y:number){
+    this.x= x;
+    this.y= y;
+    this.updateAllIncidentEdges();
+  }
+
   setEventListeners(){
     // this.on('click', (event: any)=>{
     //   console.log('node click');

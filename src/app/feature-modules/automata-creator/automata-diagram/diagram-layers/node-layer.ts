@@ -172,4 +172,29 @@ export class DiagramNodesLayer extends createjs.Container{
       return {x: node.x, y: node.y};
     });
   }
+
+
+  getHorizontallyAlignedNodePositions(target_node: NodeElement, delta: number= 0){
+    return this.nodes.filter((node: NodeElement) =>{
+      return !this.pointsAreEqual(node, target_node) && Math.abs(node.y - target_node.y) <= delta;
+    }).map((x =>{return x.getPosition();}))
+  }
+
+  getVerticallyAlignedNodePositions(target_node: NodeElement, delta: number= 0){
+    return this.nodes.filter((node: NodeElement) =>{
+      return !this.pointsAreEqual(node, target_node) && Math.abs(node.x - target_node.x) <= delta;
+    }).map((x =>{return x.getPosition();}))
+  }
+
+  // return the position of nodes
+  getAlmostAlignedNodePositions(target_node: NodeElement, delta: number= 0){
+    return {
+      horizontal: this.getHorizontallyAlignedNodePositions(target_node, delta),
+      vertical: this.getVerticallyAlignedNodePositions(target_node, delta)
+    }
+  }
+
+  private pointsAreEqual(a, b){
+    return a.x == b.x && a.y == b.y;
+  }
 }

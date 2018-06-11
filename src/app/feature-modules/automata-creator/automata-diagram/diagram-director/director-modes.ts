@@ -16,6 +16,7 @@ import {ActionExecutor} from '../diagram-actions/action-executor';
 import {ExternalCommandsHandler} from './diagram-controls';
 import {QuadCurveLine} from '../diagram-layers/quad-curve-line';
 import {AlignmentGuidelineLayer} from '../diagram-layers/alignment-guideline-layer';
+import {THIS_EXPR} from '@angular/compiler/src/output/output_ast';
 
 // todo: move 'press move performed' calculation into this class
 // todo: update values in this class from a safer place, as of now DirectorMode classes are updating them
@@ -109,24 +110,37 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
     // update the guidelines for aligned nodes
     // clean up
     this.alignment_guideline_layer.clearAllGuideLines();
-    let node_point = {x: event.currentTarget.x, y: event.currentTarget.y };
-    this.alignment_guideline_layer.placeLinesOnAlignedPoints(this.node_layer.getNodePositions(), node_point);
+    let almost_aligned_points = this.node_layer.getAlmostAlignedNodePositions(event.currentTarget,10);
+
+    this.alignment_guideline_layer.createHorizontalLines(almost_aligned_points.horizontal);
+    this.alignment_guideline_layer.createVerticalLines(almost_aligned_points.vertical);
 
     this.updateDiagram();
-
-    // console.log('Press Move');
   }
 
   nodePressUp(event: any){
     // moving of nodes has been completed
-
     // clean up all guidelines
     this.alignment_guideline_layer.clearAllGuideLines();
 
-    // console.log('Press up');
-
     let dx = event.stageX-MouseData.initial_mouse_x;
     let dy = event.stageY-MouseData.initial_mouse_y;
+
+    // todo fix auto alignment of nodes
+    // if(this.node_layer.getSelectedNodes().length == 1){
+    //   let almost_aligned_positions = this.node_layer.getAlmostAlignedNodePositions(event.currentTarget, 10);
+    //
+    //   if(almost_aligned_positions.horizontal){
+    //     let align_to= almost_aligned_positions.horizontal[0];
+    //     dy = align_to.y - MouseData.initial_mouse_y;
+    //   }
+    //
+    //   if(almost_aligned_positions.vertical){
+    //     let align_to= almost_aligned_positions.vertical[0];
+    //     dx = align_to.x - MouseData.initial_mouse_x;
+    //   }
+    //
+    // }
 
     // if the has moved after mouesdown event was fired
     if(dx != 0 || dy != 0){
