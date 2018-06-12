@@ -7,7 +7,7 @@ import {DiagramNodesLayer} from '../diagram-layers/node-layer';
 import {DiagramEdgeLayer} from '../diagram-layers/edge-layer';
 import {NodeElement} from '../diagram-layers/node-element';
 import {ActionExecutor} from '../diagram-actions/action-executor';
-import {DiagramDirectorDefaultMode, DiagramDirectorEdgeCreationMode} from './director-modes';
+import {DirectorDefaultMode, DiagramDirectorEdgeCreationMode} from './director-modes';
 import {DiagramEventHandler} from './diagram-event-handler';
 import {ExternalCommandsHandler} from './diagram-controls';
 import {AlignmentGuidelineLayer} from '../diagram-layers/alignment-guideline-layer';
@@ -16,10 +16,10 @@ import {AlignmentGuidelineLayer} from '../diagram-layers/alignment-guideline-lay
 
 export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHandler {
   private action_executor = new ActionExecutor();
-  public readonly default_mode: DiagramDirectorDefaultMode;
+  public readonly default_mode: DirectorDefaultMode;
   public readonly edge_creation_mode: DiagramDirectorEdgeCreationMode;
 
-  private current_mode:DiagramDirectorDefaultMode;
+  private current_mode:DirectorDefaultMode;
 
   constructor(stage: createjs.Stage,
               diagram: DFADiagram,
@@ -30,7 +30,7 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
               alignment_guideline_layer: AlignmentGuidelineLayer){
 
     // create default mode
-    this.default_mode = new DiagramDirectorDefaultMode(this.action_executor,
+    this.default_mode = new DirectorDefaultMode(this.action_executor,
                                                       stage,
                                                       diagram,
                                                       selection_layer,
@@ -52,7 +52,7 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
     this.current_mode = this.default_mode;
   }
 
-  switchMode(mode: DiagramDirectorDefaultMode){
+  switchMode(mode: DirectorDefaultMode){
 
     // this check is important, not for performance concerns
     // reloading the same mode can cause problems because

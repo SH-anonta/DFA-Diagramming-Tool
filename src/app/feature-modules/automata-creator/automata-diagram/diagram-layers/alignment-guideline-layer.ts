@@ -1,57 +1,53 @@
 import * as createjs from 'createjs-module';
 
 export class AlignmentGuidelineLayer extends createjs.Container{
-  private guidelines: createjs.Shape[]= [];
-  private static readonly DELTA: number= 3;
+  private static readonly LINE_THICKNESS:number = 2;
+  private static readonly LINE_COLOR:string = 'red';
 
-  constructor(canvas_width, canvas_height){
+  private guidelines: createjs.Shape[]= [];
+
+  constructor(private canvas_width, private canvas_height){
     super();
   }
 
-  createHorizontalLine(y: number): createjs.Shape{
+  createLine(x1, y1, x2, y2){
     let line: createjs.Shape = new createjs.Shape();
+    line.graphics.beginStroke(AlignmentGuidelineLayer.LINE_COLOR);
+    line.graphics.setStrokeStyle(AlignmentGuidelineLayer.LINE_THICKNESS);
 
-    line.graphics.beginStroke('red').setStrokeStyle(2);
-
-    line.graphics.moveTo(0, y);
-
-    // todo change 1000 to canvas width
-    line.graphics.lineTo(1000, y);
+    line.graphics.moveTo(x1, y1);
+    line.graphics.lineTo(x2, y2);
     line.graphics.endStroke();
 
-    return line;
+    this.guidelines.push(line);
+    this.addChild(line);
   }
 
-  createVerticalLine(x: number): createjs.Shape{
-    let line: createjs.Shape = new createjs.Shape();
-
-    line.graphics.beginStroke('red').setStrokeStyle(2);
-
-    line.graphics.moveTo(x, 0);
-
-    // todo change 1000 to canvas height
-    line.graphics.lineTo(x, 1000);
-    line.graphics.endStroke();
-
-    return line;
+  // draw a horizontal line that intersects the Y axis at y
+  createHorizontalLine(y: number){
+    this.createLine(0, y, this.canvas_width, y);
   }
 
+  // draw a vertical line that intersects the X axis at x
+  createVerticalLine(x: number){
+    this.createLine(x, 0, x, this.canvas_height);
+  }
+
+  // given a set of points, draw horizontal lines that go through them
   createHorizontalLines(points){
     for(let p of points){
-      let line = this.createHorizontalLine(p.y);
-      this.guidelines.push(line);
-      this.addChild(line);
+      this.createHorizontalLine(p.y);
     }
   }
 
+  // given a set of points, draw vertical lines that go through them
   createVerticalLines(points){
     for(let p of points){
-      let line = this.createVerticalLine(p.x);
-      this.guidelines.push(line);
-      this.addChild(line);
+      this.createVerticalLine(p.x);
     }
   }
 
+  // remove all guide lines from this layer
   clearAllGuideLines(){
     while(this.guidelines.length > 0){
       let line = this.guidelines.pop();

@@ -104,7 +104,7 @@ export class DiagramNodesLayer extends createjs.Container{
   }
 
   // todo: move this inside NodeElement class to ensure all nodes get listened to
-  // all event response task is delegated to a mediator class (DiagramDirectorDefaultMode)
+  // all event response task is delegated to a mediator class (DirectorDefaultMode)
   setEventListenersToNode(node: NodeElement){
     // add click listener
     node.on('click', (event: any) => {

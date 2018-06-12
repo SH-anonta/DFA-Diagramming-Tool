@@ -196,7 +196,7 @@ describe('DFA Diagram', ()=>{
 
   describe('SelectionLayer', function () {
     it('Should be creatable', ()=>{
-      let director:any = jasmine.createSpy('DiagramDirectorDefaultMode');
+      let director:any = jasmine.createSpy('DirectorDefaultMode');
       let temp = new DiagramSelectionLayer(100, 100);
     });
   });

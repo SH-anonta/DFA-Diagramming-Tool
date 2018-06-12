@@ -12,7 +12,7 @@ export class DFADiagram implements ExternalCommandsHandler{
   shift_is_pressed: boolean= false;
 
   // class for controlling all the parts of the diagram
-  // readonly director: DiagramDirectorDefaultMode;
+  // readonly director: DirectorDefaultMode;
   readonly director: DiagramDirector;
 
   // different classes that make up the diagram

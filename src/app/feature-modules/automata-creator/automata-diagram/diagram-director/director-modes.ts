@@ -28,7 +28,7 @@ class MouseData {
   static last_mouse_y= 0;
 }
 
-export class DiagramDirectorDefaultMode implements DiagramEventHandler, ExternalCommandsHandler{
+export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommandsHandler{
   // How many units to tolerate when considering if two nodes are aligned (horizontally or vertically)
   protected readonly ALIGNMENT_DELTA= 5;
 
@@ -309,7 +309,7 @@ enum EdgeCreationPhase{
   destination_node_selection,
 }
 
-export class DiagramDirectorEdgeCreationMode extends DiagramDirectorDefaultMode{
+export class DiagramDirectorEdgeCreationMode extends DirectorDefaultMode{
   private current_phase: EdgeCreationPhase = EdgeCreationPhase.source_node_selection;
   private floating_line: QuadCurveLine;
 
