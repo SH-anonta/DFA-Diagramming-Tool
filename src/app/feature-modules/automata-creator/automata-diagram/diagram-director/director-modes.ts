@@ -29,6 +29,8 @@ class MouseData {
 }
 
 export class DiagramDirectorDefaultMode implements DiagramEventHandler, ExternalCommandsHandler{
+  // How many units to tolerate when considering if two nodes are aligned (horizontally or vertically)
+  protected readonly ALIGNMENT_DELTA= 5;
 
   constructor(protected action_executor: ActionExecutor,
               protected stage: createjs.Stage,
@@ -110,7 +112,7 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
     // update the guidelines for aligned nodes
     // clean up
     this.alignment_guideline_layer.clearAllGuideLines();
-    let almost_aligned_points = this.node_layer.getAlmostAlignedNodePositions(event.currentTarget,10);
+    let almost_aligned_points = this.node_layer.getAlmostAlignedNodePositions(event.currentTarget,this.ALIGNMENT_DELTA);
 
     this.alignment_guideline_layer.createHorizontalLines(almost_aligned_points.horizontal);
     this.alignment_guideline_layer.createVerticalLines(almost_aligned_points.vertical);
@@ -123,24 +125,33 @@ export class DiagramDirectorDefaultMode implements DiagramEventHandler, External
     // clean up all guidelines
     this.alignment_guideline_layer.clearAllGuideLines();
 
+    let node = event.currentTarget;
+
+    // distance from node's initial position to it's new position
     let dx = event.stageX-MouseData.initial_mouse_x;
     let dy = event.stageY-MouseData.initial_mouse_y;
 
-    // todo fix auto alignment of nodes
-    // if(this.node_layer.getSelectedNodes().length == 1){
-    //   let almost_aligned_positions = this.node_layer.getAlmostAlignedNodePositions(event.currentTarget, 10);
-    //
-    //   if(almost_aligned_positions.horizontal){
-    //     let align_to= almost_aligned_positions.horizontal[0];
-    //     dy = align_to.y - MouseData.initial_mouse_y;
-    //   }
-    //
-    //   if(almost_aligned_positions.vertical){
-    //     let align_to= almost_aligned_positions.vertical[0];
-    //     dx = align_to.x - MouseData.initial_mouse_x;
-    //   }
-    //
-    // }
+    // how much to translate the node's position to align it with other nodes
+    let tx = 0;
+    let ty = 0;
+
+    // todo refactor this part for more simplicity, possibly move this to node layer
+    if((dx != 0 || dy != 0) && this.node_layer.getSelectedNodes().length == 1){
+      let horizontals = this.node_layer.getHorizontallyAlignedNodePositions(event.currentTarget, this.ALIGNMENT_DELTA);
+      let verticals = this.node_layer.getVerticallyAlignedNodePositions(event.currentTarget, this.ALIGNMENT_DELTA);
+
+      if(horizontals.length > 0){
+        ty=  horizontals[0].y - node.y;
+        dy= horizontals[0].y-MouseData.initial_mouse_y;
+      }
+
+      if(verticals.length > 0){
+        tx=  verticals[0].x - node.x;
+        dx= verticals[0].x-MouseData.initial_mouse_x;
+      }
+
+      event.currentTarget.translatePosition(tx, ty);
+    }
 
     // if the has moved after mouesdown event was fired
     if(dx != 0 || dy != 0){
