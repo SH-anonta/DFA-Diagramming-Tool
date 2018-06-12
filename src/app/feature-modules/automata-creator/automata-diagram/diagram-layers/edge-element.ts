@@ -28,7 +28,6 @@ export class EdgeCenterControlPoint extends createjs.Container{
 }
 
 
-// todo: Force edge to be created with two nodes instead of start and end position
 export class EdgeElement extends createjs.Container{
   // the line that represents this edge, a quadratic curve line
   protected line: QuadCurveLine;

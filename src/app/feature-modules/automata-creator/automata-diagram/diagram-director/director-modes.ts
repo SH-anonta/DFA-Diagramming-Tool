@@ -16,16 +16,20 @@ import {ActionExecutor} from '../diagram-actions/action-executor';
 import {ExternalCommandsHandler} from './diagram-controls';
 import {QuadCurveLine} from '../diagram-layers/quad-curve-line';
 import {AlignmentGuidelineLayer} from '../diagram-layers/alignment-guideline-layer';
-import {THIS_EXPR} from '@angular/compiler/src/output/output_ast';
 
-// todo: move 'press move performed' calculation into this class
 // todo: update values in this class from a safer place, as of now DirectorMode classes are updating them
 class MouseData {
+  // where the mouse was located when the last 'mouse down' event was fired
   static initial_mouse_x= 0;
   static initial_mouse_y= 0;
 
+  // where the mouse was located when the last 'press move' event was fired
   static last_mouse_x= 0;
   static last_mouse_y= 0;
+
+  // static dragPerformed(): boolean{
+  //   return MouseData.initial_mouse_x == this.last_mouse_x && MouseData.initial_mouse_y == this.last_mouse_y;
+  // }
 }
 
 export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommandsHandler{
@@ -51,6 +55,8 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
     let dy = event.stageY - MouseData.initial_mouse_y;
     let drag_performed = !(dx == 0 && dy == 0);
 
+    // let drag_performed = MouseData.dragPerformed();
+
     if(!this.diagram.ctrl_is_pressed && !drag_performed){
       this.node_layer.deselectAllNodes();
       event.currentTarget.is_selected = true;
@@ -65,9 +71,7 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
   }
 
   nodeMouseDown(event: any){
-    // drag_offset is used to keep track of where the mouse pointer is pressed on the node element
-    event.currentTarget.drag_offset = {x : event.localX, y: event.localY};
-
+    // todo collect this data from another location, possibly the main event handlers of diagram
     //Values used for making decisions
     MouseData.last_mouse_x= event.stageX;
     MouseData.last_mouse_y= event.stageY;
@@ -98,9 +102,6 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
 
   // this method expects drag_offset property to be set on event, by mouseDown event handler
   nodePressMove(event: any){
-    // event.currentTarget.x = event.stageX - event.currentTarget.drag_offset.x;
-    // event.currentTarget.y = event.stageY - event.currentTarget.drag_offset.y;
-
     let tx=  event.stageX - MouseData.last_mouse_x;
     let ty=  event.stageY - MouseData.last_mouse_y;
 
@@ -185,18 +186,14 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
 
     let selected_nodes = this.node_layer.getNodesWithinRect(points.top_left.x, points.top_left.y, points.bottom_right.x, points.bottom_right.y);
     this.node_layer.selectNodes(selected_nodes);
-    // console.log('Up');
     this.updateDiagram();
   }
   selectionLayerPressDown(event: any){
-    // todo move creation of selction rect to PressMove event handler for efficiency
     this.selection_rect = this.selection_overlay_layer.createSelectionRectangle(event.stageX, event.stageY);
-    // console.log('Down');
     this.updateDiagram();
   }
   selectionLayerPressMove(event: any){
     this.selection_rect.setBottomRightPoint(event.stageX, event.stageY);
-    // console.log('pressmove');
     this.updateDiagram();
   }
 
@@ -216,7 +213,6 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
   }
 
   edgeClicked(event: any) {
-    // console.log('Edge clicked');
     this.node_layer.deselectAllNodes();
     this.edge_layer.selectEdge(event.currentTarget);
     this.updateDiagram();
@@ -237,8 +233,6 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
   edgeCenterClicked(event: any){
     // prevent the edge element right below this point from receiving this event
     // event.stopPropagation();
-
-    // console.log(event.currentTarget);
   }
   edgeCenterDoubleClicked(event: any){
 
@@ -259,7 +253,6 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
     // prevent the edge element right below this point from receiving this event
     event.stopPropagation();
 
-    // console.log('press');
     let edge = event.currentTarget.getParentEdge();
     edge.setEdgeCenterPointPosition(event.stageX, event.stageY);
     this.updateDiagram();
@@ -309,7 +302,7 @@ enum EdgeCreationPhase{
   destination_node_selection,
 }
 
-export class DiagramDirectorEdgeCreationMode extends DirectorDefaultMode{
+export class DirectorEdgeCreationMode extends DirectorDefaultMode{
   private current_phase: EdgeCreationPhase = EdgeCreationPhase.source_node_selection;
   private floating_line: QuadCurveLine;
 

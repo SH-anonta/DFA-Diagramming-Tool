@@ -7,17 +7,15 @@ import {DiagramNodesLayer} from '../diagram-layers/node-layer';
 import {DiagramEdgeLayer} from '../diagram-layers/edge-layer';
 import {NodeElement} from '../diagram-layers/node-element';
 import {ActionExecutor} from '../diagram-actions/action-executor';
-import {DirectorDefaultMode, DiagramDirectorEdgeCreationMode} from './director-modes';
+import {DirectorDefaultMode, DirectorEdgeCreationMode} from './director-modes';
 import {DiagramEventHandler} from './diagram-event-handler';
 import {ExternalCommandsHandler} from './diagram-controls';
 import {AlignmentGuidelineLayer} from '../diagram-layers/alignment-guideline-layer';
 
-//todo move mouse event data out of default direct mode
-
 export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHandler {
   private action_executor = new ActionExecutor();
   public readonly default_mode: DirectorDefaultMode;
-  public readonly edge_creation_mode: DiagramDirectorEdgeCreationMode;
+  public readonly edge_creation_mode: DirectorEdgeCreationMode;
 
   private current_mode:DirectorDefaultMode;
 
@@ -40,7 +38,7 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
                                                       alignment_guideline_layer);
 
     // create edge creation mode
-    this.edge_creation_mode = new DiagramDirectorEdgeCreationMode(this.action_executor,
+    this.edge_creation_mode = new DirectorEdgeCreationMode(this.action_executor,
                                                                   stage,
                                                                   diagram,
                                                                   selection_layer,
