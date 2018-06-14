@@ -3,7 +3,7 @@ import * as createjs from "createjs-module";
 import {DiagramDirector} from '../diagram-director/diagram-director';
 import {EdgeElement, LoopBackEdgeElement} from './edge-element';
 import {NodeElement} from './node-element';
-import {QuadCurveLine} from './quad-curve-line';
+import {ArrowHead, QuadCurveLine} from './quad-curve-line';
 
 
 export class DiagramEdgeLayer extends createjs.Container{
@@ -24,6 +24,10 @@ export class DiagramEdgeLayer extends createjs.Container{
   constructor(){
     super();
 
+    // todo remove
+    // let head = new ArrowHead({x:300, y: 50}, 45);
+    // head.setPosition(10,10)
+    // this.addChild(head);
   }
 
   // creates new edge between two nodes and return the created edge

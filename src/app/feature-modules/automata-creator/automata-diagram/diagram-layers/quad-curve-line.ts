@@ -15,13 +15,73 @@ function centerControlPointOfQuadraticCurve(x1,y1, x3,y3, center_x, center_y){
   };
 }
 
+export class ArrowHead extends createjs.Container{
+  private static COLOR = 'black';
+  render_commands = {
 
+  };
+
+  // start_point where the tip of the arrow lies
+  constructor(start_point, rotate){
+    super();
+
+    this.x= 0;
+    this.y= 0;
+
+    let left_part = new createjs.Shape()
+    let right_part = new createjs.Shape()
+    const len = 10;
+    const thickness = 2;
+
+    // make left and right hand of the arrow head as if the arrow is pointing up
+    // arrow head tip needs to be at 0,0 for rotation to work properly
+    left_part.graphics.setStrokeStyle(thickness);
+    left_part.graphics.beginStroke('black');
+    left_part.graphics.moveTo(0, 0);
+    left_part.graphics.lineTo(-len, len);
+    left_part.graphics.endStroke();
+
+    right_part.graphics.setStrokeStyle(thickness);
+    right_part.graphics.beginStroke('black');
+    right_part.graphics.moveTo(0, 0);
+    right_part.graphics.lineTo(len, len);
+    right_part.graphics.endStroke();
+
+    this.addChild(left_part);
+    this.addChild(right_part);
+
+    this.rotation = 90;
+
+    this.x= start_point.x;
+    this.y= start_point.y;
+
+    // setTimeout(()=>{
+    //   this.rotation+= 50;
+    // }, 500);
+
+    // let dot = new createjs.Shape();
+    // dot.graphics.beginFill('red').drawCircle(this.x, this.y, 5);
+    // this.addChild(dot);
+  }
+
+  // setPosition(point){
+  //   this.x = point.x;
+  //   this.y = point.y;
+  // }
+
+  setPosition(x, y){
+    this.x = x;
+    this.y = y;
+  }
+
+}
 
 export class QuadCurveLine extends createjs.Container{
   private static DEFAULT_COLOR: string = '#000000';
   private static HIGHLIGHT_COLOR: string =  '#213bd0';
 
   private line: createjs.Shape;
+  private arrow_head: ArrowHead;
 
   // these commands are altered to dynamically change the properties of the shapes they render
   render_commands = {
@@ -44,8 +104,12 @@ export class QuadCurveLine extends createjs.Container{
     this.render_commands.line_quadratic_curve_command= this.line.graphics.quadraticCurveTo((sx+dx)/2, (sy+dy)/2, dx, dy).command;
 
     this.line.graphics.endStroke();
-
     this.addChild(this.line);
+
+    this.arrow_head =  new ArrowHead(0,0);
+    this.updateArrowHead();
+
+    this.addChild(this.arrow_head);
   }
 
   updateEdgePosition(old_src_pos, old_dest_pos, src_pos, dest_pos){
@@ -74,10 +138,28 @@ export class QuadCurveLine extends createjs.Container{
     let cpx = this.render_commands.line_quadratic_curve_command.cpx;
     let cpy = this.render_commands.line_quadratic_curve_command.cpy;
 
+    this.updateArrowHead();
     // update center point
-    let curve_center_point = centerOfQuadraticCurve(src_pos.x, src_pos.y, cpx, cpy, dest_pos.x, dest_pos.y);
+    // let curve_center_point = centerOfQuadraticCurve(src_pos.x, src_pos.y, cpx, cpy, dest_pos.x, dest_pos.y);
+  }
+
+  updateArrowHead(){
+    let src= this.getSourcePoint();
+    let dest= this.getDestinationPoint();
+
+    this.arrow_head.setPosition(dest.x, dest.y);
+
+    let ang = this.getAngleOfLine();
+    ang = (ang/Math.PI)*180;
+    console.log(ang);
+    ang = ang+90;
+
+    if(src.x > dest.x){
+      ang+= 180;
     }
 
+    this.arrow_head.rotation= ang;
+  }
 
   getSourcePoint(){
     return {
@@ -154,6 +236,20 @@ export class QuadCurveLine extends createjs.Container{
     this.render_commands.line_quadratic_curve_command.y += sy;
 
   }
+
+  getAngleOfLine(){
+    let src= this.getSourcePoint();
+    let dest= this.getDestinationPoint();
+
+    let opposite_side = dest.y-src.y;
+    let adjacent_side = dest.x-src.x;
+
+    // console.log(opposite_side);
+    // console.log(adjacent_side);
+
+    return Math.atan(opposite_side/adjacent_side)
+  }
+  // arrow parts...
 
 
 }
