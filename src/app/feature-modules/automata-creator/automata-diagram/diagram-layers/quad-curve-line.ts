@@ -152,8 +152,11 @@ export class QuadCurveLine extends createjs.Container{
     let ang = this.getAngleOfLine();
     ang = (ang/Math.PI)*180;
     console.log(ang);
+
+    // the arrow head is created with 90degree angle
     ang = ang+90;
 
+    // if the line goes from right to left flip the arrow head
     if(src.x > dest.x){
       ang+= 180;
     }
