@@ -15,6 +15,26 @@ function centerControlPointOfQuadraticCurve(x1,y1, x3,y3, center_x, center_y){
   };
 }
 
+function getQuadCurvePoint(a, b, c, t){
+  return {
+    x: (1-t)*(1-t)*a.x+2*(1-t)*t*b.x+t*t*c.x,
+    y: (1-t)*(1-t)*a.y+2*(1-t)*t*b.y+t*t*c.y
+  };
+}
+
+
+// point a, b
+function getAngleOfLine(a, b){
+  let opposite_side = b.y-a.y;
+  let adjacent_side = b.x-a.x;
+
+  // console.log(opposite_side);
+  // console.log(adjacent_side);
+
+  return Math.atan(opposite_side/adjacent_side)
+}
+
+
 export class ArrowHead extends createjs.Container{
   private static COLOR = 'black';
   render_commands = {
@@ -146,22 +166,29 @@ export class QuadCurveLine extends createjs.Container{
   updateArrowHead(){
     let src= this.getSourcePoint();
     let dest= this.getDestinationPoint();
+    let cent= this.getCenterControlPointPosition();
 
     this.arrow_head.setPosition(dest.x, dest.y);
 
-    let ang = this.getAngleOfLine();
+    let ang = getAngleOfLine(cent, dest);
+
+    // convert angle from radian to degree
     ang = (ang/Math.PI)*180;
-    console.log(ang);
 
     // the arrow head is created with 90degree angle
     ang = ang+90;
 
     // if the line goes from right to left flip the arrow head
-    if(src.x > dest.x){
+    if(cent.x > dest.x){
       ang+= 180;
     }
 
     this.arrow_head.rotation= ang;
+
+    // position-----
+
+    let head= getQuadCurvePoint(src, cent, dest, 1);
+    this.arrow_head.setPosition(head.x, head.y);
   }
 
   getSourcePoint(){
@@ -240,19 +267,9 @@ export class QuadCurveLine extends createjs.Container{
 
   }
 
-  getAngleOfLine(){
-    let src= this.getSourcePoint();
-    let dest= this.getDestinationPoint();
 
-    let opposite_side = dest.y-src.y;
-    let adjacent_side = dest.x-src.x;
-
-    // console.log(opposite_side);
-    // console.log(adjacent_side);
-
-    return Math.atan(opposite_side/adjacent_side)
-  }
   // arrow parts...
 
 
 }
+
