@@ -157,6 +157,7 @@ export class LoopBackEdgeElement extends EdgeElement{
 
 
   updateEdgePosition(){
+    super.updateEdgePosition();
     let sx = this.source_node.x;
     let sy = this.source_node.y;
 
@@ -173,6 +174,7 @@ export class LoopBackEdgeElement extends EdgeElement{
 
     // record current position of incident node as old position
     this.incident_node_position_old = this.source_node.getPosition();
+
   }
 
 
@@ -212,6 +214,5 @@ export class LoopBackEdgeElement extends EdgeElement{
 
     return Math.atan(opposite/base);
   }
-
 
 }

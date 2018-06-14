@@ -1,5 +1,5 @@
 import * as createjs from "createjs-module";
-import {EdgeElement} from './edge-element';
+import {Point} from "../../models/point.model"
 
 function centerOfQuadraticCurve(x1,y1, x2,y2, x3,y3){
   return {
@@ -167,6 +167,7 @@ export class QuadCurveLine extends createjs.Container{
     let src= this.getSourcePoint();
     let dest= this.getDestinationPoint();
     let cent= this.getCenterControlPointPosition();
+    let dist =  cent.distance(dest);
 
     this.arrow_head.setPosition(dest.x, dest.y);
 
@@ -185,24 +186,16 @@ export class QuadCurveLine extends createjs.Container{
 
     this.arrow_head.rotation= ang;
 
-    // position-----
-
-    let head= getQuadCurvePoint(src, cent, dest, 1);
+    let head= getQuadCurvePoint(src, cent, dest, (dist-21)/dist);
     this.arrow_head.setPosition(head.x, head.y);
   }
 
-  getSourcePoint(){
-    return {
-      x: this.render_commands.line_create_command.x,
-      y: this.render_commands.line_create_command.y
-    };
+  getSourcePoint(): Point{
+    return new Point(this.render_commands.line_create_command.x, this.render_commands.line_create_command.y);
   }
 
-  getDestinationPoint(){
-    return {
-      x: this.render_commands.line_quadratic_curve_command.x,
-      y: this.render_commands.line_quadratic_curve_command.y
-    };
+  getDestinationPoint(): Point{
+    return new Point(this.render_commands.line_quadratic_curve_command.x, this.render_commands.line_quadratic_curve_command.y);
   }
 
   setSourcePosition(x:number, y:number){
@@ -235,13 +228,12 @@ export class QuadCurveLine extends createjs.Container{
 
     this.render_commands.line_quadratic_curve_command.cpx = center_point.x;
     this.render_commands.line_quadratic_curve_command.cpy = center_point.y;
+
+    this.updateArrowHead();
   }
 
-  getCenterControlPointPosition(){
-    return {
-      x : this.render_commands.line_quadratic_curve_command.cpx,
-      y : this.render_commands.line_quadratic_curve_command.cpy,
-    };
+  getCenterControlPointPosition(): Point{
+    return new Point(this.render_commands.line_quadratic_curve_command.cpx, this.render_commands.line_quadratic_curve_command.cpy)
   }
 
   // methods to change appearance of curve

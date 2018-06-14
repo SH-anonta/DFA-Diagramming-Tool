@@ -47,9 +47,9 @@ export class DFADiagram implements ExternalCommandsHandler{
     // If layer a is added after b, a will be on top of b
     this.stage.addChild(this.background);
     this.stage.addChild(this.selection_rect_layer);
-    this.stage.addChild(this.alignment_guideline_layer);  // todo: move node_layer to this line
-    this.stage.addChild(this.nodes_layer);
     this.stage.addChild(this.edge_layer);
+    this.stage.addChild(this.alignment_guideline_layer);
+    this.stage.addChild(this.nodes_layer);
     this.stage.addChild(this.selection_overlay_layer);
 
     this.setEventListeners();
