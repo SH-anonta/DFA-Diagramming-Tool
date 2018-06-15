@@ -7,6 +7,9 @@ import {DFADiagram} from '../automata-diagram/diagram';
   styleUrls: ['./dfa-creator.component.css']
 })
 export class DfaCreatorComponent implements OnInit, AfterViewInit{
+  @ViewChild('ControlsMenueContainer') controls_menue_container: ElementRef;
+  show_controls_menu= false;
+
   // todo move to another class
 
   @ViewChild('MainCanvas') canvas_ref: ElementRef;
@@ -79,5 +82,14 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
 
     // remove focus from button after click, focus causes problems for shortcuts
     event.target.blur();
+  }
+
+  // controls menu callbacks
+  onControlsBtnClick(){
+    this.show_controls_menu = true;
+  }
+
+  closeControlsMenu(){
+    this.show_controls_menu= false;
   }
 }

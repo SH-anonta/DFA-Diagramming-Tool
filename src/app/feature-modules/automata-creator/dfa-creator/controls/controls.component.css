@@ -1,3 +1,13 @@
-#ControlMenuContainer{
+#ComponentContainer{
   background-color: white;
+}
+
+#ControlsTable{
+  width: 100%;
+}
+
+
+#CloseBtn{
+  width: 30px;
+  height: 30px;
 }
