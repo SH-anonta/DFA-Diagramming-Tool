@@ -4,6 +4,7 @@ import {Subject} from 'rxjs/Subject';
 export class NodeElement extends createjs.Container{
   selection_border: createjs.Shape;     // circle border that indicates the node is selected
   accept_state_symbol: createjs.Shape;  // an inner circle that indicates the node is an accept state
+  node_label: createjs.Text;
 
   private node_position_change: Subject<NodeElement> = new Subject();
 
@@ -38,7 +39,14 @@ export class NodeElement extends createjs.Container{
   }
   get is_selected(){return this._is_selected;}
 
-  constructor(private label: string, pos_x, pos_y){
+  // label properties
+  get label(){return this.node_label.text;}
+  set label(val: string){
+    this.node_label.text = val;
+
+  }
+
+  constructor(node_label_text: string, pos_x, pos_y){
     super();
 
     this.x = pos_x;
@@ -59,8 +67,9 @@ export class NodeElement extends createjs.Container{
     this.accept_state_symbol.alpha= 0;
 
     // label of node
-    let node_label = new createjs.Text(label, "bold 15px Arial", "black");
-    node_label.set({
+    this.node_label = new createjs.Text(node_label_text, "bold 15px Arial", "black");
+
+    this.node_label.set({
       textAlign: "center",
       textBaseline: "middle",
       font_size: 20,
@@ -75,7 +84,7 @@ export class NodeElement extends createjs.Container{
 
 
     this.hitArea = circle;
-    this.addChild(circle, circle_border, node_label, this.selection_border, this.accept_state_symbol);
+    this.addChild(circle, circle_border, this.node_label, this.selection_border, this.accept_state_symbol);
 
     this.setEventListeners();
   }

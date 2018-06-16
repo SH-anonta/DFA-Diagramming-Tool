@@ -1,23 +1,18 @@
 
 #ControlsMenuContainer{
-  /*position: absolute;*/
-
-  /*visibility: hidden;*/
-
+  z-index: 1;
   position: absolute;
-  background-color: white;
-
-
-  height: 60%;
-  width: 80%;
 
   top: 2%;
   left: 10%;
 
+  height: 60%;
+  width: 80%;
+
+  background-color: white;
   border-style: solid;
   border-width: thin;
 
-  z-index: 1;
 }
 
 #CanvasColumn{

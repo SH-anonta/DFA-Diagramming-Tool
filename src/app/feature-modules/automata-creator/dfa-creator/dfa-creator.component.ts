@@ -105,4 +105,6 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
   closeControlsMenu(){
     this.show_controls_menu= false;
   }
+
+  
 }
