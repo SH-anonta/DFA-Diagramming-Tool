@@ -11,7 +11,7 @@ export class NodeElement extends createjs.Container{
   // constants
   readonly NODE_RADIUS: number = 40;
 
-  // accept state status, changing the value of this property also changes the diagram
+  // accept state status, changing the value of this property also changes the dfa_diagram
   private _is_accept_state: boolean= false;
   set is_accept_state(val: boolean){
     this._is_accept_state = val;
@@ -25,7 +25,7 @@ export class NodeElement extends createjs.Container{
   }
   get is_accept_state(): boolean{ return this._is_accept_state; }
 
-  // node selection logic, changing the value of this property also changes the diagram
+  // node selection logic, changing the value of this property also changes the dfa_diagram
   private _is_selected: boolean= false;
 
   set is_selected(val: boolean){

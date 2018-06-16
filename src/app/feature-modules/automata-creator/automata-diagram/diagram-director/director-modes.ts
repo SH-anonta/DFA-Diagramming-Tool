@@ -45,7 +45,7 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
               protected selection_overlay_layer: SelectionOverlayLayer,
               protected alignment_guideline_layer: AlignmentGuidelineLayer){}
 
-  // diagram notifications
+  // dfa_diagram notifications
 
   // send event with whatever is currently selected
   sendSelectionEvent(selection){
@@ -81,7 +81,7 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
   }
 
   nodeMouseDown(event: any){
-    // todo collect this data from another location, possibly the main event handlers of diagram
+    // todo collect this data from another location, possibly the main event handlers of dfa_diagram
     //Values used for making decisions
     MouseData.last_mouse_x= event.stageX;
     MouseData.last_mouse_y= event.stageY;
@@ -268,7 +268,7 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
     this.updateDiagram();
   }
 
-  // commands sent from outside of the diagram, by method call and not by some event
+  // commands sent from outside of the dfa_diagram, by method call and not by some event
   undoChanges(){
     this.action_executor.undoAction();
     this.updateDiagram();

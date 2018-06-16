@@ -16,11 +16,11 @@ export class DFADiagram implements ExternalCommandsHandler{
   ctrl_is_pressed: boolean= false;
   shift_is_pressed: boolean= false;
 
-  // class for controlling all the parts of the diagram
+  // class for controlling all the parts of the dfa_diagram
   // readonly director: DirectorDefaultMode;
   readonly director: DiagramDirector;
 
-  // different classes that make up the diagram
+  // different classes that make up the dfa_diagram
   readonly stage: createjs.Stage;    // Easeljs stage
   readonly background: createjs.Shape;
   readonly nodes_layer: DiagramNodesLayer;
@@ -62,7 +62,7 @@ export class DFADiagram implements ExternalCommandsHandler{
     this.stage.update();
   }
 
-  // diagram initialization methods
+  // dfa_diagram initialization methods
   private createBackGround(): createjs.Shape {
     let background = new createjs.Shape();
     let canvas_width = (<any>this.stage.canvas).scrollWidth;
@@ -111,7 +111,7 @@ export class DFADiagram implements ExternalCommandsHandler{
     this.director.switchMode(this.director.edge_creation_mode);
   }
 
-  // return a subscription so the outside can get notifications when something in the diagram is selected
+  // return a subscription so the outside can get notifications when something in the dfa_diagram is selected
   subscribeToNodeSelection(observer): Subscription{
     return this.element_selection_subject.subscribe(observer);
   }

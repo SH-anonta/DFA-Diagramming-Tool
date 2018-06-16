@@ -14,7 +14,7 @@ export class DiagramEdgeLayer extends createjs.Container{
   // only one edge can be selected at a time
   private selected_edge: EdgeElement = null;
 
-  // node selection logic, changing the value of this property also changes the diagram
+  // node selection logic, changing the value of this property also changes the dfa_diagram
   createFloatingLine(sx: number, sy: number, dx: number, dy: number){
     this.floating_line = new QuadCurveLine(sx, sy, dx, dy);
     this.addChild(this.floating_line);

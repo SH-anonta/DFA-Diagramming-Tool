@@ -64,7 +64,7 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
     }
   }
 
-  // methods for handling events that occur on different components of the diagram
+  // methods for handling events that occur on different components of the dfa_diagram
   // all methods below should delegate the call to the current_mode mode object
 
   updateDiagram(){

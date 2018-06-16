@@ -1,6 +1,8 @@
 import * as createjs from "createjs-module";
 import {Point} from "../../models/point.model"
 
+// todo fix bug: when an edge is created, the arrow head apears at the top left corner
+
 function centerOfQuadraticCurve(x1,y1, x2,y2, x3,y3){
   return {
     x : .25*x1 + .5*x2 + .25*x3,

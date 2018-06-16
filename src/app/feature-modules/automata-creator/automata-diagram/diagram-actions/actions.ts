@@ -4,7 +4,7 @@ import {EdgeElement} from '../diagram-layers/edge-element';
 import {NodeElement} from '../diagram-layers/node-element';
 import {setTestabilityGetter} from '@angular/core';
 
-// action classes that encapsulate logic for manipulating the diagram
+// action classes that encapsulate logic for manipulating the dfa_diagram
 
 export interface Action{
   execute();

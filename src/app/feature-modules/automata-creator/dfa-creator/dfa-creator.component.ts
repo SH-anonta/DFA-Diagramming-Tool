@@ -3,27 +3,13 @@ import {DFADiagram} from '../automata-diagram/diagram';
 import {Selectable} from '../models/selectable.model';
 import {Observer} from 'rxjs/Observer';
 
-// todo move to another file
-export enum DfaCreatorSidebar {
-  node_editor,
-  edge_editor,
-  blank,
-}
-
 
 @Component({
   selector: 'app-dfa-creator',
   templateUrl: './dfa-creator.component.html',
   styleUrls: ['./dfa-creator.component.css']
 })
-export class DfaCreatorComponent implements OnInit, AfterViewInit{
-  current_sidebar: DfaCreatorSidebar = DfaCreatorSidebar.blank;
-
-  // sidebars enums, this is needed becaues the template cannot access the Sidebar enum directly
-  node_editor_sidebar = DfaCreatorSidebar.node_editor;
-  edge_editor_sidebar = DfaCreatorSidebar.edge_editor;
-  blank_sidebar = DfaCreatorSidebar.blank;
-
+export class DfaCreatorComponent implements OnInit{
   @ViewChild('ControlsMenueContainer') controls_menue_container: ElementRef;
   show_controls_menu= false;
 
@@ -33,10 +19,6 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
   constructor() { }
 
   ngOnInit() {
-
-  }
-
-  ngAfterViewInit(){
     this.diagram = new DFADiagram(this.canvas_ref.nativeElement);
     this.setEventListeners();
   }
@@ -83,12 +65,6 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
         // if the shift button was released,
         this.diagram.switchToDefaultMode();
       }
-    });
-
-
-    // event listeners for diagram
-    this.diagram.subscribeToNodeSelection((selection: Selectable[])=>{
-      console.log('selected: ', selection);
     });
 
   }
