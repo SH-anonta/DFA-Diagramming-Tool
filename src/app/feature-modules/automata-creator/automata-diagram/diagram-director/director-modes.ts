@@ -183,6 +183,9 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
     this.node_layer.deselectAllNodes();
     this.edge_layer.deselectAllEdges();
     this.updateDiagram();
+
+    // nothing is selected
+    this.sendSelectionEvent([]);
   }
 
   selectionLayerDoubleClicked(event: any){

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {NodeElement} from '../../../../automata-diagram/diagram-layers/node-element';
 
 @Component({
   selector: 'dfa-node-editor',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./node-editor.component.css']
 })
 export class NodeEditorComponent implements OnInit {
+  @Input() selected_node: NodeElement;   // todo replace with model
+
 
   constructor() { }
 
