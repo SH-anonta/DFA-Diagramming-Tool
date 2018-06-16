@@ -1,27 +1,55 @@
-<div id="ToolBar" class="text-left mb-2">
-  <span id="LeftButtonGroup" class="text-left my-2 ml-5">
-    <button class="btn btn-sm btn-default" (click)="onUndoClick($event)">Undo</button>
-    <button class="btn btn-sm btn-default" (click)="onRedoClick($event)">Redo</button>
 
-  </span>
-
-  <span id="RightButtonGroup" class="float-right mr-5">
-    <button class="btn btn-sm btn-default" (click)="onControlsBtnClick()">Controls</button>
-  </span>
-
-</div>
-
-
+<!-- Absolute positioned popup-->
 <div id="ControlsMenuContainer"
      #ControlsMenueContainer
      [class.hidden]="!show_controls_menu" >
   <dfa-controls (closeRequestEvent)="closeControlsMenu()"></dfa-controls>
 </div>
 
-<canvas id="MainCanvas"
-        #MainCanvas
-        class=""
-        style="border: black thin solid;"
-        width="1000px" height="1000px">
+<div class="container">
 
-</canvas>
+  <!--Toolbar row-->
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="ToolBar" class="text-left mb-2">
+      <span id="LeftButtonGroup" class="text-left my-2 ml-3">
+        <button class="btn btn-sm btn-default" (click)="onUndoClick($event)">Undo</button>
+        <button class="btn btn-sm btn-default" (click)="onRedoClick($event)">Redo</button>
+      </span>
+
+        <span id="RightButtonGroup" class="float-right mr-5">
+        <button class="btn btn-sm btn-default" (click)="onControlsBtnClick()">Controls</button>
+      </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="row">
+    <div id="CanvasColumn" class="col-sm-9">
+
+      <canvas id="MainCanvas"
+              #MainCanvas
+              class=""
+              style="border: black thin solid;"
+              width="820px" height="1000px">
+
+      </canvas>
+
+
+    </div>
+
+    <div id="SidebarColumn" class="col-sm-3">
+      <p>Sidebar goes here</p>
+
+    </div>
+
+
+  </div>
+
+
+</div>
+

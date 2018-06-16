@@ -16,8 +16,24 @@
 
   border-style: solid;
   border-width: thin;
+
+  z-index: 1;
 }
 
+#CanvasColumn{
+
+}
+
+#SidebarColumn{
+  border-style: solid;
+
+}
+
+#MainCanvas{
+  /*width: 100%;*/
+}
+
+/*Style classes*/
 
 .hidden{
   visibility: hidden;
