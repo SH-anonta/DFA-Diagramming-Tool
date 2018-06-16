@@ -2,24 +2,30 @@ import {Component, ElementRef, OnInit, ViewChild, AfterViewInit} from '@angular/
 import {DFADiagram} from '../automata-diagram/diagram';
 import {Selectable} from '../models/selectable.model';
 import {Observer} from 'rxjs/Observer';
+import {DiagramService} from '../diagram.service';
 
 
 @Component({
   selector: 'app-dfa-creator',
   templateUrl: './dfa-creator.component.html',
-  styleUrls: ['./dfa-creator.component.css']
+  styleUrls: ['./dfa-creator.component.css'],
+  providers: [DiagramService],
+
 })
 export class DfaCreatorComponent implements OnInit{
   @ViewChild('ControlsMenueContainer') controls_menue_container: ElementRef;
+  @ViewChild('MainCanvas') canvas_ref: ElementRef;
+
+  //flags
   show_controls_menu= false;
 
-  @ViewChild('MainCanvas') canvas_ref: ElementRef;
   diagram: DFADiagram;
 
-  constructor() { }
+  constructor(public diagram_provider: DiagramService) { }
 
   ngOnInit() {
     this.diagram = new DFADiagram(this.canvas_ref.nativeElement);
+    this.diagram_provider.setDiagram(this.diagram);
     this.setEventListeners();
   }
 
