@@ -3,6 +3,7 @@ import {Selectable} from '../../../models/selectable.model';
 import {DFADiagram} from '../../../automata-diagram/diagram';
 import {Node} from "../../../models/node.model"
 import {NodeElement} from '../../../automata-diagram/diagram-layers/node-element';
+import {DiagramService} from '../../../diagram.service';
 
 // todo move to another file
 export enum DfaCreatorSidebar {
@@ -18,8 +19,6 @@ export enum DfaCreatorSidebar {
   styleUrls: ['./sidebar-container.component.css']
 })
 export class SidebarContainerComponent implements OnInit {
-  @Input() dfa_diagram: DFADiagram;
-
   selection: Selectable;
 
   current_sidebar: DfaCreatorSidebar = DfaCreatorSidebar.blank;
@@ -29,7 +28,7 @@ export class SidebarContainerComponent implements OnInit {
   edge_editor_sidebar = DfaCreatorSidebar.edge_editor;
   blank_sidebar = DfaCreatorSidebar.blank;
 
-  constructor() { }
+  constructor(public diagram_provider: DiagramService) { }
 
   ngOnInit() {
     this.setEventListeners();
@@ -51,7 +50,7 @@ export class SidebarContainerComponent implements OnInit {
 
   setEventListeners(){
     // event listeners for dfa_diagram
-    this.dfa_diagram.subscribeToNodeSelection((selection: Selectable[])=>{
+    this.diagram_provider.diagram.subscribeToNodeSelection((selection: Selectable[])=>{
       this.selection= selection[0];
       this.updateSidebarType(selection);
     });

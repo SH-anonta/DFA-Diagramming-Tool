@@ -2,8 +2,9 @@
   <label for="NodeLabelInput" class=""> Label </label>
   <input id="NodeLabelInput"
           type="text"
-         class="form-control"
-          [value]="selected_node.label">
+          class="form-control"
+          [value]="selected_node.label"
+          (input)="onNodeRename($event)">
 
   <div class="form-check">
 

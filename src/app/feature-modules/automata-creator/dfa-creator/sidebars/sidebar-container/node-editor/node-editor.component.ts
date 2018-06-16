@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NodeElement} from '../../../../automata-diagram/diagram-layers/node-element';
+import {DiagramService} from '../../../../diagram.service';
 
 @Component({
   selector: 'dfa-node-editor',
@@ -10,9 +11,19 @@ export class NodeEditorComponent implements OnInit {
   @Input() selected_node: NodeElement;   // todo replace with model
 
 
-  constructor() { }
+  constructor(public diagram_provider: DiagramService) {
+    console.log('AAAAAAAAAAAAA');
+  }
 
   ngOnInit() {
+  }
+
+  onNodeRename(event){
+    let val = event.target.value;
+    // console.log();
+
+    //todo update lable through diagram object method
+    this.selected_node.label= val;
   }
 
 }
