@@ -1,6 +1,7 @@
 import {NodeElement} from '../automata-diagram/diagram-layers/node-element';
+import {Selectable} from './selectable.model';
 
-export class Node{
+export class Node implements Selectable{
   readonly label: string;
   readonly is_accept_state: boolean;
 

@@ -45,6 +45,15 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
               protected selection_overlay_layer: SelectionOverlayLayer,
               protected alignment_guideline_layer: AlignmentGuidelineLayer){}
 
+  // diagram notifications
+
+  // send event with whatever is currently selected
+  sendSelectionEvent(selection){
+    if(!selection.isEmpty){
+      this.diagram.element_selection_subject.next(selection);
+    }
+  }
+
   updateDiagram(){
     this.stage.update();
   }
@@ -62,6 +71,7 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
       event.currentTarget.is_selected = true;
     }
 
+    this.sendSelectionEvent(this.node_layer.getSelectedNodes());
     this.updateDiagram();
   }
 

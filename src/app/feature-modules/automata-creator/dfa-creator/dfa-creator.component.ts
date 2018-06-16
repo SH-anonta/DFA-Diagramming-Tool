@@ -1,5 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {DFADiagram} from '../automata-diagram/diagram';
+import {Selectable} from '../models/selectable.model';
+import {Observer} from 'rxjs/Observer';
 
 // todo move to another file
 export enum DfaCreatorSidebar {
@@ -40,9 +42,11 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
   }
 
   private setEventListeners() {
+
+    // event handlers for document key events
+
     // this.canvas.addEventListener('keydown', (event: KeyboardEvent)=>{
     document.addEventListener('keydown', (event: KeyboardEvent)=>{
-      // console.log(event);
       // check if delete key is pressed
 
       // execute only if the delete is not pressed in an input element
@@ -80,6 +84,13 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
         this.diagram.switchToDefaultMode();
       }
     });
+
+
+    // event listeners for diagram
+    this.diagram.subscribeToNodeSelection((selection: Selectable[])=>{
+      console.log('selected: ', selection);
+    });
+
   }
 
 
@@ -106,5 +117,5 @@ export class DfaCreatorComponent implements OnInit, AfterViewInit{
     this.show_controls_menu= false;
   }
 
-  
+
 }

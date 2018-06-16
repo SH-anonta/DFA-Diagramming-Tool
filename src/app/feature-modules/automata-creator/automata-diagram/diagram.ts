@@ -5,9 +5,14 @@ import {DiagramNodesLayer} from './diagram-layers/node-layer';
 import {DiagramEdgeLayer} from './diagram-layers/edge-layer';
 import {ExternalCommandsHandler} from './diagram-director/diagram-controls';
 import {AlignmentGuidelineLayer} from './diagram-layers/alignment-guideline-layer';
+import {Subscription} from 'rxjs/Subscription';
+import {Subject} from 'rxjs/Subject';
+import {Selectable} from '../models/selectable.model';
 
 
 export class DFADiagram implements ExternalCommandsHandler{
+  element_selection_subject: Subject<Selectable[]>= new Subject<Selectable[]>();
+
   ctrl_is_pressed: boolean= false;
   shift_is_pressed: boolean= false;
 
@@ -104,5 +109,10 @@ export class DFADiagram implements ExternalCommandsHandler{
 
   switchToEdgeCreationMode(){
     this.director.switchMode(this.director.edge_creation_mode);
+  }
+
+  // return a subscription so the outside can get notifications when something in the diagram is selected
+  subscribeToNodeSelection(observer): Subscription{
+    return this.element_selection_subject.subscribe(observer);
   }
 }

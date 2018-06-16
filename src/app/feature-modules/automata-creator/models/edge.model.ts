@@ -1,7 +1,8 @@
 import {Node} from "./node.model"
+import {Selectable} from './selectable.model';
 
 
-export class Edge{
+export class Edge implements Selectable{
   readonly label: string= "";
   readonly source_node: Node;
   readonly destination_node: Node;
