@@ -14,11 +14,14 @@ import { NodeEditorComponent } from './dfa-creator/sidebars/node-editor/node-edi
     ControlsComponent,
     EdgeEditorComponent,
     NodeEditorComponent,
-    EdgeEditorComponent
+    EdgeEditorComponent,
   ],
   exports: [
     DfaCreatorComponent,
     ControlsComponent
+  ],
+  providers: [
+
   ]
 
 })
