@@ -171,6 +171,10 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
     this.current_mode = this.edge_creation_mode;
   }
 
+  straightenSelectedEdge(){
+    this.current_mode.straightenSelectedEdge();
+  }
+
   renameSelectedNode(name: string) {
     this.current_mode.renameSelectedNode(name);
   }

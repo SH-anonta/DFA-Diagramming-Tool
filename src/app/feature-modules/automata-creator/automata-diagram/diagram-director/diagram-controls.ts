@@ -8,5 +8,9 @@ export interface ExternalCommandsHandler {
   switchToDefaultMode();
   switchToEdgeCreationMode();
 
+  // node manipulations
   renameSelectedNode(name: string);
+
+  // edge manipulations
+  straightenSelectedEdge();
 }

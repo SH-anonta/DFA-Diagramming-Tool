@@ -304,6 +304,12 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
     this.updateDiagram();
   }
 
+  straightenSelectedEdge(){
+    let selected_edge = this.edge_layer.getSelectedEdge();
+    selected_edge.straightenEdge();
+    this.updateDiagram();
+  }
+
   switchToDefaultMode(){
     // dummy methods, not to be used
     // exists only because the ExternalCommandsHandler interface requires it
