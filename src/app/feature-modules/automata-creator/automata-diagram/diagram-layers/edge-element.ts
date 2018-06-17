@@ -36,7 +36,15 @@ export class EdgeCenterControlPoint extends createjs.Container{
 export class EdgeElement extends createjs.Container{
   // the line that represents this edge, a quadratic curve line
   protected line: QuadCurveLine;
-  protected label: string;
+
+  protected edge_label: createjs.Text;
+  public set label(val: string){
+    this.edge_label.text =val;
+  }
+
+  public get label(){
+    return this.edge_label.text;
+  }
 
   // incident nodes
   protected readonly source_node: NodeElement;
@@ -54,11 +62,27 @@ export class EdgeElement extends createjs.Container{
     this.line = new QuadCurveLine(source_node.x, source_node.y, destination_node.x, destination_node.y);
     this.center_point = new EdgeCenterControlPoint(this);
 
-    // order is important
-    this.addChild(this.line, this.center_point);
+    // label
+    this.edge_label = this.createLabelTextObject();
+
+      // order is important
+    this.addChild(this.line, this.center_point, this.edge_label);
 
     // source_node and destination node may be undefined
     this.setNodePositionListeners(source_node, destination_node);
+  }
+
+  createLabelTextObject(): createjs.Text{
+    let text = new createjs.Text('New', 'bold 15px Arial', 'black');
+
+    text.set({
+      textAlign: "center",
+      textBaseline: "middle",
+      font_size: 20,
+    });
+
+
+    return text;
   }
 
   updateEdgePosition(){
@@ -77,8 +101,15 @@ export class EdgeElement extends createjs.Container{
 
     let centroid = this.line.getCenterPointPosition();
     this.setEdgeCenterPointPosition(centroid.x,centroid.y);
+    this.updateLabelPosition();
   }
 
+  // requires the center point position to be updated before use
+  updateLabelPosition(){
+    let p = this.getCenterPointPosition();
+    this.edge_label.x = p.x;
+    this.edge_label.y = p.y-10;
+  }
 
   private setNodePositionListeners(source_node: NodeElement, destination_node:NodeElement) {
 
@@ -129,6 +160,7 @@ export class EdgeElement extends createjs.Container{
     this.center_point.y= y;
 
     this.line.setEdgeCenterPointPosition(x,y);
+    this.updateLabelPosition();
   }
 
   // return the position of the mid point if the edge were a straight line
