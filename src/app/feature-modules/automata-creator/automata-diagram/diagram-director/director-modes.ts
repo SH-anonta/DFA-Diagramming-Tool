@@ -187,7 +187,7 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
     this.updateDiagram();
 
     // nothing is selected
-    this.sendSelectionEvent([]);
+    // this.sendSelectionEvent([]);
   }
 
   selectionLayerDoubleClicked(event: any){
@@ -201,6 +201,8 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
 
     let selected_nodes = this.node_layer.getNodesWithinRect(points.top_left.x, points.top_left.y, points.bottom_right.x, points.bottom_right.y);
     this.node_layer.selectNodes(selected_nodes);
+
+    this.sendSelectionEvent(selected_nodes);
     this.updateDiagram();
   }
   selectionLayerPressDown(event: any){

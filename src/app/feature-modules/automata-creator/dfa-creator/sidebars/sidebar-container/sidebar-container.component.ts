@@ -35,9 +35,13 @@ export class SidebarContainerComponent implements OnInit {
   }
 
   private updateSidebarType(elements: Selectable[]){
-    // todo check if array length is 1 else set blank panel
-    console.log(elements);
+    // console.log(elements);
 
+    // all sidebars are meant to deal with only one selected element
+    if(elements.length != 1){
+      this.current_sidebar = this.blank_sidebar;
+      return;
+    }
 
     // todo use Node model class instead of Node element
     if(elements[0] instanceof NodeElement){
@@ -52,6 +56,7 @@ export class SidebarContainerComponent implements OnInit {
     // event listeners for dfa_diagram
     this.diagram_provider.diagram.subscribeToNodeSelection((selection: Selectable[])=>{
       this.selection= selection[0];
+
       this.updateSidebarType(selection);
     });
   }
