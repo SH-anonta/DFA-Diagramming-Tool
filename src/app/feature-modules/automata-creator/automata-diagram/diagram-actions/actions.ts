@@ -208,3 +208,22 @@ export class MoveEdgeCentroid implements Action{
   }
 }
 
+
+export class StraightenEdgeAction implements Action{
+  private previous_center_point;
+  constructor(private edge: EdgeElement){
+    this.previous_center_point = edge.getCenterPointPosition();
+  }
+
+  execute(){
+    this.edge.straightenEdge();
+  }
+
+  undo(){
+    this.edge.setEdgeCenterPointPosition(this.previous_center_point.x, this.previous_center_point.y);
+  }
+
+  redo(){
+    this.execute();
+  }
+}

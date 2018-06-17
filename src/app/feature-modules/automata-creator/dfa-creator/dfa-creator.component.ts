@@ -15,7 +15,7 @@ export class DfaCreatorComponent implements OnInit{
   @ViewChild('MainCanvas') canvas_ref: ElementRef;
 
   //flags
-  show_controls_menu= true;
+  show_controls_menu= false;
 
   diagram: DFADiagram;
 

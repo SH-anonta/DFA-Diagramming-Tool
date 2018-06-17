@@ -8,7 +8,7 @@ import {
   DeleteEdgeAction,
   DeleteSelectedNodesAction,
   MoveNodesAction, MoveEdgeCentroid,
-  ToggleNodeAcceptStateStatusAction, RenameNodeAction
+  ToggleNodeAcceptStateStatusAction, RenameNodeAction, StraightenEdgeAction
 } from '../diagram-actions/actions';
 import {NodeElement} from '../diagram-layers/node-element';
 import {DiagramEventHandler} from './diagram-event-handler';
@@ -306,7 +306,9 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
 
   straightenSelectedEdge(){
     let selected_edge = this.edge_layer.getSelectedEdge();
-    selected_edge.straightenEdge();
+
+    this.action_executor.execute(new StraightenEdgeAction(selected_edge));
+
     this.updateDiagram();
   }
 

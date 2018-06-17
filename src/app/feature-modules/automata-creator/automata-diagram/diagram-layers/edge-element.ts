@@ -1,6 +1,7 @@
 import * as createjs from "createjs-module";
 import {QuadCurveLine} from './quad-curve-line';
 import {NodeElement} from './node-element';
+import {Point} from '../../models/point.model';
 
 
 export class EdgeCenterControlPoint extends createjs.Container{
@@ -24,6 +25,10 @@ export class EdgeCenterControlPoint extends createjs.Container{
 
   getParentEdge(): EdgeElement{
     return this.parent_edge;
+  }
+
+  getPosition(){
+    return new Point(this.x, this.y);
   }
 }
 
@@ -112,6 +117,10 @@ export class EdgeElement extends createjs.Container{
 
   getCenterControlPointElement(){
     return this.center_point;
+  }
+
+  getCenterPointPosition(): Point{
+    return this.center_point.getPosition();
   }
 
   // Move the edge line's mid point to a certain position
