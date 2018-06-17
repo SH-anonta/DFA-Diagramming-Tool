@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {NodeElement} from '../../../../automata-diagram/diagram-layers/node-element';
 import {DiagramService} from '../../../../diagram.service';
 
@@ -10,6 +10,10 @@ import {DiagramService} from '../../../../diagram.service';
 export class NodeEditorComponent implements OnInit {
   @Input() selected_node: NodeElement;   // todo replace with model
 
+  // @HostListener('keypress', ['$event'])
+  // keyEventHandler(event: KeyboardEvent){
+  //   console.log(event.key);
+  // }
 
   constructor(public diagram_provider: DiagramService) {
   }

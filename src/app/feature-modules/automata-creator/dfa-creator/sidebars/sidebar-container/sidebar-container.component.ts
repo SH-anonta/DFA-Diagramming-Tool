@@ -4,6 +4,7 @@ import {DFADiagram} from '../../../automata-diagram/diagram';
 import {Node} from "../../../models/node.model"
 import {NodeElement} from '../../../automata-diagram/diagram-layers/node-element';
 import {DiagramService} from '../../../diagram.service';
+import {EdgeElement} from '../../../automata-diagram/diagram-layers/edge-element';
 
 // todo move to another file
 export enum DfaCreatorSidebar {
@@ -35,8 +36,6 @@ export class SidebarContainerComponent implements OnInit {
   }
 
   private updateSidebarType(elements: Selectable[]){
-    // console.log(elements);
-
     // all sidebars are meant to deal with only one selected element
     if(elements.length != 1){
       this.current_sidebar = this.blank_sidebar;
@@ -46,6 +45,9 @@ export class SidebarContainerComponent implements OnInit {
     // todo use Node model class instead of Node element
     if(elements[0] instanceof NodeElement){
       this.current_sidebar = this.node_editor_sidebar;
+    }
+    else if(elements[0] instanceof EdgeElement){
+      this.current_sidebar = this.edge_editor_sidebar;
     }
     else{
       this.current_sidebar = this.blank_sidebar;
