@@ -8,7 +8,7 @@ import {
   DeleteEdgeAction,
   DeleteSelectedNodesAction,
   MoveNodesAction, MoveEdgeCentroid,
-  ToggleNodeAcceptStateStatusAction
+  ToggleNodeAcceptStateStatusAction, RenameNodeAction
 } from '../diagram-actions/actions';
 import {NodeElement} from '../diagram-layers/node-element';
 import {DiagramEventHandler} from './diagram-event-handler';
@@ -309,8 +309,19 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
     // dummy methods, not to be used
     // exists only because the ExternalCommandsHandler interface requires it
   }
-}
 
+  renameSelectedNode(name: string) {
+    let selected:NodeElement[] = this.node_layer.getSelectedNodes();
+
+    // only one node will be renamed
+    // if multiple nodes are selected, operation is aborted
+    if(selected.length == 1){
+      this.action_executor.execute(new RenameNodeAction(selected[0], name))
+    }
+
+    this.updateDiagram();
+  }
+}
 
 enum EdgeCreationPhase{
   source_node_selection,

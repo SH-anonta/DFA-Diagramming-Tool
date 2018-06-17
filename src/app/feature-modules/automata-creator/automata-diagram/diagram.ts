@@ -111,6 +111,10 @@ export class DFADiagram implements ExternalCommandsHandler{
     this.director.switchMode(this.director.edge_creation_mode);
   }
 
+  renameSelectedNode(name: string){
+    this.director.renameSelectedNode(name)
+  }
+
   // return a subscription so the outside can get notifications when something in the dfa_diagram is selected
   subscribeToNodeSelection(observer): Subscription{
     return this.element_selection_subject.subscribe(observer);

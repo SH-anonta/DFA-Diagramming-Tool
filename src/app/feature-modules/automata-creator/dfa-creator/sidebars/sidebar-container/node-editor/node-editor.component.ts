@@ -21,8 +21,7 @@ export class NodeEditorComponent implements OnInit {
     let val = event.target.value;
     // console.log();
 
-    //todo update lable through diagram object method
-    this.selected_node.label= val;
+    this.diagram_provider.diagram.renameSelectedNode(val);
   }
 
 }

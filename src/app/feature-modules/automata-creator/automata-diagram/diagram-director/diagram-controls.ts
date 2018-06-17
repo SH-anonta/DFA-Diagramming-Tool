@@ -5,7 +5,8 @@ export interface ExternalCommandsHandler {
   redoChanges();
   deleteSelectedNodesOrEdge();
 
-  // dfa_diagram (director) mode switching controls
   switchToDefaultMode();
   switchToEdgeCreationMode();
+
+  renameSelectedNode(name: string);
 }

@@ -124,6 +124,26 @@ export class MoveNodesAction implements Action{
   }
 }
 
+export class RenameNodeAction implements Action{
+  private old_name: string;
+
+  constructor(private node: NodeElement, private new_name: string){
+    this.old_name = node.label;
+  }
+
+  execute(){
+    this.node.label = this.new_name;
+  }
+
+  undo(){
+    this.node.label = this.old_name;
+  }
+
+  redo(){
+    this.node.label = this.new_name;
+  }
+}
+
 // Actions performed on edges
 
 export class CreateEdgeAction implements Action{
@@ -187,3 +207,4 @@ export class MoveEdgeCentroid implements Action{
     this.edge.setEdgeCenterPointPosition(this.new_position.x, this.new_position.y);
   }
 }
+

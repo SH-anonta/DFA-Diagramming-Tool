@@ -1,7 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {DFADiagram} from '../automata-diagram/diagram';
-import {Selectable} from '../models/selectable.model';
-import {Observer} from 'rxjs/Observer';
 import {DiagramService} from '../diagram.service';
 
 

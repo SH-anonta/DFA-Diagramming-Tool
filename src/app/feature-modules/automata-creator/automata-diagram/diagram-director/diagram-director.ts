@@ -170,4 +170,8 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
   switchToEdgeCreationMode(){
     this.current_mode = this.edge_creation_mode;
   }
+
+  renameSelectedNode(name: string) {
+    this.current_mode.renameSelectedNode(name);
+  }
 }
