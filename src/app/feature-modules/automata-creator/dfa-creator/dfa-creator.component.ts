@@ -25,7 +25,7 @@ export class DfaCreatorComponent implements OnInit{
 
   ngOnInit() {
     this.diagram = new DFADiagram(this.canvas_ref.nativeElement);
-    this.diagram_provider.setDiagram(this.diagram);
+    this.diagram_provider.diagram = this.diagram;
     this.setEventListeners();
   }
 

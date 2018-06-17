@@ -17,6 +17,8 @@ import {ExternalCommandsHandler} from './diagram-controls';
 import {QuadCurveLine} from '../diagram-layers/quad-curve-line';
 import {AlignmentGuidelineLayer} from '../diagram-layers/alignment-guideline-layer';
 
+// todo Make all diagram manupulations through action objects, even the ones that aren't to be undone
+
 // todo: update values in this class from a safer place, as of now DirectorMode classes are updating them
 class MouseData {
   // where the mouse was located when the last 'mouse down' event was fired

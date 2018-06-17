@@ -12,7 +12,6 @@ export class NodeEditorComponent implements OnInit {
 
 
   constructor(public diagram_provider: DiagramService) {
-    console.log('AAAAAAAAAAAAA');
   }
 
   ngOnInit() {
