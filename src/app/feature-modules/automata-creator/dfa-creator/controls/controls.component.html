@@ -1,7 +1,7 @@
 <div id="ComponentContainer">
 
   <div class="text-right">
-    <button id=""CloseBtn
+    <button id="CloseBtn"
             class="btn btn-danger btn-sm"
             (click)="onCloseBtnClick()">
       x
@@ -15,50 +15,77 @@
       <!--only used for centering the table-->
       <!--<div class="col-sm-1"></div>-->
 
-      <div class="col-sm-12 ">
+      <div class="col-sm-12 text-left">
+        <div>
+          <b>State Controls</b>
+          <table class="table ControlsTable">
+            <tr>
+              <th>Action</th>
+              <th>Controls</th>
+            </tr>
 
-        <table class="table text-left mt-3" id="ControlsTable">
-          <tr>
+            <tr>
+              <td>Create new state</td>
+              <td>Double click on empty space </td>
+            </tr>
+
+            <tr>
+              <td>Select state</td>
+              <td>Click state, ctrl+click to add to selection or remove from selection</td>
+            </tr>
+
+            <tr>
+              <td>Move states</td>
+              <td>Select the state and drag</td>
+            </tr>
+
+            <tr>
+              <td>Toggle accept state</td>
+              <td>Double click on node</td>
+            </tr>
+          </table>
+        </div>
+
+        <div>
+          <b>Transition Controls</b>
+          <table class="table ControlsTable" >
+            <tr>
+              <th>Action</th>
+              <th>Controls</th>
+            </tr>
+
+            <tr>
+              <td>Create new edge</td>
+              <td>Press shift and drag from one state to the other</td>
+            </tr>
+
+            <tr>
+              <td>Delete nodes or edges</td>
+              <td>Select and press delete key</td>
+            </tr>
+          </table>
+        </div>
+
+        <div>
+          <b>Miscellaneous</b>
+          <table class="table text-left ControlsTable">
+            <tr>
             <th>Action</th>
             <th>Controls</th>
-          </tr>
+            </tr>
 
-          <tr>
-            <td>Create new state</td>
-            <td>Double click on empty space </td>
-          </tr>
+            <tr>
+              <td>Undo</td>
+              <td>ctrl+z</td>
+            </tr>
 
-          <tr>
-            <td>Select state</td>
-            <td>Click state, ctrl+click to add to selection or remove from selection</td>
-          </tr>
+            <tr>
+              <td>Redo</td>
+              <td>ctrl+y</td>
+            </tr>
+          </table>
+        </div>
 
-          <tr>
-            <td>Move states</td>
-            <td>Select the nodes and drag</td>
-          </tr>
-
-          <tr>
-            <td>Create new edge</td>
-            <td>Press shift and drag from one state to the other</td>
-          </tr>
-
-          <tr>
-            <td>Delete nodes or edges</td>
-            <td>Select and press delete key</td>
-          </tr>
-
-          <tr>
-            <td>Undo</td>
-            <td>ctrl+z</td>
-          </tr>
-
-          <tr>
-            <td>Redo</td>
-            <td>ctrl+y</td>
-          </tr>
-
-        </table>
       </div>
     </div>
   </div>

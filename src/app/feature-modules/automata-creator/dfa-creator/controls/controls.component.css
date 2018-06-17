@@ -2,6 +2,10 @@
   background-color: white;
 }
 
+.ControlsTable > td, .ControlsTable > th{
+  width: 20px;
+}
+
 #ControlsTable{
   width: 100%;
 }
