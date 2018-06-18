@@ -11,17 +11,23 @@ export class EdgeEditorComponent implements OnInit {
 
   // todo turn this into edge model.
   @Input() selected_edge: EdgeElement;
-
   constructor(public diagram_service: DiagramService) { }
 
   ngOnInit() {
   }
 
-  onStraightenEdgeClick() {
+  onStraightenEdgeClick(event) {
     this.diagram_service.diagram.straightenSelectedEdge();
+    event.target.blur();
   }
 
   onEdgeNameChange(event) {
     this.diagram_service.diagram.renameSelectedEdge(event.target.value);
+    event.target.blur();
+  }
+
+  onChangeLabelPositionClick(event) {
+    event.target.blur();
+    // todo implement
   }
 }

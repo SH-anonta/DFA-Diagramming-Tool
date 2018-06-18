@@ -26,6 +26,7 @@ export class NodeEditorComponent implements OnInit {
     // console.log();
 
     this.diagram_provider.diagram.renameSelectedNode(val);
+    event.target.blur();
   }
 
 }
