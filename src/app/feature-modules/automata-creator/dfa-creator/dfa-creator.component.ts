@@ -89,8 +89,9 @@ export class DfaCreatorComponent implements OnInit{
   }
 
   // controls menu callbacks
-  onControlsBtnClick(){
+  onControlsBtnClick(event){
     this.show_controls_menu = true;
+    event.target.blur();
   }
 
   closeControlsMenu(){

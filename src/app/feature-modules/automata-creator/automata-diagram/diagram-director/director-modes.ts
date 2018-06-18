@@ -35,6 +35,31 @@ class MouseData {
   // }
 }
 
+// todo move to another file
+class NodeNameGenerator {
+  private static count = 0;
+
+  static getNewName(): string{
+    this.count++;
+    let base10 = this.count.toString();
+
+    let name = [];
+
+    for(let ch of base10){
+      if(ch == '0'){
+        ch = '1';
+      }
+      name.push(String.fromCharCode(parseInt(ch)+64));
+    }
+
+    return name.join('');
+  }
+
+  static numToAlphabet(n: number){
+
+  }
+}
+
 export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommandsHandler{
   // How many units to tolerate when considering if two nodes are aligned (horizontally or vertically)
   protected readonly ALIGNMENT_DELTA= 5;
@@ -192,7 +217,9 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
   }
 
   selectionLayerDoubleClicked(event: any){
-    this.action_executor.execute(new CreateNodeAction(this.node_layer, 'New', event.stageX, event.stageY));
+
+    let node_label = NodeNameGenerator.getNewName();
+    this.action_executor.execute(new CreateNodeAction(this.node_layer, node_label, event.stageX, event.stageY));
     this.updateDiagram();
   }
 
