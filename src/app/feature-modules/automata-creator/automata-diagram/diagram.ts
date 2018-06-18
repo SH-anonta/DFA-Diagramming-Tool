@@ -8,6 +8,7 @@ import {AlignmentGuidelineLayer} from './diagram-layers/alignment-guideline-laye
 import {Subscription} from 'rxjs/Subscription';
 import {Subject} from 'rxjs/Subject';
 import {Selectable} from '../models/selectable.model';
+import {templateJitUrl} from '@angular/compiler';
 
 
 export class DFADiagram implements ExternalCommandsHandler{
@@ -117,6 +118,14 @@ export class DFADiagram implements ExternalCommandsHandler{
 
   straightenSelectedEdge(){
     this.director.straightenSelectedEdge();
+  }
+
+  renameSelectedEdge(name: string){
+    this.director.renameSelectedEdge(name);
+  }
+
+  changeEdgeLabelPosition(){
+    this.director.changeEdgeLabelPosition();
   }
 
   // return a subscription so the outside can get notifications when something in the dfa_diagram is selected

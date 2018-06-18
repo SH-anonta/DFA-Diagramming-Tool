@@ -13,4 +13,6 @@ export interface ExternalCommandsHandler {
 
   // edge manipulations
   straightenSelectedEdge();
+  renameSelectedEdge(name: string);
+  changeEdgeLabelPosition();
 }

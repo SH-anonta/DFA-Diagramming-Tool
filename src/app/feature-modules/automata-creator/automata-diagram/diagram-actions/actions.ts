@@ -208,7 +208,6 @@ export class MoveEdgeCentroid implements Action{
   }
 }
 
-
 export class StraightenEdgeAction implements Action{
   private previous_center_point;
   constructor(private edge: EdgeElement){
@@ -225,5 +224,25 @@ export class StraightenEdgeAction implements Action{
 
   redo(){
     this.execute();
+  }
+}
+
+export class RenameEdgeAction implements Action{
+  private old_name: string;
+
+  constructor(private edge: EdgeElement, private new_name: string){
+    this.old_name = edge.label;
+  }
+
+  execute(){
+    this.edge.label = this.new_name;
+  }
+
+  undo(){
+    this.edge.label = this.old_name;
+  }
+
+  redo(){
+    this.edge.label = this.new_name;
   }
 }

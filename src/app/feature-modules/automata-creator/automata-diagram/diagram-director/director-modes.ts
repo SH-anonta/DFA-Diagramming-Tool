@@ -8,7 +8,7 @@ import {
   DeleteEdgeAction,
   DeleteSelectedNodesAction,
   MoveNodesAction, MoveEdgeCentroid,
-  ToggleNodeAcceptStateStatusAction, RenameNodeAction, StraightenEdgeAction
+  ToggleNodeAcceptStateStatusAction, RenameNodeAction, StraightenEdgeAction, RenameEdgeAction
 } from '../diagram-actions/actions';
 import {NodeElement} from '../diagram-layers/node-element';
 import {DiagramEventHandler} from './diagram-event-handler';
@@ -16,6 +16,7 @@ import {ActionExecutor} from '../diagram-actions/action-executor';
 import {ExternalCommandsHandler} from './diagram-controls';
 import {QuadCurveLine} from '../diagram-layers/quad-curve-line';
 import {AlignmentGuidelineLayer} from '../diagram-layers/alignment-guideline-layer';
+import {EdgeElement} from '../diagram-layers/edge-element';
 
 // todo Make all diagram manupulations through action objects, even the ones that aren't to be undone
 
@@ -332,6 +333,17 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
     }
 
     this.updateDiagram();
+  }
+
+  renameSelectedEdge(name: string){
+    let selected:EdgeElement = this.edge_layer.getSelectedEdge();
+
+    this.action_executor.execute(new RenameEdgeAction(selected, name));
+    this.updateDiagram();
+  }
+
+  changeEdgeLabelPosition(){
+    // todo implement
   }
 }
 

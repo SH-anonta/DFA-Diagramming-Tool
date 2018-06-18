@@ -3,7 +3,9 @@
   <label for="EdgeLabelInput" class=""> Label </label>
   <input id="EdgeLabelInput"
          type="text"
-         class="form-control">
+         value="{{selected_edge.label}}"
+         class="form-control"
+        (change)="onEdgeNameChange($event)">
 
   <button class="btn btn-sm btn-default"
           (click)="onStraightenEdgeClick()">Straighten Edge</button>

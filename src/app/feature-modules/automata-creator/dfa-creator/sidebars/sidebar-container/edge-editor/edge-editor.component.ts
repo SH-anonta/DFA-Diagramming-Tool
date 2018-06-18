@@ -20,4 +20,8 @@ export class EdgeEditorComponent implements OnInit {
   onStraightenEdgeClick() {
     this.diagram_service.diagram.straightenSelectedEdge();
   }
+
+  onEdgeNameChange(event) {
+    this.diagram_service.diagram.renameSelectedEdge(event.target.value);
+  }
 }

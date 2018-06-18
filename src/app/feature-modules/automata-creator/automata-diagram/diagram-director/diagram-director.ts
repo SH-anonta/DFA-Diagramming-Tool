@@ -178,4 +178,12 @@ export class DiagramDirector implements DiagramEventHandler, ExternalCommandsHan
   renameSelectedNode(name: string) {
     this.current_mode.renameSelectedNode(name);
   }
+
+  renameSelectedEdge(name: string){
+    this.current_mode.renameSelectedEdge(name);
+  }
+
+  changeEdgeLabelPosition(){
+    this.current_mode.changeEdgeLabelPosition();
+  }
 }
