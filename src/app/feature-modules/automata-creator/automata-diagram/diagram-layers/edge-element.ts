@@ -67,6 +67,8 @@ export class EdgeElement extends createjs.Container{
 
       // order is important
     this.addChild(this.line, this.center_point, this.edge_label);
+    // this.updateLabelPosition();
+    this.updateEdgePosition();
 
     // source_node and destination node may be undefined
     this.setNodePositionListeners(source_node, destination_node);
