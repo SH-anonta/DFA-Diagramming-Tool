@@ -28,6 +28,6 @@ export class EdgeEditorComponent implements OnInit {
 
   onChangeLabelPositionClick(event) {
     event.target.blur();
-    // todo implement
+    this.diagram_service.diagram.changeEdgeLabelPosition();
   }
 }

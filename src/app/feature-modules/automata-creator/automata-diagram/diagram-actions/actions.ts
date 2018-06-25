@@ -2,7 +2,7 @@ import {DiagramNodesLayer} from '../diagram-layers/node-layer';
 import {DiagramEdgeLayer} from '../diagram-layers/edge-layer';
 import {EdgeElement} from '../diagram-layers/edge-element';
 import {NodeElement} from '../diagram-layers/node-element';
-import {setTestabilityGetter} from '@angular/core';
+import {LabelDirection} from  '../diagram-layers/edge-element';
 
 // action classes that encapsulate logic for manipulating the dfa_diagram
 
@@ -244,5 +244,26 @@ export class RenameEdgeAction implements Action{
 
   redo(){
     this.edge.label = this.new_name;
+  }
+}
+
+
+export class ChangeEdgeLabelPositionAction implements Action{
+  private previous_position: LabelDirection;
+
+  constructor(private edge: EdgeElement){
+    this.previous_position = edge.getLabelPosition();
+  }
+
+  execute(){
+    this.edge.changeEdgeLabelPosition();
+  }
+
+  undo(){
+    this.edge.setLabelPosition(this.previous_position);
+  }
+
+  redo(){
+    this.execute();
   }
 }

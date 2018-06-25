@@ -8,7 +8,7 @@ import {
   DeleteEdgeAction,
   DeleteSelectedNodesAction,
   MoveNodesAction, MoveEdgeCentroid,
-  ToggleNodeAcceptStateStatusAction, RenameNodeAction, StraightenEdgeAction, RenameEdgeAction
+  ToggleNodeAcceptStateStatusAction, RenameNodeAction, StraightenEdgeAction, RenameEdgeAction, ChangeEdgeLabelPositionAction
 } from '../diagram-actions/actions';
 import {NodeElement} from '../diagram-layers/node-element';
 import {DiagramEventHandler} from './diagram-event-handler';
@@ -370,7 +370,9 @@ export class DirectorDefaultMode implements DiagramEventHandler, ExternalCommand
   }
 
   changeEdgeLabelPosition(){
-    // todo implement
+    let selected = this.edge_layer.getSelectedEdge();
+    this.action_executor.execute(new ChangeEdgeLabelPositionAction(selected));
+    this.updateDiagram();
   }
 }
 

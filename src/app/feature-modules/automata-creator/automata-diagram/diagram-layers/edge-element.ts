@@ -3,6 +3,50 @@ import {QuadCurveLine} from './quad-curve-line';
 import {NodeElement} from './node-element';
 import {Point} from '../../models/point.model';
 
+// where the label will be placed with respect to the center point
+export enum LabelDirection{
+  up, right, down, left
+}
+
+// todo turn edge label into a class and put these functions in it
+function getNextClockwiseDirection(direction: LabelDirection){
+  if(direction == LabelDirection.up){
+    return LabelDirection.right;
+  }
+  else if(direction == LabelDirection.right){
+    return LabelDirection.down;
+  }
+  else if(direction == LabelDirection.down){
+    return LabelDirection.left;
+  }
+  else if(direction == LabelDirection.left){
+    return LabelDirection.up;
+  }
+}
+
+function convertDirectionToTranslation(direction: LabelDirection){
+  let p = {x:null, y:null};
+  const dist= 10;
+
+  if(direction == LabelDirection.up){
+    p.x = 0;
+    p.y = -dist;
+  }
+  else if(direction == LabelDirection.right){
+    p.x = dist;
+    p.y = 0;
+  }
+  else if(direction == LabelDirection.down){
+    p.x = 0;
+    p.y = dist;
+  }
+  else if(direction == LabelDirection.left){
+    p.x = -dist;
+    p.y = 0;
+  }
+
+  return p;
+}
 
 export class EdgeCenterControlPoint extends createjs.Container{
   constructor(private parent_edge: EdgeElement){
@@ -33,6 +77,7 @@ export class EdgeCenterControlPoint extends createjs.Container{
 }
 
 
+
 export class EdgeElement extends createjs.Container{
   // the line that represents this edge, a quadratic curve line
   protected line: QuadCurveLine;
@@ -41,10 +86,10 @@ export class EdgeElement extends createjs.Container{
   public set label(val: string){
     this.edge_label.text =val;
   }
-
   public get label(){
     return this.edge_label.text;
   }
+  protected label_direction: LabelDirection = LabelDirection.up;
 
   // incident nodes
   protected readonly source_node: NodeElement;
@@ -109,8 +154,10 @@ export class EdgeElement extends createjs.Container{
   // requires the center point position to be updated before use
   updateLabelPosition(){
     let p = this.getCenterPointPosition();
-    this.edge_label.x = p.x;
-    this.edge_label.y = p.y-10;
+
+    let translate = convertDirectionToTranslation(this.label_direction);
+    this.edge_label.x = p.x+translate.x;
+    this.edge_label.y = p.y+translate.y;
   }
 
   private setNodePositionListeners(source_node: NodeElement, destination_node:NodeElement) {
@@ -177,6 +224,21 @@ export class EdgeElement extends createjs.Container{
   straightenEdge(){
     let centroid = this.getEdgeCentroid();
     this.setEdgeCenterPointPosition(centroid.x, centroid.y);
+  }
+
+  changeEdgeLabelPosition(){
+    this.label_direction= getNextClockwiseDirection(this.label_direction);
+    this.updateLabelPosition();
+  }
+
+  setLabelPosition(direction: LabelDirection){
+    this.label_direction = direction;
+    this.updateLabelPosition();
+  }
+
+
+  getLabelPosition() : LabelDirection{
+    return this.label_direction;
   }
 }
 
