@@ -1,4 +1,10 @@
-# Chatapp
+# Automata Simulator
+
+A simple single page application for creating DFA simulations
+
+Try the [Prototype](https://autosim-b5ced.firebaseapp.com/dfa)
+
+---
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
 
